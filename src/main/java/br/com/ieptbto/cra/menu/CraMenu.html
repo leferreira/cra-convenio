@@ -1,0 +1,83 @@
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:panel>
+		<!-- MENU  -->
+		<div class="navbar-default sidebar" role="navigation" wicket:id="CraMenu">
+			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
+				<div class="nav">
+				<ul class="nav" id="side-menu">
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+							<span class="glyphicon glyphicon-file icon-menu" ></span>
+							<br>Arquivos  
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar Arquivo</a></li>
+							<li><a href="EnviarArquivo" wicket:id="EnviarArquivo">Enviar Arquivo</a></li>
+							<li><a wicket:id="ArquivosPage" href="ArquivosPage">Enviados e Recebidos</a></li>
+						</ul>
+					</li>
+					
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+							<span class="glyphicon glyphicon-align-left icon-menu" ></span>
+							<br>T&iacute;tulos
+						</a>
+						<ul class="dropdown-menu">
+							<li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos">Buscar T&iacute;tulos</a></li>
+							<li><a wicket:id="EntradaManual" href="EntradaManual">Lan&ccedil;ar T&iacute;tulos</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
+							<br>Relat&oacute;rios
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="RelatorioSintetico" wicket:id="RelatorioSintetico">Sint&eacute;ticos</a></li>
+							<li><a href="RelatorioArquivosTitulos" wicket:id="RelatorioArquivosTitulos">Anal&iacute;ticos</a></li>
+						</ul>
+					</li>
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+						 	<span class="fa fa-envelope-o icon-menu" ></span> 
+						 	<br>Instrumento<br>de Protesto
+						 </a>
+						 <ul class="dropdown-menu">
+							<li><a href="InstrumentoDeProtesto" wicket:id="InstrumentoDeProtesto">Entrada de Instrumentos</a></li>
+							<li><a href="#" >Consultar SLIPS</a></li>
+							<li><a href="ImportarArquivoDePara" wicket:id="ImportarArquivoDePara">Importar De/Para</a></li>
+						</ul>
+					</li>
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+						 	<span class="glyphicon glyphicon-check icon-menu" ></span> 
+						 	<br>Batimento
+						</a>
+						<ul class="dropdown-menu">
+							<li><a wicket:id="Batimento" href="Batimento">Batimento</a></li>
+							<li><a wicket:id="ConfirmaçãoRetorno" href="ConfirmaçãoRetorno">Confirma&ccedil;&atilde;o e Retorno</a></li>
+						</ul>
+					</li>
+					<li class="dropdown-submenu">
+						<a href="#" class="link-icones">
+						 	<span class="fa fa-gear icon-menu" ></span>
+								<br>Administra&ccedil;&atilde;o
+						</a>
+						<ul class="dropdown-menu">
+							<li><a wicket:id="CartoriosPage" href="CartoriosPage">Cart&oacute;rios</a></li>
+							<li><a href="InstituicoesPage" wicket:id="InstituicoesPage">Institui&ccedil;&otilde;es</a></li>
+							<li><a href="MunicipiosPage" wicket:id="MunicipiosPage">Munic&iacute;pios</a></li>
+							<li><a href="TipoInstituicoesPage" wicket:id="TipoInstituicoesPage">Tipo de Institui&ccedil;&otilde;es</a></li>
+							<li><a href="UsuariosPage" wicket:id="UsuariosPage">Usu&aacute;rios</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			</div>
+			<br style="clear: both;" />
+		</div>
+	</wicket:panel>
+</body>
+</html>
