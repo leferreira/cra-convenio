@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<form wicket:id="form" class="form-horizontal">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Entrada de Títulos</div>
+			<div class="panel-body">
+                <div class="row col-lg-12">
+                	<fieldset>
+						<!-- Form Name -->
+						<legend class="legend">Informações do Título</legend>
+	                 	<div class=col-md-6>
+	                 		<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="numeroTitulo">Número do Título:</label>  
+							  <div class="col-md-6">
+							  <input id="numeroTitulo" name="numeroTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							    
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="date">Data Emissão:</label>  
+							  <div class="col-md-4">
+							  <input id="date" name="date" type="text" placeholder="__/__/____" class="form-control input-md" required="">
+							    
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="date1">Data de Vencimento:</label>  
+							  <div class="col-md-4">
+							  <input id="date1" name="date1" type="text" placeholder="__/__/____" class="form-control input-md" required="">
+							    
+							  </div>
+							</div>
+						</div>
+	                  	<div class=col-md-6>
+	                  		<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="valorTitulo">Valor do Débito:</label>  
+							  <div class="col-md-6">
+							  <input id="valorTitulo" name="valorTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							    
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Saldo do Débito:</label>  
+							  <div class="col-md-6">
+							  <input id="valorSaldoTitulo" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							    
+							  </div>
+							</div>
+							<!-- Button -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="salvar"></label>
+							  <div class="col-md-6">
+							    <button id="salvar" wicket:id="adicionarTitulo" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+							  </div>
+							</div>
+                  	   </div>
+                  	 </fieldset>
+                  	 <fieldset>
+						<!-- Form Name -->
+						<legend class="legend">Informações do Devedor</legend>
+						<div class=col-md-6>
+						
+						</div>
+						<div class=col-md-6>
+						
+						</div>
+					</fieldset>
+                   </div>
+                </div>
+			<div class="panel-footer">
+			</div>
+		</div>
+		</form>
+	</wicket:extend>
+</body>
+</html>

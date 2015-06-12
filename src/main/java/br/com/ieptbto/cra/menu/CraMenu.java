@@ -33,9 +33,6 @@ public class CraMenu extends Panel {
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
 		/**Menus arquivos*/
-		menuLateral.addItem("BuscarArquivo", rolesPesquisar);
-		menuLateral.addItem("EnviarArquivo", rolesPesquisar);
-		menuLateral.addItem("ArquivosPage", rolesPesquisar);
 		
 		/**Menus titulos*/
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
@@ -43,23 +40,12 @@ public class CraMenu extends Panel {
 
 		/**Menus Relatorios*/
 		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
-//		menuLateral.addItem("RelatorioAnalitico", rolesIncluir);
 		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
-		/**Menu batimento*/
-	    menuLateral.addItem("Batimento", rolesIncluir);
-	    menuLateral.addItem("ConfirmaçãoRetorno",rolesIncluir);
-
-	    /**Menus Relatorios*/
-	    menuLateral.addItem("CartoriosPage", rolesIncluir);
-	    menuLateral.addItem("InstituicoesPage", rolesIncluir);
-	    menuLateral.addItem("MunicipiosPage", rolesIncluir);
-	    menuLateral.addItem("TipoInstituicoesPage", rolesIncluir);
+	    /**Menus Aministracao*/
 	    menuLateral.addItem("UsuariosPage", rolesIncluir);
+	    menuLateral.addItem("FiliadosPage", rolesIncluir);
 	    
-	    /**Instrumento de Protesto*/
-	    menuLateral.addItem("InstrumentoDeProtesto", rolesIncluir);
-	    menuLateral.addItem("ImportarArquivoDePara", rolesIncluir);
 	}
 
 	// private void adicionarMenuAgenda(Menu menu) {

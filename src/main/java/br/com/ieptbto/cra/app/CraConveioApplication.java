@@ -25,6 +25,10 @@ import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
+import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
+import br.com.ieptbto.cra.page.titulo.HistoricoPage;
+import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
+import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -104,6 +108,13 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("CargaInicial", CargaInicialPage.class);
 
 		/** Arquivo */
+		/** Titulos */
+		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
+		mountPage("EntradaManual", EntradaManualPage.class);
+		mountPage("ListaTitulos", ListaTitulosPage.class);
+		mountPage("HistoricoDoTitulo", HistoricoPage.class);
+		/** Relatorios */
+		/** Administracao */
 	}
 
 	/**
