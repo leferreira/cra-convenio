@@ -18,7 +18,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="numeroTitulo">Número do Título:</label>  
 							  <div class="col-md-6">
-							  <input id="numeroTitulo" name="numeroTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							  <input id="numeroTitulo" name="numeroTitulo" type="text" placeholder="" class="form-control input-md" required="required">
 							    
 							  </div>
 							</div>
@@ -27,7 +27,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date">Data Emissão:</label>  
 							  <div class="col-md-4">
-							  <input id="date" name="date" type="text" placeholder="__/__/____" class="form-control input-md" required="">
+							  <input id="date" name="date" type="text" placeholder="__/__/____" class="form-control input-md" required="required">
 							    
 							  </div>
 							</div>
@@ -36,7 +36,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date1">Data de Vencimento:</label>  
 							  <div class="col-md-4">
-							  <input id="date1" name="date1" type="text" placeholder="__/__/____" class="form-control input-md" required="">
+							  <input id="date1" name="date1" type="text" placeholder="__/__/____" class="form-control input-md" required="required">
 							    
 							  </div>
 							</div>
@@ -46,24 +46,17 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="valorTitulo">Valor do Débito:</label>  
 							  <div class="col-md-6">
-							  <input id="valorTitulo" name="valorTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							  <input id="valorTitulo" name="valorTitulo" type="text" placeholder="" class="form-control input-md" required="required">
 							    
 							  </div>
 							</div>
 							
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Saldo do Débito:</label>  
+							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Valor à Protestar:</label>  
 							  <div class="col-md-6">
-							  <input id="valorSaldoTitulo" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md" required="">
+							  <input id="valorSaldoTitulo" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md" required="required">
 							    
-							  </div>
-							</div>
-							<!-- Button -->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="salvar"></label>
-							  <div class="col-md-6">
-							    <button id="salvar" wicket:id="adicionarTitulo" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
 							  </div>
 							</div>
                   	   </div>
@@ -72,10 +65,82 @@
 						<!-- Form Name -->
 						<legend class="legend">Informações do Devedor</legend>
 						<div class=col-md-6>
-						
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="nomeDevedor">Nome do Devedor:</label>  
+							  <div class="col-md-6">
+							  <input id="nomeDevedor" name="nomeDevedor" type="text" placeholder="" class="form-control input-md" required="required">
+							    
+							  </div>
+							</div>
+							
+							<!-- Multiple Radios (inline) -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="tipoIdentificacao">Tipo de Documento::</label>
+							  <div class="col-md-4"> 
+							    <label class="radio-inline inline" for="tipoIdentificacao-0">
+							      <input type="radio" name="tipoIdentificacao" id="tipoIdentificacao-0" value="001" checked="checked">
+							      CNPJ
+							    </label> 
+							    <label class="radio-inline" for="tipoIdentificacao-1">
+							      <input type="radio" name="tipoIdentificacao" id="tipoIdentificacao-1" value="002">
+							      CPF
+							    </label>
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="documentoDevedor">Documento Devedor:</label>  
+							  <div class="col-md-6">
+							  <input id="documentoDevedor" name="documentoDevedor" type="text" placeholder="" class="form-control input-md" required="required">
+							    
+							  </div>
+							</div>
+							
+							<!-- Textarea -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="enderecoDevedor">Endereço Devedor:</label>
+							  <div class="col-md-4">                     
+							    <textarea class="form-control" id="enderecoDevedor" name="enderecoDevedor" required="required"></textarea>
+							  </div>
+							</div>
+														
 						</div>
 						<div class=col-md-6>
-						
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="cep">CEP:</label>  
+							  <div class="col-md-6">
+							  <input id="cep" name="cep" type="text" placeholder="" class="form-control input-md" required="required">
+							    
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="cidade">Cidade:</label>  
+							  <div class="col-md-6">
+							  <input id="cidade" name="cidade" type="text" placeholder="" class="form-control input-md" required="required">
+							    
+							  </div>
+							</div>
+							
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="uf">UF:</label>  
+							  <div class="col-md-6">
+							  <input id="uf" name="uf" type="text" placeholder="" class="form-control input-md" required="required">
+							    
+							  </div>
+							</div>
+							<!-- Button -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="salvar"></label>
+							  <div class="col-md-6">
+							    <button id="salvar" wicket:id="adicionarTitulo" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar Título</button>
+							  </div>
+							</div>
 						</div>
 					</fieldset>
                    </div>
