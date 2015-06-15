@@ -8,7 +8,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -29,7 +28,6 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("rawtypes")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
@@ -89,17 +87,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			@Override
 			protected void populateItem(ListItem<Historico> item) {
 				final Historico historico = item.getModelObject();
-				Link linkArquivo = new Link("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(historico.getRemessa()));  
-		            }
-		        };
-		        linkArquivo.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
-		        item.add(linkArquivo);
+				item.add(new Label("nomeArquivo", historico.getRemessa().getArquivo().getNomeArquivo()));
 				item.add(new Label("dataOcorrencia", DataUtil.localDateTimeToString(historico.getDataOcorrencia())));
 				item.add(new Label("usuarioAcao", historico.getUsuarioAcao().getNome()));
 			}

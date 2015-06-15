@@ -53,16 +53,7 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				final TituloRemessa tituloLista = item.getModelObject();
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				Link linkArquivo = new Link("linkArquivo") {
-		            /***/
-					private static final long serialVersionUID = 1L;
-
-					public void onClick() {
-		            	setResponsePage(new TitulosDoArquivoPage(tituloLista.getRemessa()));  
-		            }
-		        };
-		        linkArquivo.add(new Label("nomeRemessa", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
-		        item.add(linkArquivo);
+		        item.add(new Label("nomeArquivo", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
 		        
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
 				if (tituloLista.getConfirmacao() != null) {
@@ -83,21 +74,11 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 		        };
 		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
 		        item.add(linkHistorico);
-		        Link linkRetorno = new Link("linkRetorno") {
-		        	/***/
-		        	private static final long serialVersionUID = 1L;
-		        	
-		        	public void onClick() {
-		        		setResponsePage(new TitulosDoArquivoPage(tituloLista.getRetorno().getRemessa()));  
-		        	}
-		        };
 		        if (tituloLista.getRetorno() != null){
-	        		linkRetorno.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
-	        		item.add(linkRetorno);
+	        		item.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
 	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
 		        } else {
-		        	linkRetorno.add(new Label("retorno", StringUtils.EMPTY));
-	        		item.add(linkRetorno);
+		        	item.add(new Label("retorno", StringUtils.EMPTY));
 		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
 		        }
 				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
