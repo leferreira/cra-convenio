@@ -37,13 +37,14 @@ public class CraMenu extends Panel {
 		/**Menus titulos*/
 		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
 		menuLateral.addItem("EntradaManual", rolesPesquisar);
+		menuLateral.addItem("EnviarTitulosPendentes", rolesPesquisar);
 
 		/**Menus Relatorios*/
 		menuLateral.addItem("RelatorioSintetico", rolesIncluir);
 		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
 
 	    /**Menus Aministracao*/
-	    menuLateral.addItem("UsuariosPage", rolesIncluir);
+	    menuLateral.addItem("UsuariosFiliadoPage", rolesIncluir);
 	    menuLateral.addItem("FiliadosPage", rolesIncluir);
 	    
 	}

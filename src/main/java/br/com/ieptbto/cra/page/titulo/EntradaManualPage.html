@@ -9,145 +9,147 @@
 		<div class="panel panel-primary">
 			<div class="panel-heading">Entrada de Títulos</div>
 			<div class="panel-body">
-                <div class="row col-lg-12">
-                	<fieldset>
-						<!-- Form Name -->
-						<legend class="legend">Informações do Título</legend>
-	                 	<div class=col-md-6>
+               	<fieldset>
+					<!-- Form Name -->
+					<legend class="legend">Informações do Documento</legend>
+					<div class="row">
+						<div class="col-md-4">
 	                 		<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="numeroTitulo">Número do Título:</label>  
-							  <div class="col-md-6">
-							  <input id="numeroTitulo" name="numeroTitulo" type="text" placeholder="" class="form-control input-md" >
+							  <label class="col-md-4 control-label" for="numeroTitulo">Nº do Título:</label>  
+							  <div class="col-md-8">
+							  <input id="numeroTitulo" maxlength="11" name="numeroTitulo" type="text" placeholder="" class="form-control input-md" >
 							    
 							  </div>
 							</div>
-							
+						</div>
+						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="date">Data Emissão:</label>  
-							  <div class="col-md-4">
+							  <label class="col-md-4 control-label" for="date">Emissão:</label>  
+							  <div class="col-md-8">
 							  <input id="date" name="date" type="text" placeholder="__/__/____" class="form-control input-md" >
 							    
 							  </div>
 							</div>
-							
+						</div>
+						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="date1">Data de Vencimento:</label>  
-							  <div class="col-md-4">
+							  <label class="col-md-4 control-label" for="date1">Vencimento:</label>  
+							  <div class="col-md-8">
 							  <input id="date1" name="date1" type="text" placeholder="__/__/____" class="form-control input-md" >
 							    
 							  </div>
 							</div>
 						</div>
-	                  	<div class=col-md-6>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<!-- Select Basic -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="pracaProtesto">Praça de Protesto:</label>
+							  <div class="col-md-8">
+							    <select id="pracaProtesto" name="pracaProtesto" class="form-control">
+							      <option value="Escolha">Escolha</option>
+							    </select>
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
 	                  		<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="valorTitulo">Valor do Débito:</label>  
-							  <div class="col-md-6">
-							  <input id="valorTitulo" name="valorTitulo" type="text" placeholder="" class="form-control input-md" >
-							    
+							  <label class="col-md-4 control-label" for="valorTitulo">Valor Débito:</label>  
+							  <div class="col-md-8">
+							  	<div class="input-group">
+							  		<span class="input-group-addon">R$</span>
+							  		<input id="valorTitulo" maxlength="15" name="valorTitulo" type="text" placeholder="" class="form-control input-md" >
+							    </div>
 							  </div>
 							</div>
-							
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Valor à Protestar:</label>  
-							  <div class="col-md-6">
-							  <input id="valorSaldoTitulo" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md" >
-							    
-							  </div>
-							</div>
-                  	   </div>
-                  	 </fieldset>
-                  	 <fieldset>
-						<!-- Form Name -->
-						<legend class="legend">Informações do Devedor</legend>
-						<div class=col-md-6>
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="nomeDevedor">Nome do Devedor:</label>  
-							  <div class="col-md-6">
-							  <input id="nomeDevedor" name="nomeDevedor" type="text" placeholder="" class="form-control input-md" required="required">
-							    
-							  </div>
-							</div>
-							
-							<!-- Multiple Radios (inline) -->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="tipoIdentificacao">Tipo de Documento::</label>
-							  <div class="col-md-4"> 
-							    <label class="radio-inline inline" for="tipoIdentificacao-0">
-							      <input type="radio" name="tipoIdentificacao" id="tipoIdentificacao-0" value="001" checked="checked">
-							      CNPJ
-							    </label> 
-							    <label class="radio-inline" for="tipoIdentificacao-1">
-							      <input type="radio" name="tipoIdentificacao" id="tipoIdentificacao-1" value="002">
-							      CPF
-							    </label>
-							  </div>
-							</div>
-							
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="documentoDevedor">Documento Devedor:</label>  
-							  <div class="col-md-6">
-							  <input id="documentoDevedor" name="documentoDevedor" type="text" placeholder="" class="form-control input-md" required="required">
-							    
-							  </div>
-							</div>
-							
-							<!-- Textarea -->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="enderecoDevedor">Endereço Devedor:</label>
-							  <div class="col-md-4">                     
-							    <textarea class="form-control" id="enderecoDevedor" name="enderecoDevedor" required="required"></textarea>
-							  </div>
-							</div>
-														
 						</div>
-						<div class=col-md-6>
+						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="cep">CEP:</label>  
-							  <div class="col-md-6">
-							  <input id="cep" name="cep" type="text" placeholder="" class="form-control input-md" required="required">
+							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Valor Protesto:</label>  
+							  <div class="col-md-8">
+							  	<div class="input-group">
+							  		<span class="input-group-addon">R$</span>
+							 		 <input id="valorSaldoTitulo" maxlength="15" name="valorSaldoTitulo" type="text" placeholder="" class="form-control input-md" >
+							    </div>
+							  </div>
+							</div>
+                 	    </div>
+					 </div>
+				 </fieldset>
+				 <fieldset>
+				 	<legend class="legend">Informações do Devedor</legend>
+					 <div class="row">
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="nomeDevedor">Nome:</label>  
+							  <div class="col-md-8">
+							  <input id="nomeDevedor" maxlength="45"  name="nomeDevedor" type="text" placeholder="" class="form-control input-md" >
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="documentoDevedor">CNPJ/CPF:</label>  
+							  <div class="col-md-8">
+							  <input id="documentoDevedor" maxlength="14" name="documentoDevedor" type="text" placeholder="" class="form-control input-md" >
 							    
 							  </div>
 							</div>
-							
+						</div>
+						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="cidade">Cidade:</label>  
-							  <div class="col-md-6">
-							  <input id="cidade" name="cidade" type="text" placeholder="" class="form-control input-md" required="required">
+							  <div class="col-md-8">
+							  <input id="cidade" name="cidade" min="4" maxlength="20" type="text" placeholder="" class="form-control input-md" >
 							    
 							  </div>
 							</div>
-							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<!-- Textarea -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+							  <div class="col-md-8">                     
+							    <textarea class="form-control" maxlength="45" id="endereco" name="endereco"></textarea>
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="uf">UF:</label>  
-							  <div class="col-md-6">
-							  <input id="uf" name="uf" type="text" placeholder="" class="form-control input-md" required="required">
+							  <div class="col-md-8">
+							  <input id="uf" name="uf" type="text" max="2" maxlength="2" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" >
 							    
 							  </div>
 							</div>
+						</div>
+						<div class="col-md-4">
 							<!-- Button -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="salvar"></label>
-							  <div class="col-md-6">
+							  <div class="col-md-8">
 							    <button id="salvar" wicket:id="adicionarTitulo" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar Título</button>
 							  </div>
 							</div>
 						</div>
-					</fieldset>
-                   </div>
-                </div>
-			<div class="panel-footer">
-			</div>
-		</div>
+					</div>
+				  </fieldset>
+				</div>
+				<div class="panel-footer">
+				</div>
+			</div>	
 		</form>
 	</wicket:extend>
 </body>

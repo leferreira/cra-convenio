@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+			<form wicket:id="form" id="form" class="form-horizontal">
+				<div class="panel panel-primary">
+		<div class="panel-heading">Cadastro de Filiados</div>
+		<div class="panel-body">
+				<a href="FiliadoPage"	style="float: right;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
+		<div class="col-md-12">
+			<fieldset>
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="razaoSocial">Nome Fantasia:</label>  
+				  <div class="col-md-6">
+				  <input id="razaoSocial" wicket:id="nomeCredor" name="razaoSocial" type="text" placeholder="" class="form-control input-md">
+				    
+				  </div>
+				</div>
+				
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="cnpj">CNPJ:</label>  
+				  <div class="col-md-6">
+				  <input id="cnpj" wicket:id="documentoCredor" name="cnpj" type="text" placeholder="" class="form-control input-md">
+				    
+				  </div>
+				</div>
+				
+				<!-- Textarea -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+				  <div class="col-md-4">                     
+				    <textarea class="form-control" wicket:id="enderecoCredor" id="endereco" name="endereco"></textarea>
+				  </div>
+				</div>
+				
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="cepCredor">CEP:</label>  
+				  <div class="col-md-6">
+				  <input id="cepCredor" wicket:id="cepCredor" name="cepCredor" type="text" placeholder="" class="form-control input-md">
+				    
+				  </div>
+				</div>
+				
+				<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="municipio">Município:</label>
+				  <div class="col-md-6">
+				    <select id="municipio" wicket:id="municipio" name="municipio" class="form-control">
+				      <option value="1">Option one</option>
+				    </select>
+				  </div>
+				</div>
+				
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="uf">UF:</label>  
+				  <div class="col-md-6">
+				  <input id="uf" name="uf" wicket:id="ufCredor" type="text" placeholder="" class="form-control input-md">
+				    
+				  </div>
+				</div>
+				<!-- Button -->
+				<div class="form-group">
+				  <label class="col-md-2 control-label" for="salvar"></label>
+				  <div class="col-md-8">
+				    <button id="salvar" type="submit" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+				  </div>
+				</div>
+			</fieldset>
+		</div>
+		</div>
+		<div class="panel-footer">
+			<p></p>
+		</div>
+	</div>
+			</form>
+	</wicket:extend>
+</body>
+</html>

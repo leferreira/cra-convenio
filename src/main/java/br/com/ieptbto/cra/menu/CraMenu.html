@@ -14,10 +14,9 @@
 						<ul class="dropdown-menu">
 							<li><a wicket:id="EntradaManual" href="EntradaManual">Entrada de T&iacute;tulos</a></li>
 							<li><a wicket:id="MonitorarTitulos" href="MonitorarTitulos">Consultar T&iacute;tulos</a></li>
-							<li><a href="#">Enviar Pendentes</a></li>
+							<li><a wicket:id="EnviarTitulosPendentes" href="EnviarTitulosPendentes">Enviar Pendentes</a></li>
 						</ul>
 					</li>
-
 					<li class="dropdown-submenu">
 						<a href="#" class="link-icones">
 							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
@@ -29,14 +28,16 @@
 						</ul>
 					</li>
 					<li class="dropdown-submenu">
-						<a href="#" class="link-icones">
-						 	<span class="fa fa-gear icon-menu" ></span>
-								<br>Administra&ccedil;&atilde;o
+						<a href="FiliadosPage" wicket:id="FiliadosPage" class="link-icones">
+						 	<span class="fa fa-home icon-menu" ></span>
+								<br>Filiados
 						</a>
-						<ul class="dropdown-menu">
-							<li><a href="FiliadosPage" wicket:id="FiliadosPage">Cadastrar Filiados</a></li>
-							<li><a href="UsuariosPage" wicket:id="UsuariosPage">Cadastrar Usu&aacute;rios</a></li>
-						</ul>
+					</li>
+					<li class="dropdown-submenu">
+						<a href="UsuariosFiliadoPage" wicket:id="UsuariosFiliadoPage" class="link-icones">
+						 	<span class="fa fa-user icon-menu" ></span>
+								<br>Usu&aacute;rios
+						</a>
 					</li>
 				</ul>
 			</div>

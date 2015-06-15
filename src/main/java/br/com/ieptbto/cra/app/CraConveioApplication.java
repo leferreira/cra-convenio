@@ -24,11 +24,16 @@ import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
+import br.com.ieptbto.cra.page.filiados.IncluirFiliadoPage;
+import br.com.ieptbto.cra.page.filiados.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
+import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
 import br.com.ieptbto.cra.page.titulo.MonitorarTitulosPage;
+import br.com.ieptbto.cra.page.usuario.IncluirUsuarioFiliadoPage;
+import br.com.ieptbto.cra.page.usuario.ListaUsuarioFiliadoPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
 import br.com.ieptbto.cra.security.UserRoleAuthorizationStrategy;
 import br.com.ieptbto.cra.security.UserRolesAuthorizer;
@@ -107,14 +112,21 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
 
-		/** Arquivo */
 		/** Titulos */
 		mountPage("MonitorarTitulos", MonitorarTitulosPage.class);
 		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("ListaTitulos", ListaTitulosPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 		/** Relatorios */
-		/** Administracao */
+		
+		/** Filiado */
+		mountPage("FiliadosPage", ListaFiliadoPage.class);
+		mountPage("IncluirFiliadoPage", IncluirFiliadoPage.class);
+
+		/** Usuario Filiado */
+		mountPage("UsuariosFiliadoPage", ListaUsuarioFiliadoPage.class);
+		mountPage("IncluirUsuarioFiliadoPage", IncluirUsuarioFiliadoPage.class);
+		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
 	}
 
 	/**
