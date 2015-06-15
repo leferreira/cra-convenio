@@ -24,12 +24,17 @@ public class LoginForm extends BaseForm<Usuario> {
 
 	@Override
 	public void onSubmit() {
-		Usuario usuario = usuarioMediator.autenticar(getModelObject().getLogin(), getModelObject().getSenha());
-		
-		if (usuario != null) {
-			getSession().setUser(usuario);
-			setResponsePage(getApp().getHomePage());
+
+		try {
+			Usuario usuario = usuarioMediator.autenticarConvenio(getModelObject().getLogin(), getModelObject().getSenha());
+
+			if (usuario != null) {
+				getSession().setUser(usuario);
+				setResponsePage(getApp().getHomePage());
+			}
+			transError("Login ou senha inválido(s) ou não ativo.");
+		} catch (Exception ex) {
+			transError(ex.getMessage());
 		}
-		transError("Login ou senha inválido(s) ou não ativo.");
 	}
 }
