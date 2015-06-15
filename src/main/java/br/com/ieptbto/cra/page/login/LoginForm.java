@@ -32,7 +32,6 @@ public class LoginForm extends BaseForm<Usuario> {
 				getSession().setUser(usuario);
 				setResponsePage(getApp().getHomePage());
 			}
-			transError("Login ou senha inválido(s) ou não ativo.");
 		} catch (Exception ex) {
 			transError(ex.getMessage());
 		}
