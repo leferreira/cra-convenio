@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN,CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EnviarTitulosPage extends BasePage<TituloRemessa> {
 	
 	/***/
