@@ -16,12 +16,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
+import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -32,42 +33,50 @@ import br.com.ieptbto.cra.util.EmailValidator;
  *
  */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
+public class IncluirUsuarioFiliadoPage extends BasePage<Usuario> {
 
 	private static final long serialVersionUID = 1L;
-	private UsuarioFiliado usuarioFiliado;
+	private Usuario usuario;
 	private DropDownChoice<Filiado> comboFiliado;
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	@SpringBean
+	GrupoUsuarioMediator grupoUsuarioMediator;
 
 	public IncluirUsuarioFiliadoPage() {
-		this.usuarioFiliado = new UsuarioFiliado();
+		this.usuario = new Usuario();
 		carregarFormulario();
 	}
 
-	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
-		this.usuarioFiliado = usuario;
+	public IncluirUsuarioFiliadoPage(Usuario usuario) {
+		this.usuario = usuario;
 		carregarFormulario();
 	}
 
 	private void carregarFormulario() {
-		Form<UsuarioFiliado> form = new Form<UsuarioFiliado>("form"){
+		Form<Usuario> form = new Form<Usuario>("form", getModel()){
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				UsuarioFiliado novoUsuario = new UsuarioFiliado();
+				UsuarioFiliado usuarioFiliado = new UsuarioFiliado();
 				
 				try {
-					novoUsuario.setUsuario(getModelObject().getUsuario());
-					novoUsuario.setFiliado(comboFiliado.getModelObject());
+					usuario.setInstituicao(getUser().getInstituicao());
+					usuario.setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
+					usuarioFiliado.setFiliado(comboFiliado.getModelObject());
+					usuarioFiliado.setUsuario(usuario);
 					
-					usuarioFiliadoMediator.salvarUsuarioFiliado(novoUsuario);
-					setResponsePage(new ListaUsuarioFiliadoPage("O novo usuario ["+ novoUsuario.getUsuario().getNome() +"] foi salvo com sucesso ! "));
+					if (usuario.getId() != 0) {
+						usuarioFiliadoMediator.alterarUsuarioFiliado(usuario, usuarioFiliado);
+					} else 
+						usuarioFiliadoMediator.salvarUsuarioFiliado(usuario, usuarioFiliado);
+					
+					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso na CRA ! "));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 					error("Não foi possível cadastrar o novo usuário ! Entre em contato com a CRA !");
@@ -86,61 +95,59 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	}
 
 	private TextField<String> campoNome() {
-		TextField<String> textField = new TextField<String>("usuario.nome", new PropertyModel<String>("usuario.nome", null));
-		textField.setLabel(new Model<String>("Nome"));
-		textField.setRequired(true);
-		textField.setOutputMarkupId(true);
-		return textField;
+		TextField<String> fieldNome = new TextField<String>("nome");
+		fieldNome.setLabel(new Model<String>("Nome"));
+		fieldNome.setRequired(true);
+		return fieldNome;
 	}
 
 	private TextField<String> campoLogin() {
-		TextField<String> textField = new TextField<String>("usuario.login");
+		TextField<String> textField = new TextField<String>("login");
 		textField.setLabel(new Model<String>("Login"));
 		textField.setRequired(true);
-		textField.setOutputMarkupId(true);
 		return textField;
 	}
 
 	private TextField<String> campoSenha() {
-		PasswordTextField senha = new PasswordTextField("usuario.senha");
+		PasswordTextField senha = new PasswordTextField("senha");
 		senha.setLabel(new Model<String>("Senha"));
 		return senha;
 	}
 
 	private TextField<String> campoConfirmarSenha() {
-		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
+		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
 		return confirmarSenha;
 	}
 
 	private TextField<String> campoEmail() {
-		TextField<String> textField = new TextField<String>("usuario.email");
+		TextField<String> textField = new TextField<String>("email");
 		textField.setLabel(new Model<String>("E-mail"));
 		textField.add(new EmailValidator());
 		return textField;
 	}
 
 	private TextField<String> campoContato() {
-		TextField<String> textField = new TextField<String>("usuario.contato");
+		TextField<String> textField = new TextField<String>("contato");
 		textField.setLabel(new Model<String>("Contato"));
 		return textField;
 	}
 
 	private Component campoStatus() {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("usuario.situacao", status);
+		return new RadioChoice<String>("situacao", status);
 	}
 
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		comboFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(),filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
 		comboFiliado.setLabel(new Model<String>("Filiado"));
 		comboFiliado.setRequired(true);
 		return comboFiliado;		
 	}
 	
 	@Override
-	protected IModel<UsuarioFiliado> getModel() {
-		return new CompoundPropertyModel<UsuarioFiliado>(usuarioFiliado);
+	protected IModel<Usuario> getModel() {
+		return new CompoundPropertyModel<Usuario>(usuario);
 	}
 }

@@ -63,7 +63,7 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						setResponsePage(new IncluirUsuarioFiliadoPage(usuarioLista));
+						setResponsePage(new IncluirUsuarioFiliadoPage(usuarioLista.getUsuario()));
 		            }
 		        };
 		        linkAlterar.add(new Label("nomeUsuario", usuarioLista.getUsuario().getNome()));
