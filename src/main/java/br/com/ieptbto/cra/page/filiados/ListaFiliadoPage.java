@@ -76,11 +76,19 @@ public class ListaFiliadoPage extends BasePage<Filiado>{
 				item.add(linkAlterar);
 				
 				item.add(new Label("documento", filiado.getCnpjCpf()));
-				item.add(new Label("cidade", filiado.getCnpjCpf()));
+				item.add(new Label("cidade", filiado.getMunicipio().getNomeMunicipio()));
 				item.add(new Label("uf", filiado.getUf()));
+				item.add(new Label("ativo", verificarSituacao(filiado.isAtivo()) ));
 			}
 		};
 	}
+	
+	private String verificarSituacao(Boolean ativo){
+		if (ativo.equals(true))
+			return "Ativo";
+		return "Não Ativo";
+	}
+	
 	@Override
 	protected IModel<Filiado> getModel() {
 		return new CompoundPropertyModel<Filiado>(filiado);

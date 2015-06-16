@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -85,7 +86,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	}
 
 	private TextField<String> campoNome() {
-		TextField<String> textField = new TextField<String>("usuario.nome");
+		TextField<String> textField = new TextField<String>("usuario.nome", new PropertyModel<String>("usuario.nome", null));
 		textField.setLabel(new Model<String>("Nome"));
 		textField.setRequired(true);
 		textField.setOutputMarkupId(true);
@@ -131,7 +132,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	}
 
 	private DropDownChoice<Filiado> comboFiliado() {
-		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("nomeCredor");
+		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
 		comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
 		comboFiliado.setLabel(new Model<String>("Filiado"));
 		comboFiliado.setRequired(true);
