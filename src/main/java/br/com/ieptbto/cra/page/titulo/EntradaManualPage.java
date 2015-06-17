@@ -29,44 +29,45 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER})
-public class EntradaManualPage extends BasePage<TituloFiliado>{
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
+public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	private Form<?> form;
 	private TituloFiliado titulo;
 	private TextField<String> dataEmissaoField;
 	private TextField<String> dataVencimentoField;
 	private DropDownChoice<Municipio> comboMunicipio;
-	
+
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
-	
+
 	public EntradaManualPage() {
 		this.titulo = new TituloFiliado();
 		carregarEntradaManualPage();
 	}
-	
+
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.titulo = titulo;
 		carregarEntradaManualPage();
 	}
-	
+
 	public void carregarEntradaManualPage() {
-	
-		form = new Form<TituloFiliado>("form", getModel()){
-			
+
+		form = new Form<TituloFiliado>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
+
 			@Override
-            protected void onSubmit(){
-				
+			protected void onSubmit() {
+
 				try {
 					if (titulo.getId() != 0) {
 						tituloFiliadoMediator.alterarTituloFiliado(titulo);
@@ -75,7 +76,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 						titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 						titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 						titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-						
+
 						tituloFiliadoMediator.salvarTituloFiliado(titulo);
 					}
 					setResponsePage(new TituloLabel());
@@ -97,21 +98,21 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 		form.add(cidadeDevedor());
 		form.add(cepDevedor());
 		form.add(ufDevedor());
-		
+
 		add(form);
 	}
-	
+
 	private TextField<String> numeroTitulo() {
 		TextField<String> textField = new TextField<String>("numeroTitulo");
 		textField.setLabel(new Model<String>("Nùmero do Título"));
 		textField.setRequired(true);
 		return textField;
 	}
-	
+
 	private TextField<String> dataEmissao() {
 		if (titulo.getDataEmissao() != null) {
 			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(titulo.getDataEmissao())));
-		} else 
+		} else
 			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
 		dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
 		dataEmissaoField.setRequired(true);
@@ -120,14 +121,15 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 
 	private TextField<String> dataVencimento() {
 		if (titulo.getDataVencimento() != null) {
-			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(titulo.getDataVencimento())));
-		} else 
+			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(titulo
+			        .getDataVencimento())));
+		} else
 			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
 		dataVencimentoField.setLabel(new Model<String>("Data de Vencimento"));
 		dataVencimentoField.setRequired(true);
 		return dataVencimentoField;
 	}
-	
+
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		if (titulo.getPracaProtesto() != null)
@@ -137,7 +139,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;
 	}
-	
+
 	private TextField<String> ufDevedor() {
 		TextField<String> textField = new TextField<String>("ufDevedor");
 		textField.setLabel(new Model<String>("UF"));
@@ -177,6 +179,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorSaldoTitulo");
 		textField.setLabel(new Model<String>("Valor de Protesto"));
 		textField.setRequired(true);
+		textField.setOutputMarkupId(true);
 		return textField;
 	}
 
@@ -184,16 +187,17 @@ public class EntradaManualPage extends BasePage<TituloFiliado>{
 		TextField<BigDecimal> textField = new TextField<BigDecimal>("valorTitulo");
 		textField.setLabel(new Model<String>("Valor do Débito"));
 		textField.setRequired(true);
+		textField.setOutputMarkupId(true);
 		return textField;
 	}
 
-	private TextField<String> documentoDevedor(){
+	private TextField<String> documentoDevedor() {
 		TextField<String> textField = new TextField<String>("documentoDevedor");
 		textField.setLabel(new Model<String>("Documento Devedor"));
 		textField.setRequired(true);
 		return textField;
 	}
-	
+
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(titulo);
