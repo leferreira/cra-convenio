@@ -27,6 +27,7 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.filiados.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiados.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosTitulosPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -122,6 +123,7 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		/** Filiado */
 		mountPage("FiliadosPage", ListaFiliadoPage.class);
 		mountPage("IncluirFiliadoPage", IncluirFiliadoPage.class);
+		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
 
 		/** Usuario Filiado */
 		mountPage("UsuariosFiliadoPage", ListaUsuarioFiliadoPage.class);

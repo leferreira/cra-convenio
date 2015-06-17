@@ -19,9 +19,11 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
+
+	/***/
+	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
@@ -54,6 +56,9 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	@SuppressWarnings("rawtypes")
 	private ListView<UsuarioFiliado> carregarListaUsuario() {
 		return new ListView<UsuarioFiliado>("listViewUsuario", usuarioFiliadoMediator.buscarUsuariosDoConvenio(getUser())) {
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<UsuarioFiliado> item) {
 				final UsuarioFiliado usuarioLista = UsuarioFiliado.class.cast(item.getModelObject());
@@ -72,7 +77,7 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 				item.add(new Label("loginUsuario", usuarioLista.getUsuario().getLogin()));
 				item.add(new Label("emailUsuario", usuarioLista.getUsuario().getEmail()));
 				item.add(new Label("contato", usuarioLista.getUsuario().getContato()));
-				item.add(new Label("instituicaoUsuario", usuarioLista.getUsuario().getInstituicao().getNomeFantasia()));
+				item.add(new Label("instituicaoUsuario", usuarioLista.getFiliado().getRazaoSocial()));
 				if (usuarioLista.getUsuario().isStatus()) {
 					item.add(new Label("status", "Sim"));
 				} else {
