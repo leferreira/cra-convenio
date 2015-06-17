@@ -52,7 +52,7 @@
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							  		<input maxlength="15" type="text" class="form-control input-md" wicket:id="valorTitulo">
+							  		<input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorTitulo">
 							    </div>
 							  </div>
 							</div>
@@ -64,7 +64,7 @@
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							 		 <input maxlength="15" type="text" class="form-control input-md" wicket:id="valorSaldoTitulo">
+							 		 <input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event)" class="form-control input-md" wicket:id="valorSaldoTitulo">
 							    </div>
 							  </div>
 							</div>
