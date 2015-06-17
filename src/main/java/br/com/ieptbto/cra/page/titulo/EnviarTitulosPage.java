@@ -2,7 +2,8 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.markup.html.basic.Label;
@@ -14,8 +15,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
+import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -25,99 +30,116 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
-public class EnviarTitulosPage extends BasePage<TituloRemessa> {
+public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	
 	/***/
 	private static final long serialVersionUID = 1L;
-	private TituloRemessa titulo;
-	private List<TituloRemessa> listaTitulosParaEnvio;
+	private static final Logger logger = Logger.getLogger(EnviarTitulosPage.class);
+	private TituloFiliado titulo;
+	private List<TituloFiliado> listaTitulosFiliado;
 	
 	@SpringBean
-	TituloMediator tituloMediator;
+	TituloFiliadoMediator tituloFiliadoMediator;
+	@SpringBean
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	
 	public EnviarTitulosPage() {
-		this.titulo = new TituloRemessa();
-		setListaTitulosParaEnvio(tituloMediator.titulosParaEnvioAoConvenio());
+		this.titulo = new TituloFiliado();
 		carregarFormEnviar();
 		add(carregarTitulosParaEnvio());
 	}
 
 	public EnviarTitulosPage(String mensagem) {
-		this.titulo = new TituloRemessa();
-		setListaTitulosParaEnvio(tituloMediator.titulosParaEnvioAoConvenio());
+		this.titulo = new TituloFiliado();
 		info(mensagem);
 		carregarFormEnviar();
 		add(carregarTitulosParaEnvio());
 	}
 	
 	private void carregarFormEnviar() {
-		Form<TituloRemessa> form = new Form<TituloRemessa>("form", getModel()){
+		this.listaTitulosFiliado = getListaTitulosParaEnvio();
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
 			/***/
 			private static final long serialVersionUID = 1L;
 			@Override
             protected void onSubmit(){
+				try {
 				
+					tituloFiliadoMediator.enviarTitulosPendentes(listaTitulosFiliado);
+				
+					setResponsePage(new EnviarTitulosPage("Os títulos foram enviados com sucesso para a CRA !"));
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+				}
 			}
 		};
 		add(form);
 	}
 
-	private ListView<TituloRemessa> carregarTitulosParaEnvio() {
-		return new ListView<TituloRemessa>("listViewTitulos", getListaTitulosParaEnvio()) {
+	private ListView<TituloFiliado> carregarTitulosParaEnvio() {
+		return new ListView<TituloFiliado>("listViewTitulos", listaTitulosFiliado) {
 			/***/
 			private static final long serialVersionUID = 1L;
 
-			@SuppressWarnings("rawtypes")
 			@Override
-			protected void populateItem(ListItem<TituloRemessa> item) {
-				final TituloRemessa tituloLista = item.getModelObject();
+			protected void populateItem(ListItem<TituloFiliado> item) {
+				final TituloFiliado tituloLista = item.getModelObject();
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-		        item.add(new Label("nomeArquivo", tituloLista.getRemessa().getArquivo().getNomeArquivo()));
-		        
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto()));
-				if (tituloLista.getConfirmacao() != null) {
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getRemessa().getDataRecebimento())));
-					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
-				} else { 
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-				}
-				item.add(new Label("valorTitulo", tituloLista.getValorTitulo()));
-				Link linkHistorico = new Link("linkHistorico") {
-		            /***/
+				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
+				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
+				
+				Link<String> linkAlterar = new Link<String>("linkAlterar") {
+					/***/
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public void onClick() {
-						setResponsePage(new HistoricoPage(tituloLista));
-		            }
-		        };
-		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
-		        item.add(linkHistorico);
-		        if (tituloLista.getRetorno() != null){
-	        		item.add(new Label("retorno", tituloLista.getRetorno().getRemessa().getArquivo().getNomeArquivo()));
-	        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
-		        } else {
-		        	item.add(new Label("retorno", StringUtils.EMPTY));
-		        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
-		        }
-				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
+						setResponsePage(new EntradaManualPage(tituloLista));
+					}
+				}; 
+				linkAlterar.add(new Label("devedor", tituloLista.getNomeDevedor()));
+				item.add(linkAlterar);
+				
+				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
+				item.add(new Label("dataVencimento", DataUtil.localDateToString(tituloLista.getDataVencimento())));
+				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+//				item.add(new LabelValorMonetario<String>("valorSaldo", tituloLista.getValorSaldoTitulo()));
+				item.add(removerTitulo(tituloLista));
+			}
+			
+			private Component removerTitulo(final TituloFiliado titulo) {
+				return new Link<Arquivo>("remover") {
+					/***/
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					public void onClick() {
+						
+						try {
+							
+							tituloFiliadoMediator.removerTituloFiliado(titulo);
+							setResponsePage(new EnviarTitulosPage("O título foi removido com sucesso da CRA !"));
+						} catch (Exception ex) {
+							System.out.println(ex.getMessage());
+							error("Não foi possível remover o título ! Entre em contato com a CRA !");
+						}
+					}
+				};
 			}
 		};
 	}
-	
 
-	private List<TituloRemessa> getListaTitulosParaEnvio() {
-		return listaTitulosParaEnvio;
+	private List<TituloFiliado> getListaTitulosParaEnvio() {
+		return tituloFiliadoMediator.titulosParaEnvioAoConvenio(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 	}
 
-	private void setListaTitulosParaEnvio(List<TituloRemessa> listaTitulosParaEnvio) {
-		this.listaTitulosParaEnvio = listaTitulosParaEnvio;
-	}
-
-	
 	@Override
-	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+	protected IModel<TituloFiliado> getModel() {
+		return new CompoundPropertyModel<TituloFiliado>(titulo);
 	}
 }
