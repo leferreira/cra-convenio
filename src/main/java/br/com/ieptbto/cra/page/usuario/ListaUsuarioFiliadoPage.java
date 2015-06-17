@@ -15,13 +15,12 @@ import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 
-
 /**
  * @author Thasso Araújo
  *
  */
 @SuppressWarnings("serial")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	@SpringBean
@@ -42,42 +41,42 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private void carregarCampos() {
 		usuario = new UsuarioFiliado();
 		add(new Link("botaoNovo") {
-            /***/
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
 				setResponsePage(new IncluirUsuarioFiliadoPage());
-            }
-        });
+			}
+		});
 		add(carregarListaUsuario());
 	}
+
 	@SuppressWarnings("rawtypes")
-	private ListView<UsuarioFiliado> carregarListaUsuario(){
-		return new ListView<UsuarioFiliado>("listViewUsuario", usuarioFiliadoMediator.buscarUsuariosDoConvenio(getUser().getInstituicao())) {
+	private ListView<UsuarioFiliado> carregarListaUsuario() {
+		return new ListView<UsuarioFiliado>("listViewUsuario", usuarioFiliadoMediator.buscarUsuariosDoConvenio(getUser())) {
 			@Override
 			protected void populateItem(ListItem<UsuarioFiliado> item) {
 				final UsuarioFiliado usuarioLista = UsuarioFiliado.class.cast(item.getModelObject());
-				
+
 				Link linkAlterar = new Link("linkAlterar") {
-		            /***/
+					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirUsuarioFiliadoPage(usuarioLista.getUsuario()));
-		            }
-		        };
-		        linkAlterar.add(new Label("nomeUsuario", usuarioLista.getUsuario().getNome()));
-		        item.add(linkAlterar);
-		        
-		        item.add(new Label("loginUsuario", usuarioLista.getUsuario().getLogin()));
+					}
+				};
+				linkAlterar.add(new Label("nomeUsuario", usuarioLista.getUsuario().getNome()));
+				item.add(linkAlterar);
+
+				item.add(new Label("loginUsuario", usuarioLista.getUsuario().getLogin()));
 				item.add(new Label("emailUsuario", usuarioLista.getUsuario().getEmail()));
 				item.add(new Label("contato", usuarioLista.getUsuario().getContato()));
-				item.add(new Label("instituicaoUsuario", usuarioLista
-						.getUsuario().getInstituicao().getNomeFantasia()));
-				if (usuarioLista.getUsuario().isStatus()){
+				item.add(new Label("instituicaoUsuario", usuarioLista.getUsuario().getInstituicao().getNomeFantasia()));
+				if (usuarioLista.getUsuario().isStatus()) {
 					item.add(new Label("status", "Sim"));
-				}else{
-					item.add(new Label("status","Não" ));
+				} else {
+					item.add(new Label("status", "Não"));
 				}
 			}
 		};
