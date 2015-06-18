@@ -1,6 +1,8 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -18,6 +20,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
+import br.com.ieptbto.cra.enumeration.TipoDocumento;
+import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
@@ -38,9 +42,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	private Form<?> form;
 	private TituloFiliado titulo;
-	private TextField<String> dataEmissaoField;
 	private TextField<String> dataVencimentoField;
-	private DropDownChoice<Municipio> comboMunicipio;
+	private TextField<String> dataEmissaoField;
 
 	@SpringBean
 	MunicipioMediator municipioMediator;
@@ -74,7 +77,17 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 			@Override
 			protected void onSubmit() {
-
+				TituloFiliado titulo = getModelObject();
+				
+				if (titulo.getCpfCnpj().length() == 18 ){
+					titulo.setTipoDocumentoDevedor(TipoDocumento.CNPJ.getLabel());
+				} else { 
+					titulo.setTipoDocumentoDevedor(TipoDocumento.CPF.getLabel());
+				}
+				
+				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
+				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
+				
 				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
 					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
 						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
@@ -84,8 +97,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					if (titulo.getId() != 0) {
 						tituloFiliadoMediator.alterarTituloFiliado(titulo);
 					} else {
-						titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
-						titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 						titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 						titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
 
@@ -103,6 +114,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(dataVencimento());
 		form.add(pracaProtesto());
 		form.add(documentoDevedor());
+		form.add(outroDocumento());
 		form.add(valorTitulo());
 		form.add(valorSaldoTitulo());
 		form.add(nomeDevedor());
@@ -110,6 +122,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(cidadeDevedor());
 		form.add(cepDevedor());
 		form.add(ufDevedor());
+		form.add(especieTitulo());
 
 		add(form);
 	}
@@ -141,12 +154,10 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		dataVencimentoField.setRequired(true);
 		return dataVencimentoField;
 	}
-
+	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		if (titulo.getPracaProtesto() != null)
-			renderer.getDisplayValue(titulo.getPracaProtesto());
-		comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;
@@ -204,12 +215,23 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	private TextField<String> documentoDevedor() {
-		TextField<String> textField = new TextField<String>("documentoDevedor");
-		textField.setLabel(new Model<String>("Documento Devedor"));
+		TextField<String> textField = new TextField<String>("CpfCnpj");
+		textField.setLabel(new Model<String>("CPF/CNPJ"));
 		textField.setRequired(true);
 		return textField;
 	}
 
+	private TextField<String> outroDocumento() {
+		TextField<String> textField = new TextField<String>("documentoDevedor");
+		textField.setLabel(new Model<String>("Documento Devedor"));
+		return textField;
+	}
+	
+	private DropDownChoice<TipoEspecieTitulo> especieTitulo() {
+		List<TipoEspecieTitulo> status = Arrays.asList(TipoEspecieTitulo.values());
+		return new DropDownChoice<TipoEspecieTitulo>("especieTitulo", status);
+	}
+	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(titulo);

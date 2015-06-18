@@ -25,6 +25,7 @@ import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
  * @author Thasso Araújo
@@ -94,8 +95,9 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		add(form);
 	}
 	
-	private TextField<String> campoUfCredor() {
-		TextField<String> textField = new TextField<String>("uf");
+	private DropDownChoice<String> campoUfCredor() {
+		DropDownChoice<String> textField = new DropDownChoice<String>("uf", EstadoUtils.getEstadosToList());
+		textField.setLabel(new Model<String>("UF"));
 		textField.setRequired(true);
 		return textField;
 	}
