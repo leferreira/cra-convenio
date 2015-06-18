@@ -24,6 +24,7 @@ import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
  * @author Thasso Araújo
@@ -52,6 +53,12 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		this.titulo = new TituloFiliado();
 		carregarEntradaManualPage();
 	}
+	
+	public EntradaManualPage(String mensagem) {
+		this.titulo = new TituloFiliado();
+		info(mensagem);
+		carregarEntradaManualPage();
+	}
 
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.titulo = titulo;
@@ -68,7 +75,12 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			@Override
 			protected void onSubmit() {
 
+				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
+					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
+						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+				
 				try {
+					
 					if (titulo.getId() != 0) {
 						tituloFiliadoMediator.alterarTituloFiliado(titulo);
 					} else {
@@ -79,7 +91,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 						tituloFiliadoMediator.salvarTituloFiliado(titulo);
 					}
-					setResponsePage(new TituloLabel());
+					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 					error("Não foi possível realizar a entrada do título ! Entre em contato com a CRA !");
@@ -140,8 +152,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		return comboMunicipio;
 	}
 
-	private TextField<String> ufDevedor() {
-		TextField<String> textField = new TextField<String>("ufDevedor");
+	private DropDownChoice<String> ufDevedor() {
+		DropDownChoice<String> textField = new DropDownChoice<String>("ufDevedor", EstadoUtils.getEstadosToList());
 		textField.setLabel(new Model<String>("UF"));
 		textField.setRequired(true);
 		return textField;

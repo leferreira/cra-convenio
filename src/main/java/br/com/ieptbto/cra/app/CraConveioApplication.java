@@ -27,12 +27,15 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.filiados.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiados.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioArquivosTitulosPage;
+import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioConvenio;
+import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioFiliado;
+import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosConvenioPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosFiliadoPage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosConvenioPage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosFiliadoPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
-import br.com.ieptbto.cra.page.titulo.ListaTitulosPage;
-import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioFiliadoPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioFiliadoPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
@@ -113,22 +116,22 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
 
-		/** Titulos */
-		mountPage("MonitorarTitulos", BuscarTitulosPage.class);
 		mountPage("EntradaManual", EntradaManualPage.class);
-		mountPage("ListaTitulos", ListaTitulosPage.class);
+		mountPage("ConsultarTitulosConvenio", BuscarTitulosConvenioPage.class);
+		mountPage("ConsultarTitulosFiliado", BuscarTitulosFiliadoPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
-		/** Relatorios */
+		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
+
+		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
+		mountPage("ListaTitulosRelatorioConvenio", ListaTitulosRelatorioConvenio.class);
+		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
+		mountPage("ListaTitulosRelatorioFiliado", ListaTitulosRelatorioFiliado.class);
 		
-		/** Filiado */
 		mountPage("FiliadosPage", ListaFiliadoPage.class);
 		mountPage("IncluirFiliadoPage", IncluirFiliadoPage.class);
-		mountPage("RelatorioArquivosTitulos", RelatorioArquivosTitulosPage.class);
 
-		/** Usuario Filiado */
-		mountPage("UsuariosFiliadoPage", ListaUsuarioFiliadoPage.class);
 		mountPage("IncluirUsuarioFiliadoPage", IncluirUsuarioFiliadoPage.class);
-		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
+		mountPage("UsuariosFiliadoPage", ListaUsuarioFiliadoPage.class);
 	}
 
 	/**
