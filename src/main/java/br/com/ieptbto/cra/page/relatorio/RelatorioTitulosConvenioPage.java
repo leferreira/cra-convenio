@@ -80,7 +80,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 						error("As duas datas devem ser preenchidas.");
 				} 
 				
-				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), dataInicio, dataFim, comboMunicipio.getModelObject()));
+				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), comboFiliado.getModelObject(),dataInicio, dataFim, comboMunicipio.getModelObject()));
 			}
 		};
 	}

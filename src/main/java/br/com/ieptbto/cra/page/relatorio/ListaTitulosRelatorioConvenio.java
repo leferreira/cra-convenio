@@ -1,11 +1,22 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -20,6 +31,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -29,7 +41,6 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("unused")
 public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 
 	/***/
@@ -40,21 +51,26 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
+	private Filiado filiado;
+	private List<TituloFiliadoJRDataSource> listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
 	
 	private List<TituloFiliado> listaTitulos;
 	
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 	
-	public ListaTitulosRelatorioConvenio(Instituicao convenio, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto) {
+	public ListaTitulosRelatorioConvenio(Instituicao convenio, Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto) {
 		this.titulo = new TituloFiliado();
 		this.convenio = convenio;
+		this.filiado = filiado;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.pracaProtesto = pracaProtesto;
-		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioConvenio(convenio, dataInicio, dataFim, pracaProtesto));
+		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioConvenio(convenio, filiado,dataInicio, dataFim, pracaProtesto));
 		add(carregarListaTitulos());
-		add(botaoEnviar());
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
+		form.add(botaoEnviar());
+		add(form);
 	}
 	
 	private Component botaoEnviar() {
@@ -63,6 +79,14 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				
+				try {
+					JasperPrint jasperPrint = novoRelatorioDeTitulosPorConvenio(convenio, filiado, dataInicio, dataFim, pracaProtesto, listaTitulos);
+					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
+				} catch (JRException e) {
+					e.printStackTrace();
+					error("Não foi possível gerar o relatório !");
+				}
 			}
 		};
 	}
@@ -75,13 +99,21 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
-				
 				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
+				TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
+				
+				tituloFiliado.setNumeroTitulo(tituloLista.getNumeroTitulo());
+				tituloFiliado.setDataEmissao(tituloLista.getDataEmissao());
+				tituloFiliado.setPracaProtesto(tituloLista.getPracaProtesto().getNomeMunicipio());
+				tituloFiliado.setValorTitulo(tituloLista.getValorTitulo());
+				tituloFiliado.setFiliado(tituloLista.getFiliado().getRazaoSocial());
+				tituloFiliado.setNomeDevedor(tituloLista.getNomeDevedor());
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("emissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+				item.add(new Label("filiado", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
 		            /***/
@@ -99,8 +131,11 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 					item.add(new Label("dataSituacao", StringUtils.EMPTY));
 					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao()));
+					tituloFiliado.setSituacaoTituloConvenio(tituloLista.getSituacaoTituloConvenio().getSituacao());
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
+						tituloFiliado.setDataConfirmacao(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento());
+						tituloFiliado.setNomeDevedor(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio());
 						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					} else { 
@@ -109,12 +144,16 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 					}
 					
 			        if (tituloRemessa.getRetorno() != null){
+			        	tituloFiliado.setDataSitucao(tituloRemessa.getRetorno().getDataOcorrencia());
 		        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 			        } else {
+			        	tituloFiliado.setDataSitucao(tituloRemessa.getDataOcorrencia());
 			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
 			        }
 					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
+					tituloFiliado.setSituacaoTituloConvenio(tituloRemessa.getSituacaoTitulo());				
 				}
+				getListaRelatorio().add(tituloFiliado);
 			}
 		};
 	}
@@ -131,5 +170,31 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(titulo);
+	}
+
+	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
+		return listaRelatorio;
+	}
+
+	public void setListaRelatorio(List<TituloFiliadoJRDataSource> listaRelatorio) {
+		this.listaRelatorio = listaRelatorio;
+	}
+	
+	private JasperPrint novoRelatorioDeTitulosPorConvenio(Instituicao convenio,Filiado filiado, LocalDate dataInicio, 
+			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliado> beans) throws JRException {
+		
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		
+		if (beans.isEmpty())
+			throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
+
+		parametros.put("CONVENIO", convenio.getNomeFantasia());
+		parametros.put("FILIADO", filiado.getRazaoSocial());
+		parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
+		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
+
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(beans);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTituloConvenio.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}
 }

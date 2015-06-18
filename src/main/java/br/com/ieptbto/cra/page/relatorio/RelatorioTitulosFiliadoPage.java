@@ -45,6 +45,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	RemessaMediator remessaMediator;
 	
 	private TituloFiliado titulo;
+	private Filiado empresaFiliado;
 	
 	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
@@ -52,7 +53,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	
 	public RelatorioTitulosFiliadoPage() {
 		this.titulo = new TituloFiliado();
-		
+		this.empresaFiliado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
 		form.add(dataEnvioInicio());
 		form.add(dataEnvioFinal());
@@ -80,7 +81,6 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				Filiado empresaFiliado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
 				setResponsePage(new ListaTitulosRelatorioFiliado(empresaFiliado, dataInicio, dataFim, comboMunicipio.getModelObject()));
 			}
 		};
