@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -20,7 +21,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -51,8 +51,8 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 	public BuscarTitulosConvenioPage() {
 		
 		this.titulo = new TituloFiliado();
-		titulo.setDataEmissao(new LocalDate());
-		add(new Button("botaoEnviar"){
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
+		form.add(new Button("botaoEnviar"){
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -64,12 +64,13 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 				}
 			}
 		});	
-		add(numeroTitulo());
-		add(numeroProtocoloCartorio());
-		add(nomeDevedor());
-		add(documentoDevedor()); 
-		add(comboFiliado());
+		form.add(numeroTitulo());
+		form.add(numeroProtocoloCartorio());
+		form.add(nomeDevedor());
+		form.add(documentoDevedor()); 
+		form.add(comboFiliado());
 		add(carregarListaTitulos());
+		add(form);
 	}
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {

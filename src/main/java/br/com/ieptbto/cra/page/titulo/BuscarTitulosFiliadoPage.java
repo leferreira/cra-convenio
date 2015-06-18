@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -53,7 +54,8 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 		
 		this.titulo = new TituloFiliado();
 		
-		add(new Button("botaoEnviar"){
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
+		form.add(new Button("botaoEnviar"){
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -65,12 +67,13 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 				}
 			}
 		});	
-		add(numeroTitulo());
-		add(numeroProtocoloCartorio());
-		add(nomeDevedor());
-		add(documentoDevedor()); 
-		add(pracaProtesto());
+		form.add(numeroTitulo());
+		form.add(numeroProtocoloCartorio());
+		form.add(nomeDevedor());
+		form.add(documentoDevedor()); 
+		form.add(pracaProtesto());
 		add(carregarListaTitulos());
+		add(form);
 	}
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {

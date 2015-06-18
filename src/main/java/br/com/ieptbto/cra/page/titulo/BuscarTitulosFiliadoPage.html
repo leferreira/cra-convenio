@@ -6,76 +6,80 @@
 		<div class="panel-heading">Consultar T&iacute;tulos Enviados</div>
 		<div class="panel-body">
 			<fieldset>
-				<div class="row">
-					<div class="col-md-4">
-						<!-- Select Basic -->
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="pracaProtesto">Munic&iacute;pio:</label>
-						  <div class="col-md-8">
-						    <select class="form-control" wicket:id="pracaProtesto">
-						      <option value="1">Option one</option>
-						    </select>
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="nomeDevedor">Devedor:</label>
-						  <div class="col-md-8">
-						  <input type="text" wicket:id="nomeDevedor" class="form-control input-md">
-						    
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<!-- Text input-->
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="numetoTitulo">N. T&iacute;tulo:</label>  
-						  <div class="col-md-8">
-						  <input wicket:id="numeroTitulo" type="text" class="form-control input-md">
-						    
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<!-- Text input-->
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="date">Emiss&atilde;o:</label>  
-						  <div class="col-md-6">
-						  <input id="date" type="text" placeholder="__/__/____" class="form-control input-md">
-						    
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="docDevedor">Documento:</label>  
-						  <div class="col-md-8">
-						  <input type="text" wicket:id="documentoDevedor" class="form-control input-md">
-						    
-						  </div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<!-- Text input-->
-						<div class="form-group">
-						  <label class="col-md-4 control-label" for="numeroProtocolo">Protocolo:</label>  
-						  <div class="col-md-8">
-						  <input wicket:id="numeroProtocoloCartorio" type="text" class="form-control input-md">
-						    
-						  </div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					  <div class="col-md-12">
-						<div class="form-group">
-							<div class="col-md-12">
-						    	<button class="btn btn-primary" style="float: right; margin-bottom: 5px;" wicket:id="botaoEnviar"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+				<form class="form-horizontal" wicket:id="form">
+					<div class="row">
+						<div class="col-md-4">
+							<!-- Select Basic -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="pracaProtesto">Munic&iacute;pio:</label>
+							  <div class="col-md-8">
+							    <select class="form-control" wicket:id="pracaProtesto">
+							      <option value="1">Option one</option>
+							    </select>
+							  </div>
 							</div>
-					  </div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="nomeDevedor">Devedor:</label>
+							  <div class="col-md-8">
+							  <input type="text" wicket:id="nomeDevedor" class="form-control input-md">
+							    
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="numetoTitulo">N. T&iacute;tulo:</label>  
+							  <div class="col-md-8">
+							  <input wicket:id="numeroTitulo" type="text" class="form-control input-md">
+							    
+							  </div>
+							</div>
+						</div>
 					</div>
-				</div>
+					<div class="row">
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="date">Emiss&atilde;o:</label>  
+							  <div class="col-md-6">
+							  <input id="date" type="text" placeholder="__/__/____" class="form-control input-md">
+							    
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="docDevedor">Documento:</label>  
+							  <div class="col-md-8">
+							  <input type="text" wicket:id="documentoDevedor" class="form-control input-md">
+							    
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="numeroProtocolo">Protocolo:</label>  
+							  <div class="col-md-8">
+							  <input wicket:id="numeroProtocoloCartorio" type="text" class="form-control input-md">
+							    
+							  </div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						  <div class="col-md-12">
+							<div class="form-group">
+								<div class="col-md-12">
+							    	<button class="btn btn-primary" style="float: right; margin-bottom: 5px;" wicket:id="botaoEnviar"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>
+								</div>
+						  </div>
+						</div>
+					</div>
+				</form>
 				<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
 					<thead>
 						<tr>
