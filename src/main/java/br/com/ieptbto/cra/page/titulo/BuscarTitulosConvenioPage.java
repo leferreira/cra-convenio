@@ -21,19 +21,26 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
+import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
+/**
+ * @author Thasso Araújo
+ *
+ */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 	/***/
@@ -43,13 +50,25 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 	FiliadoMediator filiadoMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
+	@SpringBean
+	MunicipioMediator municipioMediator;
 	
 	private TituloFiliado titulo;
-	private TextField<String> numeroProtocolo;
-	private DropDownChoice<Filiado> comboFiliado;
+	private TextField<String> campoNomeDevedor;
+	private TextField<String> campoNumeroTitulo;
+	private TextField<String> campoNumeroDocumento;
+	private TextField<String> campoDataEmissao;
+	private DropDownChoice<Filiado> campoFiliado;
+	private DropDownChoice<Municipio> campoPracaProtesto;
+	
+	private String numeroDocumento;
+	private String nomeDevedor;
+	private String numeroTitulo;
+	private LocalDate dataEmissao;
+	private Municipio pracaProtesto;
+	private Filiado filiado;
 	
 	public BuscarTitulosConvenioPage() {
-		
 		this.titulo = new TituloFiliado();
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
 		form.add(new Button("botaoEnviar"){
@@ -58,19 +77,34 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 			@Override
 			public void onSubmit() {
-				try {
-				} catch (Exception e) {
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+				if (campoNumeroDocumento != null){
+					numeroDocumento = campoNumeroDocumento.getModelObject();
+				}
+				if (campoNomeDevedor != null){
+					nomeDevedor = campoNomeDevedor.getModelObject();
+				}
+				if (campoDataEmissao != null){
+					dataEmissao = DataUtil.stringToLocalDate(campoDataEmissao.getModelObject());
+				}
+				if (campoNumeroTitulo != null){
+					numeroTitulo = campoNumeroTitulo.getModelObject();
+				}
+				if (campoPracaProtesto != null){
+					pracaProtesto = campoPracaProtesto.getModelObject();
+				}
+				if (campoFiliado != null) {
+					filiado = campoFiliado.getModelObject(); 					
 				}
 			}
 		});	
 		form.add(numeroTitulo());
-		form.add(numeroProtocoloCartorio());
+		form.add(pracaProtesto());
 		form.add(nomeDevedor());
 		form.add(documentoDevedor()); 
 		form.add(comboFiliado());
-		add(carregarListaTitulos());
+		form.add(campoData());
 		add(form);
+		add(carregarListaTitulos());
 	}
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {
@@ -126,27 +160,45 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 		};
 	}
 	
+	private TextField<String> campoData(){
+		if (campoDataEmissao != null){
+			return campoDataEmissao = new TextField<String>("dataEmissao", new Model<String>(campoDataEmissao.getModelObject()));
+		}
+		return campoDataEmissao = new TextField<String>("dataEmissao");
+	}
+	
 	private TextField<String> numeroTitulo() {
-		return new TextField<String>("numeroTitulo");
+		if (campoNumeroTitulo != null){
+			return campoNumeroTitulo = new TextField<String>("numeroTitulo", new Model<String>(campoNumeroTitulo.getModelObject()));
+		}
+		return campoNumeroTitulo = new TextField<String>("numeroTitulo");
 	}
 	
 	private TextField<String> nomeDevedor() {
-		return new TextField<String>("nomeDevedor");
+		if (campoNomeDevedor != null){
+			return campoNomeDevedor = new TextField<String>("nomeDevedor", new Model<String>(campoNomeDevedor.getModelObject()));
+		}
+		return campoNomeDevedor = new TextField<String>("nomeDevedor");
 	}
 	
 	private TextField<String> documentoDevedor() {
-		return new TextField<String>("documentoDevedor");
+		if (campoNumeroDocumento != null){
+			return campoNumeroDocumento = new TextField<String>("documentoDevedor", new Model<String>(campoNumeroDocumento.getModelObject()));
+		}
+		return campoNumeroDocumento = new TextField<String>("documentoDevedor");
 	}
 	
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		comboFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(),filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
-		comboFiliado.setLabel(new Model<String>("Filiado"));
-		return comboFiliado;		
+		campoFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(),filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		campoFiliado.setLabel(new Model<String>("Filiado"));
+		return campoFiliado;		
 	}
 	
-	private TextField<String> numeroProtocoloCartorio() {
-		return numeroProtocolo = new TextField<String>("numeroProtocoloCartorio", new Model<String>());
+	private DropDownChoice<Municipio> pracaProtesto() {
+		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+		campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		return campoPracaProtesto;
 	}
 	
 	private IModel<List<TituloFiliado>> buscarTitulos() {
@@ -156,7 +208,7 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 			@Override
 			protected List<TituloFiliado> load() {
-				return tituloFiliadoMediator.consultarTitulosConvenio(getUser().getInstituicao(), titulo, numeroProtocolo.getModelObject());
+				return tituloFiliadoMediator.consultarTitulosConvenio(getUser().getInstituicao(),nomeDevedor, numeroDocumento,numeroTitulo, dataEmissao, pracaProtesto, filiado );
 			}
 		};
 	}

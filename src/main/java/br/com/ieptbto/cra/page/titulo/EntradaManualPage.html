@@ -18,7 +18,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="numeroTitulo">NºDocumento:</label>  
 							  <div class="col-md-8">
-							  <input maxlength="11" type="text" class="form-control input-md" wicket:id="numeroTitulo">
+							  <input maxlength="11" class="form-control input-md" wicket:id="numeroTitulo">
 							    
 							  </div>
 							</div>
@@ -28,7 +28,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date">Dt. Emissão:</label>  
 							  <div class="col-md-8">
-							  <input id="date" type="text" placeholder="__/__/____"  class="form-control input-md" wicket:id="dataEmissao">
+							  <input id="data" placeholder="__/__/____"  class="form-control input-md" wicket:id="dataEmissao">
 							    
 							  </div>
 							</div>
@@ -38,7 +38,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date1">Vencimento:</label>  
 							  <div class="col-md-8">
-							  <input id="date1" type="text" placeholder="__/__/____" class="form-control input-md" wicket:id="dataVencimento">
+							  <input id="data" placeholder="__/__/____" class="form-control input-md" wicket:id="dataVencimento">
 							    
 							  </div>
 							</div>
@@ -53,7 +53,7 @@
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							  		<input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorTitulo">
+							  		<input maxlength="15" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorTitulo">
 							    </div>
 							  </div>
 							</div>
@@ -65,7 +65,7 @@
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							 		 <input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorSaldoTitulo">
+							 		 <input maxlength="15" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorSaldoTitulo">
 							    </div>
 							  </div>
 							</div>
@@ -76,7 +76,6 @@
 							  <label class="col-md-4 control-label" for="pracaProtesto">Município:</label>
 							  <div class="col-md-8">
 							    <select class="form-control" wicket:id="pracaProtesto">
-							      <option value="Escolha">Escolha</option>
 							    </select>
 							  </div>
 							</div>

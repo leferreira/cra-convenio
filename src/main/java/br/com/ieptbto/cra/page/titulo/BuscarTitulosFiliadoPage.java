@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -18,8 +17,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -32,8 +33,11 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
-@AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 
 	/***/
@@ -47,8 +51,17 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 	MunicipioMediator municipioMediator;
 	
 	private TituloFiliado titulo;
-	private TextField<String> numeroProtocoloCartorio;
-	private DropDownChoice<Municipio> comboMunicipio;
+	private TextField<String> campoNomeDevedor;
+	private TextField<String> campoNumeroTitulo;
+	private TextField<String> campoNumeroDocumento;
+	private TextField<String> campoDataEmissao;
+	private DropDownChoice<Municipio> campoPracaProtesto;
+	
+	private String numeroDocumento;
+	private String nomeDevedor;
+	private String numeroTitulo;
+	private LocalDate dataEmissao;
+	private Municipio pracaProtesto;
 	
 	public BuscarTitulosFiliadoPage() {
 		
@@ -61,14 +74,25 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 
 			@Override
 			public void onSubmit() {
-				try {
-				} catch (Exception e) {
-					error("Não foi possível realizar a busca ! \n Entre em contato com a CRA ");
+				if (campoNumeroDocumento != null){
+					numeroDocumento = campoNumeroDocumento.getModelObject();
+				}
+				if (campoNomeDevedor != null){
+					nomeDevedor = campoNomeDevedor.getModelObject();
+				}
+				if (campoDataEmissao != null){
+					dataEmissao = DataUtil.stringToLocalDate(campoDataEmissao.getModelObject());
+				}
+				if (campoNumeroTitulo != null){
+					numeroTitulo = campoNumeroTitulo.getModelObject();
+				}
+				if (campoPracaProtesto != null){
+					pracaProtesto = campoPracaProtesto.getModelObject();
 				}
 			}
 		});	
+		form.add(campoData());
 		form.add(numeroTitulo());
-		form.add(numeroProtocoloCartorio());
 		form.add(nomeDevedor());
 		form.add(documentoDevedor()); 
 		form.add(pracaProtesto());
@@ -128,34 +152,50 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 		};
 	}
 	
-	private List<TituloFiliado> buscarTitulos(){
-		return tituloFiliadoMediator.consultarTitulosFiliado(getUser(), titulo, numeroProtocoloCartorio.getModelObject());
+	private IModel<List<TituloFiliado>> buscarTitulos() {
+		return new LoadableDetachableModel<List<TituloFiliado>>() {
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<TituloFiliado> load() {
+				return tituloFiliadoMediator.consultarTitulosFiliado(getUser(),nomeDevedor, numeroDocumento,numeroTitulo, dataEmissao, pracaProtesto );
+			}
+		};
+	}
+	
+	private TextField<String> campoData(){
+		if (campoDataEmissao != null){
+			return campoDataEmissao = new TextField<String>("dataEmissao", new Model<String>(campoDataEmissao.getModelObject()));
+		}
+		return campoDataEmissao = new TextField<String>("dataEmissao");
 	}
 	
 	private TextField<String> numeroTitulo() {
-		return new TextField<String>("numeroTitulo");
+		if (campoNumeroTitulo != null){
+			return campoNumeroTitulo = new TextField<String>("numeroTitulo", new Model<String>(campoNumeroTitulo.getModelObject()));
+		}
+		return campoNumeroTitulo = new TextField<String>("numeroTitulo");
 	}
 	
 	private TextField<String> nomeDevedor() {
-		return new TextField<String>("nomeDevedor");
+		if (campoNomeDevedor != null){
+			return campoNomeDevedor = new TextField<String>("nomeDevedor", new Model<String>(campoNomeDevedor.getModelObject()));
+		}
+		return campoNomeDevedor = new TextField<String>("nomeDevedor");
 	}
 	
 	private TextField<String> documentoDevedor() {
-		return new TextField<String>("documentoDevedor");
+		if (campoNumeroDocumento != null){
+			return campoNumeroDocumento = new TextField<String>("documentoDevedor", new Model<String>(campoNumeroDocumento.getModelObject()));
+		}
+		return campoNumeroDocumento = new TextField<String>("documentoDevedor");
 	}
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		if (titulo.getPracaProtesto() != null)
-			renderer.getDisplayValue(titulo.getPracaProtesto());
-		comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
-		comboMunicipio.setLabel(new Model<String>("Município"));
-		comboMunicipio.setRequired(true);
-		return comboMunicipio;
-	}
-	
-	private TextField<String> numeroProtocoloCartorio() {
-		return numeroProtocoloCartorio = new TextField<String>("numeroProtocoloCartorio", new Model<String>());
+		campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		return campoPracaProtesto;
 	}
 	
 	@Override

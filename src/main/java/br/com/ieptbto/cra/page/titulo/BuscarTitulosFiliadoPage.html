@@ -14,7 +14,6 @@
 							  <label class="col-md-4 control-label" for="pracaProtesto">Munic&iacute;pio:</label>
 							  <div class="col-md-8">
 							    <select class="form-control" wicket:id="pracaProtesto">
-							      <option value="1">Option one</option>
 							    </select>
 							  </div>
 							</div>
@@ -45,7 +44,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date">Emiss&atilde;o:</label>  
 							  <div class="col-md-6">
-							  <input id="date" type="text" placeholder="__/__/____" class="form-control input-md">
+							  <input id="date" type="text" wicket:id="dataEmissao" placeholder="__/__/____" class="form-control input-md">
 							    
 							  </div>
 							</div>
@@ -60,18 +59,6 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="numeroProtocolo">Protocolo:</label>  
-							  <div class="col-md-8">
-							  <input wicket:id="numeroProtocoloCartorio" type="text" class="form-control input-md">
-							    
-							  </div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						  <div class="col-md-12">
 							<div class="form-group">
 								<div class="col-md-12">
 							    	<button class="btn btn-primary" style="float: right; margin-bottom: 5px;" wicket:id="botaoEnviar"><span class="glyphicon glyphicon-search"></span>&nbsp;Buscar</button>

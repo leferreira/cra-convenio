@@ -11,10 +11,9 @@
 						<div class="col-md-4">
 							<!-- Select Basic -->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="filiado">Filiado:</label>
+							  <label class="col-md-4 control-label" for="filiado">Associado:</label>
 							  <div class="col-md-8">
-							    <select id="filiado" name="filiado" class="form-control" wicket:id="filiado">
-							      <option value="1">Option one</option>
+							    <select class="form-control" wicket:id="filiado">
 							    </select>
 							  </div>
 							</div>
@@ -43,7 +42,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date">Emiss&atilde;o:</label>  
 							  <div class="col-md-6">
-							  <input id="date" type="text" placeholder="__/__/____" class="form-control input-md">
+							  <input id="date" type="text" wicket:id="dataEmissao" placeholder="__/__/____" class="form-control input-md">
 							    
 							  </div>
 							</div>
@@ -60,10 +59,10 @@
 						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="numeroProtocolo">Protocolo:</label>  
+							  <label class="col-md-4 control-label" for="pracaProtesto">Munic&iacute;pio:</label>  
 							  <div class="col-md-8">
-							  <input wicket:id="numeroProtocoloCartorio" type="text" class="form-control input-md">
-							    
+							    <select class="form-control" wicket:id="pracaProtesto">
+							    </select>
 							  </div>
 							</div>
 						</div>
@@ -85,7 +84,7 @@
 							<th>Emiss&atilde;o</th>
 							<th>Pra&ccedil;a</th>
 							<th>Protoc.</th>
-							<th>Filiado</th>
+							<th>Associado</th>
 							<th>Devedor</th>
 							<th>Valor</th>
 							<th>Data Conf.</th>
