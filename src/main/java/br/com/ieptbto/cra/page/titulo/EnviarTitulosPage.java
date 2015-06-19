@@ -69,13 +69,13 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				
 					tituloFiliadoMediator.enviarTitulosPendentes(listaTitulosFiliado);
 				
-					setResponsePage(new EnviarTitulosPage("Os títulos foram enviados com sucesso para a CRA !"));
+					setResponsePage(new EnviarTitulosPage("Os títulos foram encaminhados com sucesso !"));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível enviar o arquivo ! \n Entre em contato com a CRA ");
+					error("Não foi possível enviar o arquivo ! \n Entre em contato com o IEPTB-TO ! ");
 				}
 			}
 		};

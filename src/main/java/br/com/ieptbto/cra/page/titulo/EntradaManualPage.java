@@ -87,14 +87,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					titulo.setTipoDocumentoDevedor(TipoDocumento.CPF.getLabel());
 				}
 				
-				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
-				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
-				
-				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
-					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
-						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 				
 				try {
+					titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
+					titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
+					
+					if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
+						if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
+							error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 					
 					if (titulo.getId() != 0) {
 						tituloFiliadoMediator.alterarTituloFiliado(titulo);
@@ -107,8 +107,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
-					error("Não foi possível realizar a entrada do título ! Entre em contato com a CRA !");
-				}
+					error("Não foi possível realizar a entrada do título ! Entre em contato com o IEPTB !");
+				} 
 			}
 		};
 		form.add(numeroTitulo());
