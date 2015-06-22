@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.menu;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -15,9 +16,11 @@ public class CraMenu extends Panel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 
-	public CraMenu(String id) {
+	public CraMenu(String id, Usuario usuario) {
 		super(id);
+		this.usuario = usuario;
 		Menu menu = new Menu("CraMenu");
 		adicionarMenuLateral(menu);
 		// adicionarMenuAgenda(menu);
@@ -32,49 +35,32 @@ public class CraMenu extends Panel {
 		String[] rolesPesquisar = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
-		/**Menus arquivos*/
-		
-		/**Menus titulos*/
-		menuLateral.addItem("EntradaManual", rolesPesquisar);
-		menuLateral.addItem("MonitorarTitulos", rolesPesquisar);
+
+		/** Menus titulos */
+		menuLateral.addItem("EntradaManual", rolesPesquisar); 
+
+		menuLateral.addItem("ConsultarTitulosFiliado", rolesPesquisar);
+		menuLateral.addItem("ConsultarTitulosConvenio", rolesPesquisar);
 		menuLateral.addItem("EnviarTitulosPendentes", rolesPesquisar);
 
-		/**Menus Relatorios*/
-		menuLateral.addItem("RelatorioArquivosTitulos", rolesIncluir);
+		/** Menus Relatorios */
+		menuLateral.addItem("RelatorioTitulosFiliado", rolesIncluir);
+		menuLateral.addItem("RelatorioTitulosConvenio", rolesIncluir);
 
-	    /**Menus Aministracao*/
-	    menuLateral.addItem("UsuariosFiliadoPage", rolesIncluir);
-	    menuLateral.addItem("FiliadosPage", rolesIncluir);
-	    
+		/** Menus Aministracao */
+		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesIncluir);
+		menuadmin.setVisible(verificaPermissao());
+		menuadmin.addItem("UsuariosFiliadoPage", rolesIncluir);
+		menuadmin.addItem("FiliadosPage", rolesIncluir);
+
 	}
 
-	// private void adicionarMenuAgenda(Menu menu) {
-	// MenuItem menuPrincipal = menu.addItem("menuAgenda");
-	// menuPrincipal.addItem("atendimento");
-	// menuPrincipal.addItem("pesquisarAtendimento");
-	// // menuPrincipal.addItem("agendamento");
-	// }
-	//
-	// private void adicionarMenuClinico(Menu menu) {
-	// MenuItem menuPrincipal = menu.addItem("menuClinico");
-	// menuPrincipal.addItem("anamnese");
-	// menuPrincipal.addItem("consulta");
-	// menuPrincipal.addItem("historico");
-	// }
-	//
-	// private void adicionarMenuRelatorio(Menu menu) {
-	// MenuItem menuPrincipal = menu.addItem("menuRelatorio");
-	// menuPrincipal.addItem("relatorioAtendimento");
-	// menuPrincipal.addItem("relatorioAtendimentoTipoServico");
-	// menuPrincipal.addItem("relatorioAtendimentoTipoAtendimento");
-	// }
-	//
-	// private void criarMenuEntidade(MenuItem menu, String nome, String[]
-	// rolesIncluir, String[] rolesPesquisar) {
-	// MenuItem menuPrincipal = menu.addItem("sm" + nome);
-	// menuPrincipal.addItem("incluir" + nome, rolesIncluir);
-	// menuPrincipal.addItem("pesquisar" + nome, rolesPesquisar);
-	//
-	// }
-
+	private boolean verificaPermissao() {
+		for (String role : usuario.getGrupoUsuario().getRoles()) {
+			if (CraRoles.ADMIN.equals(role) || CraRoles.SUPER.equals(role)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

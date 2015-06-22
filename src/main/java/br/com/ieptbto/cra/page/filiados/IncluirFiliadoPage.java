@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -25,11 +26,13 @@ import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
  * @author Thasso Araújo
  *
  */
+@AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirFiliadoPage extends BasePage<Filiado> {
 
@@ -94,8 +97,9 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		add(form);
 	}
 	
-	private TextField<String> campoUfCredor() {
-		TextField<String> textField = new TextField<String>("uf");
+	private DropDownChoice<String> campoUfCredor() {
+		DropDownChoice<String> textField = new DropDownChoice<String>("uf", EstadoUtils.getEstadosToList());
+		textField.setLabel(new Model<String>("UF"));
 		textField.setRequired(true);
 		return textField;
 	}
@@ -110,24 +114,28 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 
 	private TextField<String> campoCepCredor() {
 		TextField<String> textField = new TextField<String>("cep");
+		textField.setLabel(new Model<String>("CEP"));
 		textField.setRequired(true);
 		return textField;
 	}
 
 	private TextArea<String> campoEnderecoCredor() {
 		TextArea<String> textArea = new TextArea<String>("endereco");
+		textArea.setLabel(new Model<String>("Endereço"));
 		textArea.setRequired(true);
 		return textArea;
 	}
 
 	private TextField<String> campoDocumentoCredor() {
 		TextField<String> textField = new TextField<String>("cnpjCpf");
+		textField.setLabel(new Model<String>("CNPJ/CPF"));
 		textField.setRequired(true);
 		return textField;
 	}
 
 	private TextField<String> campoNomeCredor() {
 		TextField<String> textField = new TextField<String>("razaoSocial");
+		textField.setLabel(new Model<String>("Razão Social"));
 		textField.setRequired(true);
 		return textField;
 	}

@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.filiados;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -20,6 +21,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @SuppressWarnings("rawtypes")
+@AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaFiliadoPage extends BasePage<Filiado>{
 
@@ -83,7 +85,7 @@ public class ListaFiliadoPage extends BasePage<Filiado>{
 		};
 	}
 	
-	private String verificarSituacao(Boolean ativo){
+	private String verificarSituacao(Boolean ativo){ 
 		if (ativo.equals(true))
 			return "Ativo";
 		return "Não Ativo";

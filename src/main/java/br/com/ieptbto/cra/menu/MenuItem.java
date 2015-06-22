@@ -41,7 +41,7 @@ public class MenuItem extends WebMarkupContainer {
 	}
 
 	/**
-	 * Contr  adiciona um MenuItem ao menu indicando os roles que podem
+	 * Contr adiciona um MenuItem ao menu indicando os roles que podem
 	 * visualizar o menu. Todos os demais roles nao tem acesso ao menu.
 	 * 
 	 * @param id

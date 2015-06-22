@@ -16,9 +16,9 @@
 						<div class="col-md-4">
 	                 		<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="numeroTitulo">Nº do Título:</label>  
+							  <label class="col-md-4 control-label" for="numeroTitulo">NºDocumento:</label>  
 							  <div class="col-md-8">
-							  <input maxlength="11" type="text" class="form-control input-md" wicket:id="numeroTitulo">
+							  <input maxlength="11" class="form-control input-md" wicket:id="numeroTitulo">
 							    
 							  </div>
 							</div>
@@ -26,9 +26,9 @@
 						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="date">Emissão:</label>  
+							  <label class="col-md-4 control-label" for="date">Dt. Emissão:</label>  
 							  <div class="col-md-8">
-							  <input id="date" type="text" placeholder="__/__/____" class="form-control input-md" wicket:id="dataEmissao">
+							  <input id="data" placeholder="__/__/____"  class="form-control input-md" wicket:id="dataEmissao">
 							    
 							  </div>
 							</div>
@@ -38,21 +38,22 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date1">Vencimento:</label>  
 							  <div class="col-md-8">
-							  <input id="date1" type="text" placeholder="__/__/____" class="form-control input-md" wicket:id="dataVencimento">
+							  <input id="data" placeholder="__/__/____" class="form-control input-md" wicket:id="dataVencimento">
 							    
 							  </div>
 							</div>
-						</div>
+							
+                 	    </div>
 					</div>
 					<div class="row">
 						<div class="col-md-4">
-	                  		<!-- Text input-->
+							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="valorTitulo">Valor Débito:</label>  
+							  <label class="col-md-4 control-label" for="valorTitulo">Valor Doc:</label>  
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							  		<input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorTitulo">
+							  		<input maxlength="15" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorTitulo">
 							    </div>
 							  </div>
 							</div>
@@ -60,25 +61,38 @@
 						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Valor Protesto:</label>  
+							  <label class="col-md-4 control-label" for="valorSaldoTitulo">Valor à Protestar:</label>  
 							  <div class="col-md-8">
 							  	<div class="input-group">
 							  		<span class="input-group-addon">R$</span>
-							 		 <input maxlength="15" type="text" onkeypress="FormataValor(this.id, 12, event)" class="form-control input-md" wicket:id="valorSaldoTitulo">
+							 		 <input maxlength="15" onkeypress="FormataValor(this.id, 12, event);" class="form-control input-md" wicket:id="valorSaldoTitulo">
 							    </div>
 							  </div>
 							</div>
-                 	    </div>
+						</div>	
 						<div class="col-md-4">
 							<!-- Select Basic -->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="pracaProtesto">Praça de Protesto:</label>
+							  <label class="col-md-4 control-label" for="pracaProtesto">Município:</label>
 							  <div class="col-md-8">
 							    <select class="form-control" wicket:id="pracaProtesto">
-							      <option value="Escolha">Escolha</option>
 							    </select>
 							  </div>
 							</div>
+						</div>
+					 </div>
+					 <div class="row">
+					 	<div class="col-md-4">
+							<!-- Multiple Radios (inline) -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="especie">Tipo do Doc:</label>
+							  <div class="col-md-8" style="text-align: left;"> 
+							 	<select class="form-control"  wicket:id="especieTitulo">
+							    </select>
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
 						</div>
 					 </div>
 				 </fieldset>
@@ -97,9 +111,12 @@
 						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
-							  <label class="col-md-4 control-label" for="documentoDevedor">CNPJ/CPF:</label>  
+							  <label class="col-md-4 control-label" for="CpfCnpj">CNPJ/CPF:</label>  
 							  <div class="col-md-8">
-							  <input maxlength="14" type="text" class="form-control input-md" wicket:id="documentoDevedor">
+							  <input maxlength="18" type="text" 
+							  onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							  onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							  class="form-control input-md" wicket:id="CpfCnpj"/>
 							    
 							  </div>
 							</div>
@@ -107,10 +124,42 @@
 						<div class="col-md-4">
 							<!-- Text input-->
 							<div class="form-group">
+							  <label class="col-md-4 control-label" for="documentoDevedor">Documento:</label>  
+							  <div class="col-md-8">
+							  <input maxlength="11" type="text" class="form-control input-md" wicket:id="documentoDevedor"/>
+							    
+							  </div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
 							  <label class="col-md-4 control-label" for="cidade">Cidade:</label>  
 							  <div class="col-md-8">
 							  <input min="4" maxlength="20" type="text" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="cidadeDevedor">
+							</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<!-- Text input-->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="cep">CEP:</label>  
+							  <div class="col-md-8">
+							  <input type="text" max="8" maxlength="8" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="cepDevedor">
 							    
+							  </div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<!-- Select Basic -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label" for="ufDevedor">UF:</label>
+							  <div class="col-md-8">
+							    <select class="form-control" wicket:id="ufDevedor">
+							      <option value="Escolha">Escolha</option>
+							    </select>
 							  </div>
 							</div>
 						</div>
@@ -126,26 +175,8 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="cep">CEP:</label>  
-							  <div class="col-md-8">
-							  <input type="text" max="8" maxlength="8" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="cepDevedor">
-							    
-							  </div>
-							</div>
 						</div>
 						<div class="col-md-4">
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="uf">UF:</label>  
-							  <div class="col-md-8">
-							  <input type="text" max="2" maxlength="2" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="ufDevedor">
-							    
-							  </div>
-							</div>
-						</div>
-						<div class="col-md-12">
 							<!-- Button -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="salvar"></label>
@@ -155,7 +186,6 @@
 							</div>
 						</div>
 					</div>
-					
 				  </fieldset>
 				</div>
 				<div class="panel-footer">

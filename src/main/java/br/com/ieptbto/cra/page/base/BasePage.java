@@ -89,7 +89,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	protected Component createMenu(String containerId) {
-		return getWicketApplication().createMenuSistema(this, containerId);
+		return getWicketApplication().createMenuSistema(this, containerId, getUser());
 	}
 
 	private IWebApplication getWicketApplication() {

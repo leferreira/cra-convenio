@@ -7,7 +7,7 @@
 	<wicket:extend>
 			<form wicket:id="form" id="form" class="form-horizontal">
 				<div class="panel panel-primary">
-					<div class="panel-heading">Cadastro de Filiados</div>
+					<div class="panel-heading">Cadastro de Empresa Associada</div>
 					<div class="panel-body">
 						<a href="FiliadosPage" style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
 						<br style="clear: both;">
@@ -16,9 +16,9 @@
 								<div class="col-md-6">
 									<!-- Text input-->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="razaoSocial">Nome Fantasia:</label>  
+									  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="razaoSocial" onkeyup="this.value = this.value.toUpperCase()" name="razaoSocial" type="text" placeholder="" class="form-control input-md uppercase react">
+									  <input wicket:id="razaoSocial" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
 									    
 									  </div>
 									</div>
@@ -26,7 +26,8 @@
 									<div class="form-group">
 									  <label class="col-md-4 control-label" for="cnpjCpf">CPF/CNPJ:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="cnpjCpf" name="cnpjCpf" type="text" placeholder="" class="form-control input-md">
+									  <input wicket:id="cnpjCpf" maxlength="18"  onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							  onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
 									    
 									  </div>
 									</div>
@@ -35,8 +36,6 @@
 									  <label class="col-md-4 control-label" for="situacao">Situação:</label>
 									  <div class="col-md-6" style="text-align: left;"> 
 									    <label class="radio-inline inline" for="situacao-0" wicket:id="ativo">
-									      <input type="radio" name="situacao"  value="1" checked="checked">
-									      1
 									    </label>
 									  </div>
 									</div>
@@ -45,7 +44,7 @@
 									<div class="form-group">
 									  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
 									  <div class="col-md-4">                     
-									    <textarea class="form-control" wicket:id="endereco"></textarea>
+									    <textarea onkeyup="this.value = this.value.toUpperCase()" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 									  </div>
 									</div>
 								</div>
@@ -55,7 +54,6 @@
 									  <label class="col-md-4 control-label" for="municipio">Município:</label>
 									  <div class="col-md-6">
 									    <select wicket:id="municipio" class="form-control">
-									      <option value="1">Option one</option>
 									    </select>
 									  </div>
 									</div>
@@ -63,7 +61,7 @@
 									<div class="form-group">
 									  <label class="col-md-4 control-label" for="cep">CEP:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="cep" type="text" class="form-control input-md">
+									  <input id="cep" wicket:id="cep" class="form-control input-md">
 									    
 									  </div>
 									</div>
@@ -71,7 +69,8 @@
 									<div class="form-group">
 									  <label class="col-md-4 control-label" for="uf">UF:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="uf" type="text" class="form-control input-md">
+									 	<select wicket:id="uf" class="form-control">
+									    </select>
 									    
 									  </div>
 									</div>
