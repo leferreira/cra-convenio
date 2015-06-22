@@ -28,7 +28,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date">Dt. Emissão:</label>  
 							  <div class="col-md-8">
-							  <input id="data" placeholder="__/__/____"  class="form-control input-md" wicket:id="dataEmissao">
+							  <input id="data" placeholder="__/__/____"  onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataEmissao">
 							    
 							  </div>
 							</div>
@@ -38,7 +38,7 @@
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="date1">Vencimento:</label>  
 							  <div class="col-md-8">
-							  <input id="data" placeholder="__/__/____" class="form-control input-md" wicket:id="dataVencimento">
+							  <input id="data1" placeholder="__/__/____" onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataVencimento">
 							    
 							  </div>
 							</div>
