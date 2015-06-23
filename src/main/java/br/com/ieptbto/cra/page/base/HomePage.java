@@ -15,7 +15,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  * @param <T>
  */
-@AuthorizeInstantiation(value = { CraRoles.USER, CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeInstantiation(value = CraRoles.USER)
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
