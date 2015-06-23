@@ -31,32 +31,33 @@ public class CraMenu extends Panel {
 	}
 
 	private void adicionarMenuLateral(Menu menu) {
-//		String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
-		String[] rolesAdmin = { CraRoles.ADMIN, CraRoles.SUPER };
+		// String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER,
+		// CraRoles.USER };
+		String[] rolesAdmin = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
 		String[] rolesUser = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesUser);
-		
+
 		/** Menus Filiado */
-		menuLateral.addItem("EntradaManual", rolesUser); 
-		menuLateral.addItem("ConsultarTitulosFiliado", rolesUser);
-		menuLateral.addItem("EnviarTitulosPendentes", rolesUser);
-		menuLateral.addItem("RelatorioTitulosFiliado", rolesUser);
+		menuLateral.addItem("EntradaManual", rolesUser);
+		menuLateral.addItem("ConsultarTitulosFiliado", rolesUser).setVisible(verificaPermissao(CraRoles.USER));
+		menuLateral.addItem("EnviarTitulosPendentes", rolesUser).setVisible(verificaPermissao(CraRoles.USER));
+		menuLateral.addItem("RelatorioTitulosFiliado", rolesUser).setVisible(verificaPermissao(CraRoles.USER));
 
 		/** Menus Convenio */
-		menuLateral.addItem("ConsultarTitulosConvenio", rolesAdmin);
-		menuLateral.addItem("RelatorioTitulosConvenio", rolesAdmin);
+		menuLateral.addItem("ConsultarTitulosConvenio", rolesAdmin).setVisible(verificaPermissao(CraRoles.ADMIN));
+		menuLateral.addItem("RelatorioTitulosConvenio", rolesAdmin).setVisible(verificaPermissao(CraRoles.ADMIN));
 
 		/** Menus Aministracao */
 		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesAdmin);
-		menuadmin.setVisible(verificaPermissao());
+		menuadmin.setVisible(verificaPermissao(CraRoles.ADMIN));
 		menuadmin.addItem("UsuariosFiliadoPage", rolesAdmin);
 		menuadmin.addItem("FiliadosPage", rolesAdmin);
 	}
 
-	private boolean verificaPermissao() {
+	private boolean verificaPermissao(String permissao) {
 		for (String role : usuario.getGrupoUsuario().getRoles()) {
-			if (CraRoles.ADMIN.equals(role) || CraRoles.SUPER.equals(role)) {
+			if (permissao.equals(role)) {
 				return true;
 			}
 		}
