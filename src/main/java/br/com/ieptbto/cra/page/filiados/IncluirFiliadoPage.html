@@ -16,52 +16,52 @@
 								<div class="col-md-6">
 									<!-- Text input-->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="razaoSocial">Razão Social:</label>  
+									  <label class="col-md-4 control-label">Razão Social:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="razaoSocial" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
+									  <input wicket:id="razaoSocial" tabindex="1" autofocus="autofocus" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md uppercase react">
 									    
 									  </div>
 									</div>
 									<!-- Text input-->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="cnpjCpf">CPF/CNPJ:</label>  
+									  <label class="col-md-4 control-label">CPF/CNPJ:</label>  
 									  <div class="col-md-6">
-									  <input wicket:id="cnpjCpf" maxlength="18"  onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-							  onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
+									  <input wicket:id="cnpjCpf" maxlength="18"  tabindex="2" onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							 				onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)" class="form-control input-md">
 									    
 									  </div>
 									</div>
 									<!-- Multiple Radios (inline) -->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="situacao">Situação:</label>
+									  <label class="col-md-4 control-label" >Situação:</label>
 									  <div class="col-md-6" style="text-align: left;"> 
-									    <label class="radio-inline inline" for="situacao-0" wicket:id="ativo">
+									    <label class="radio-inline inline" tabindex="3" wicket:id="ativo">
 									    </label>
 									  </div>
 									</div>
 											
 									<!-- Textarea -->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="endereco">Endereço:</label>
+									  <label class="col-md-4 control-label">Endereço:</label>
 									  <div class="col-md-4">                     
-									    <textarea onkeyup="this.value = this.value.toUpperCase()" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
+									    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" maxlength="45" wicket:id="endereco"></textarea>
 									  </div>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<!-- Select Basic -->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="municipio">Município:</label>
+									  <label class="col-md-4 control-label">Município:</label>
 									  <div class="col-md-6">
-									    <select wicket:id="municipio" class="form-control">
+									    <select wicket:id="municipio" tabindex="5" class="form-control">
 									    </select>
 									  </div>
 									</div>
 									<!-- Text input-->
 									<div class="form-group">
-									  <label class="col-md-4 control-label" for="cep">CEP:</label>  
+									  <label class="col-md-4 control-label">CEP:</label>  
 									  <div class="col-md-6">
-									  <input id="cep" wicket:id="cep" class="form-control input-md">
+									  <input id="cep" wicket:id="cep" tabindex="6" class="form-control input-md">
 									    
 									  </div>
 									</div>
@@ -76,9 +76,9 @@
 									</div>
 									<!-- Button -->
 									<div class="form-group">
-									  <label class="col-md-2 control-label" for="salvar"></label>
+									  <label class="col-md-2 control-label"></label>
 									  <div class="col-md-8">
-									    <button id="salvar" type="submit" name="salvar" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+									    <button id="salvar" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
 									  </div>
 									</div>
 								</div>
