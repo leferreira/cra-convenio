@@ -21,7 +21,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
-import br.com.ieptbto.cra.enumeration.TipoDocumento;
 import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
@@ -42,8 +41,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	/***/
 	private static final long serialVersionUID = 1L;
 
-	private Form<?> form;
-	private TituloFiliado titulo;
+	private TituloFiliado tituloFiliado;
 	private TextField<String> dataVencimentoField;
 	private TextField<String> dataEmissaoField;
 
@@ -55,60 +53,43 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
 
 	public EntradaManualPage() {
-		this.titulo = new TituloFiliado();
+		this.tituloFiliado = new TituloFiliado();
 		carregarEntradaManualPage();
 	}
 	
-	public EntradaManualPage(String mensagem) {
-		this.titulo = new TituloFiliado();
-		info(mensagem);
-		carregarEntradaManualPage();
-	}
-
 	public EntradaManualPage(TituloFiliado titulo) {
-		this.titulo = titulo;
+		this.tituloFiliado = titulo;
 		carregarEntradaManualPage();
 	}
 
 	public void carregarEntradaManualPage() {
 
-		form = new Form<TituloFiliado>("form", getModel()) {
-
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+			
 			/***/
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void onSubmit() {
 				TituloFiliado titulo = getModelObject();
 				
-				if (titulo.getCpfCnpj().length() == 18 ){
-					titulo.setTipoDocumentoDevedor(TipoDocumento.CNPJ.getLabel());
-				} else { 
-					titulo.setTipoDocumentoDevedor(TipoDocumento.CPF.getLabel());
+				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
+					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
+						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+				
+				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
+				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
+				
+				if (titulo.getId() != 0) {
+					tituloFiliadoMediator.alterarTituloFiliado(titulo);
+				} else {
+					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
+					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
+
+					tituloFiliadoMediator.salvarTituloFiliado(titulo);
 				}
 				
-				
-				try {
-					titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
-					titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
-					
-					if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
-						if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
-							error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-					
-					if (titulo.getId() != 0) {
-						tituloFiliadoMediator.alterarTituloFiliado(titulo);
-					} else {
-						titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
-						titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-
-						tituloFiliadoMediator.salvarTituloFiliado(titulo);
-					}
-					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					error("Não foi possível realizar a entrada do título ! Entre em contato com o IEPTB !");
-				} 
+				titulo = null;
+				info("Os dados do título foram salvos com sucesso !");
 			}
 		};
 		form.add(numeroTitulo());
@@ -137,8 +118,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	private TextField<String> dataEmissao() {
-		if (titulo.getDataEmissao() != null) {
-			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(titulo.getDataEmissao())));
+		if (tituloFiliado.getDataEmissao() != null) {
+			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
 		} else
 			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
 		dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
@@ -147,8 +128,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	private TextField<String> dataVencimento() {
-		if (titulo.getDataVencimento() != null) {
-			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(titulo
+		if (tituloFiliado.getDataVencimento() != null) {
+			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(tituloFiliado
 			        .getDataVencimento())));
 		} else
 			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
@@ -236,7 +217,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(titulo);
+		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);
 	}
-
 }

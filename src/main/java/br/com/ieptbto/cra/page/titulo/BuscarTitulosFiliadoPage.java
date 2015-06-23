@@ -20,7 +20,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -51,20 +50,11 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 	MunicipioMediator municipioMediator;
 	
 	private TituloFiliado titulo;
-	private TextField<String> campoNomeDevedor;
-	private TextField<String> campoNumeroTitulo;
-	private TextField<String> campoNumeroDocumento;
-	private TextField<String> campoDataEmissao;
-	private DropDownChoice<Municipio> campoPracaProtesto;
-	
-	private String numeroDocumento;
-	private String nomeDevedor;
-	private String numeroTitulo;
-	private LocalDate dataEmissao;
-	private Municipio pracaProtesto;
+	private TituloFiliado tituloBuscado;
+	private TextField<String> textFieldDataEmissao;
 	
 	public BuscarTitulosFiliadoPage() {
-		
+		this.tituloBuscado = new TituloFiliado();
 		this.titulo = new TituloFiliado();
 		
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
@@ -74,21 +64,10 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 
 			@Override
 			public void onSubmit() {
-				if (campoNumeroDocumento != null){
-					numeroDocumento = campoNumeroDocumento.getModelObject();
-				}
-				if (campoNomeDevedor != null){
-					nomeDevedor = campoNomeDevedor.getModelObject();
-				}
-				if (campoDataEmissao != null){
-					dataEmissao = DataUtil.stringToLocalDate(campoDataEmissao.getModelObject());
-				}
-				if (campoNumeroTitulo != null){
-					numeroTitulo = campoNumeroTitulo.getModelObject();
-				}
-				if (campoPracaProtesto != null){
-					pracaProtesto = campoPracaProtesto.getModelObject();
-				}
+				tituloBuscado = titulo;
+				
+				if (textFieldDataEmissao.getModelObject() != null)
+					tituloBuscado.setDataEmissao(DataUtil.stringToLocalDate(textFieldDataEmissao.getModelObject()));
 			}
 		});	
 		form.add(campoData());
@@ -159,42 +138,31 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 
 			@Override
 			protected List<TituloFiliado> load() {
-				return tituloFiliadoMediator.consultarTitulosFiliado(getUser(),nomeDevedor, numeroDocumento,numeroTitulo, dataEmissao, pracaProtesto );
+				return null;
+//				return tituloFiliadoMediator.consultarTitulosFiliado(getUser(), tituloBuscado);
 			}
 		};
 	}
 	
 	private TextField<String> campoData(){
-		if (campoDataEmissao != null){
-			return campoDataEmissao = new TextField<String>("dataEmissao", new Model<String>(campoDataEmissao.getModelObject()));
-		}
-		return campoDataEmissao = new TextField<String>("dataEmissao");
+		return textFieldDataEmissao = new TextField<String>("dataEmissao", new Model<String>());
 	}
 	
 	private TextField<String> numeroTitulo() {
-		if (campoNumeroTitulo != null){
-			return campoNumeroTitulo = new TextField<String>("numeroTitulo", new Model<String>(campoNumeroTitulo.getModelObject()));
-		}
-		return campoNumeroTitulo = new TextField<String>("numeroTitulo");
+		return new TextField<String>("numeroTitulo");
 	}
 	
 	private TextField<String> nomeDevedor() {
-		if (campoNomeDevedor != null){
-			return campoNomeDevedor = new TextField<String>("nomeDevedor", new Model<String>(campoNomeDevedor.getModelObject()));
-		}
-		return campoNomeDevedor = new TextField<String>("nomeDevedor");
+		return new TextField<String>("nomeDevedor");
 	}
 	
 	private TextField<String> documentoDevedor() {
-		if (campoNumeroDocumento != null){
-			return campoNumeroDocumento = new TextField<String>("documentoDevedor", new Model<String>(campoNumeroDocumento.getModelObject()));
-		}
-		return campoNumeroDocumento = new TextField<String>("documentoDevedor");
+		return new TextField<String>("documentoDevedor");
 	}
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
 		return campoPracaProtesto;
 	}
 	

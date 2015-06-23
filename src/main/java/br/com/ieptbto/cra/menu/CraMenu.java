@@ -31,28 +31,27 @@ public class CraMenu extends Panel {
 	}
 
 	private void adicionarMenuLateral(Menu menu) {
-		String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
-		String[] rolesPesquisar = { CraRoles.USER };
+//		String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
+		String[] rolesAdmin = { CraRoles.ADMIN, CraRoles.SUPER };
+		String[] rolesUser = { CraRoles.USER };
 
-		MenuItem menuLateral = menu.addItem("menuLateral", rolesPesquisar);
+		MenuItem menuLateral = menu.addItem("menuLateral", rolesUser);
+		
+		/** Menus Filiado */
+		menuLateral.addItem("EntradaManual", rolesUser); 
+		menuLateral.addItem("ConsultarTitulosFiliado", rolesUser);
+		menuLateral.addItem("EnviarTitulosPendentes", rolesUser);
+		menuLateral.addItem("RelatorioTitulosFiliado", rolesUser);
 
-		/** Menus titulos */
-		menuLateral.addItem("EntradaManual", rolesPesquisar); 
-
-		menuLateral.addItem("ConsultarTitulosFiliado", rolesPesquisar);
-		menuLateral.addItem("ConsultarTitulosConvenio", rolesPesquisar);
-		menuLateral.addItem("EnviarTitulosPendentes", rolesPesquisar);
-
-		/** Menus Relatorios */
-		menuLateral.addItem("RelatorioTitulosFiliado", rolesIncluir);
-		menuLateral.addItem("RelatorioTitulosConvenio", rolesIncluir);
+		/** Menus Convenio */
+		menuLateral.addItem("ConsultarTitulosConvenio", rolesAdmin);
+		menuLateral.addItem("RelatorioTitulosConvenio", rolesAdmin);
 
 		/** Menus Aministracao */
-		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesIncluir);
+		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesAdmin);
 		menuadmin.setVisible(verificaPermissao());
-		menuadmin.addItem("UsuariosFiliadoPage", rolesIncluir);
-		menuadmin.addItem("FiliadosPage", rolesIncluir);
-
+		menuadmin.addItem("UsuariosFiliadoPage", rolesAdmin);
+		menuadmin.addItem("FiliadosPage", rolesAdmin);
 	}
 
 	private boolean verificaPermissao() {
