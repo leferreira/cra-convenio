@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -39,8 +38,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	/***/
 	private static final long serialVersionUID = 1L;
 	private Filiado filiado;
-	private DropDownChoice<Municipio> comboMunicipio;
-	private String situacao;
 	
 	@SpringBean
 	MunicipioMediator municipioMediator;
@@ -71,20 +68,13 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 						filiadoMediator.alterarFiliado(novoFiliado);
 					else {
 						novoFiliado.setInstituicaoConvenio(getUser().getInstituicao());
-						novoFiliado.setAtivo(vefificaSituacao());
 						filiadoMediator.salvarFiliado(novoFiliado);
 					}
-					setResponsePage(new ListaFiliadoPage("Os dados foram salvos com sucesso na CRA !"));
+					setResponsePage(new ListaFiliadoPage("Os dados do novo filiado foi salvo com sucesso !"));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
-					error("Não foi possível cadastrar a empresa filiada ! Entre em contato com a CRA !");
+					error("Não foi possível cadastrar a empresa filiada ! Entre em contato com o IEPTB !");
 				}
-			}
-			
-			private Boolean vefificaSituacao() {
-				if (situacao.equals("Ativo"))
-					return true;
-				return false;
 			}
 		};
 		form.add(campoNomeCredor());
@@ -106,7 +96,7 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 
 	private DropDownChoice<Municipio> campoCidadeCredor() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;
@@ -142,7 +132,7 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	
 	private Component campoSituacao() {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("ativo", new PropertyModel<String>(this, "situacao"), status).setRequired(true);
+		return new RadioChoice<String>("situacao", status).setRequired(true);
 	}
 
 	public Filiado getFiliado() {

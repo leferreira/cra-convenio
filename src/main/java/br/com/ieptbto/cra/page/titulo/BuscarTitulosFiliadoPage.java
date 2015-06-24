@@ -138,8 +138,7 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 
 			@Override
 			protected List<TituloFiliado> load() {
-				return null;
-//				return tituloFiliadoMediator.consultarTitulosFiliado(getUser(), tituloBuscado);
+				return tituloFiliadoMediator.consultarTitulosFiliado(getUser(), tituloBuscado);
 			}
 		};
 	}

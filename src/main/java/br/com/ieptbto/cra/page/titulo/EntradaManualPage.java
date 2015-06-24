@@ -57,6 +57,12 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		carregarEntradaManualPage();
 	}
 	
+	public EntradaManualPage(String mensagem) {
+		this.tituloFiliado = new TituloFiliado();
+		info(mensagem);
+		carregarEntradaManualPage();
+	}
+	
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.tituloFiliado = titulo;
 		carregarEntradaManualPage();
@@ -72,24 +78,21 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			protected void onSubmit() {
 				TituloFiliado titulo = getModelObject();
 				
-				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento()))
-					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento()))
-						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-				
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
-				if (titulo.getId() != 0) {
+				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
+					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento())) 
+						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+				} else if (titulo.getId() != 0) {
 					tituloFiliadoMediator.alterarTituloFiliado(titulo);
+					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				} else {
 					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-
 					tituloFiliadoMediator.salvarTituloFiliado(titulo);
+					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				}
-				
-				titulo = null;
-				info("Os dados do título foram salvos com sucesso !");
 			}
 		};
 		form.add(numeroTitulo());
@@ -118,21 +121,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	private TextField<String> dataEmissao() {
-		if (tituloFiliado.getDataEmissao() != null) {
-			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
-		} else
-			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
+		dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
 		dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
 		dataEmissaoField.setRequired(true);
 		return dataEmissaoField;
 	}
 
 	private TextField<String> dataVencimento() {
-		if (tituloFiliado.getDataVencimento() != null) {
-			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(tituloFiliado
-			        .getDataVencimento())));
-		} else
-			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
+		dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
 		dataVencimentoField.setLabel(new Model<String>("Data de Vencimento"));
 		dataVencimentoField.setRequired(true);
 		return dataVencimentoField;

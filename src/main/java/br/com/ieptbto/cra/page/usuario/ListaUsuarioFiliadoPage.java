@@ -70,7 +70,7 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
-						setResponsePage(new IncluirUsuarioFiliadoPage(usuarioLista.getUsuario()));
+						setResponsePage(new IncluirUsuarioFiliadoPage(usuarioLista));
 					}
 				};
 				linkAlterar.add(new Label("nomeUsuario", usuarioLista.getUsuario().getNome()));

@@ -20,7 +20,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
@@ -35,11 +34,10 @@ import br.com.ieptbto.cra.util.EmailValidator;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class IncluirUsuarioFiliadoPage extends BasePage<Usuario> {
+public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
-	private DropDownChoice<Filiado> comboFiliado;
+	private UsuarioFiliado usuarioFiliado;
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
@@ -49,35 +47,33 @@ public class IncluirUsuarioFiliadoPage extends BasePage<Usuario> {
 	GrupoUsuarioMediator grupoUsuarioMediator;
 
 	public IncluirUsuarioFiliadoPage() {
-		this.usuario = new Usuario();
+		this.usuarioFiliado = new UsuarioFiliado();
 		carregarFormulario();
 	}
 
-	public IncluirUsuarioFiliadoPage(Usuario usuario) {
-		this.usuario = usuario;
+	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
+		this.usuarioFiliado = usuario;
 		carregarFormulario();
 	}
 
 	private void carregarFormulario() {
-		Form<Usuario> form = new Form<Usuario>("form", getModel()){
+		Form<UsuarioFiliado> form = new Form<UsuarioFiliado>("form", getModel()){
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				UsuarioFiliado usuarioFiliado = new UsuarioFiliado();
+				UsuarioFiliado usuarioFiliado = getModelObject();
 				
 				try {
-					usuario.setInstituicao(getUser().getInstituicao());
-					usuario.setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
-					usuarioFiliado.setFiliado(comboFiliado.getModelObject());
-					usuarioFiliado.setUsuario(usuario);
-					
-					if (usuario.getId() != 0) {
-						usuarioFiliadoMediator.alterarUsuarioFiliado(usuario, usuarioFiliado);
-					} else 
-						usuarioFiliadoMediator.salvarUsuarioFiliado(usuario, usuarioFiliado);
-					
+
+					if (usuarioFiliado.getId() != 0)
+						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
+					else {
+						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
+						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("USER"));
+						usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);
+					}
 					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso na CRA ! "));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -97,59 +93,68 @@ public class IncluirUsuarioFiliadoPage extends BasePage<Usuario> {
 	}
 
 	private TextField<String> campoNome() {
-		TextField<String> fieldNome = new TextField<String>("nome");
+		TextField<String> fieldNome = new TextField<String>("usuario.nome");
 		fieldNome.setLabel(new Model<String>("Nome"));
 		fieldNome.setRequired(true);
 		return fieldNome;
 	}
 
 	private TextField<String> campoLogin() {
-		TextField<String> textField = new TextField<String>("login");
+		TextField<String> textField = new TextField<String>("usuario.login");
 		textField.setLabel(new Model<String>("Login"));
 		textField.setRequired(true);
 		return textField;
 	}
 
 	private TextField<String> campoSenha() {
-		PasswordTextField senha = new PasswordTextField("senha");
+		PasswordTextField senha = new PasswordTextField("usuario.senha");
 		senha.setLabel(new Model<String>("Senha"));
+		senha.setVisible(verificaExistencia());
 		return senha;
 	}
 
 	private TextField<String> campoConfirmarSenha() {
-		PasswordTextField confirmarSenha = new PasswordTextField("confirmarSenha");
+		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
+		confirmarSenha.setVisible(verificaExistencia());
 		return confirmarSenha;
 	}
 
 	private TextField<String> campoEmail() {
-		TextField<String> textField = new TextField<String>("email");
+		TextField<String> textField = new TextField<String>("usuario.email");
 		textField.setLabel(new Model<String>("E-mail"));
 		textField.add(new EmailValidator());
 		return textField;
 	}
 
 	private TextField<String> campoContato() {
-		TextField<String> textField = new TextField<String>("contato");
+		TextField<String> textField = new TextField<String>("usuario.contato");
 		textField.setLabel(new Model<String>("Contato"));
 		return textField;
 	}
 
 	private Component campoStatus() {
 		List<String> status = Arrays.asList(new String[] { "Ativo", "Não Ativo" });
-		return new RadioChoice<String>("situacao", status);
+		return new RadioChoice<String>("usuario.situacao", status);
 	}
 
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		comboFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(),filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		DropDownChoice<Filiado> comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
 		comboFiliado.setLabel(new Model<String>("Filiado"));
 		comboFiliado.setRequired(true);
 		return comboFiliado;		
 	}
 	
+	private boolean verificaExistencia() {
+		if (usuarioFiliado.getId() == 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
-	protected IModel<Usuario> getModel() {
-		return new CompoundPropertyModel<Usuario>(usuario);
+	protected IModel<UsuarioFiliado> getModel() {
+		return new CompoundPropertyModel<UsuarioFiliado>(usuarioFiliado);
 	}
 }

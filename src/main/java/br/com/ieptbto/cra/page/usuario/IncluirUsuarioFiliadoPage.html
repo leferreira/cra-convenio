@@ -17,7 +17,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label">Nome:</label>  
 						  <div class="col-md-6">
-						  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" placeholder="" wicket:id="nome" class="form-control input-md" required="required">
+						  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" placeholder="" wicket:id="usuario.nome" class="form-control input-md" required="required">
 						    
 						  </div>
 						</div>
@@ -26,7 +26,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="login">Login:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="login" tabindex="2" class="form-control input-md">
+						  <input wicket:id="usuario.login" tabindex="2" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -34,7 +34,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label">Email:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="email" tabindex="3" class="form-control input-md">
+						  <input wicket:id="usuario.email" tabindex="3" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -53,7 +53,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label">Senha:</label>
 						  <div class="col-md-6">
-						    <input type="password" wicket:id="senha" tabindex="5" class="form-control input-md">
+						    <input type="password" wicket:id="usuario.senha" tabindex="5" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -61,14 +61,14 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label" for="confirmar">Confirmar Senha:</label>
 						  <div class="col-md-6">
-						    <input type="password" wicket:id="confirmarSenha" tabindex="6" class="form-control input-md">
+						    <input type="password" wicket:id="usuario.confirmarSenha" tabindex="6" class="form-control input-md">
 						  </div>
 						</div>
 						<!-- Text input-->
 						<div class="form-group">
 						  <label class="col-md-4 control-label">Contato:</label>  
 						  <div class="col-md-6">
-						  <input wicket:id="contato" tabindex="7" class="form-control input-md">
+						  <input wicket:id="usuario.contato" tabindex="7" class="form-control input-md">
 						    
 						  </div>
 						</div>
@@ -76,8 +76,7 @@
 						<div class="form-group">
 						  <label class="col-md-4 control-label">Situação:</label>
 						  <div class="col-md-6" style="text-align: left;"> 
-						    <label class="radio-inline inline" tabindex="8" wicket:id="situacao">
-						    </label>
+						    <span class="radio-inline inline" tabindex="8" wicket:id="usuario.situacao"></span>
 						  </div>
 						</div>
 						<!-- Button -->

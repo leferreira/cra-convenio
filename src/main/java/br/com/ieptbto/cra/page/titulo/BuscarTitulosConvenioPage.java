@@ -142,8 +142,7 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 			@Override
 			protected List<TituloFiliado> load() {
-				return null;
-//				return tituloFiliadoMediator.consultarTitulosConvenio(getUser().getInstituicao(), tituloBuscado);
+				return tituloFiliadoMediator.consultarTitulosConvenio(getUser().getInstituicao(), tituloBuscado);
 			}
 		};
 	}
