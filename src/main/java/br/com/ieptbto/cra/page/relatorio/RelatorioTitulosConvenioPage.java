@@ -49,29 +49,18 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 	
 	private TituloFiliado titulo;
 	
-	private DropDownChoice<Filiado> comboFiliado;
-	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	
 	public RelatorioTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
 		
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
-		form.add(dataEnvioInicio());
-		form.add(dataEnvioFinal());
-		form.add(pracaProtesto());
-		form.add(comboFiliado());
-		form.add(botaoEnviar());
-		add(form);
-	}
-	
-	private Component botaoEnviar() {
-		return new Button("botaoBuscar") {
-			/** */
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+			/***/
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				TituloFiliado titulo = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				
@@ -85,10 +74,15 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				
-				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), comboFiliado.getModelObject(),dataInicio, dataFim, comboMunicipio.getModelObject()));
+				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), titulo.getFiliado(),dataInicio, dataFim, titulo.getPracaProtesto()));
 			}
 		};
+		form.add(dataEnvioInicio());
+		form.add(dataEnvioFinal());
+		form.add(pracaProtesto());
+		form.add(comboFiliado());
+		form.add(new Button("botaoBuscar"));
+		add(form);
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {
@@ -104,14 +98,14 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		comboFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(),filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		DropDownChoice<Filiado> comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
 		comboFiliado.setLabel(new Model<String>("Filiado"));
 		comboFiliado.setRequired(true);
 		return comboFiliado;		
 	}
 	private Component pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto" ,municipioMediator.listarTodos(), renderer);
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;
 	}

@@ -53,27 +53,18 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	private TituloFiliado titulo;
 	private Filiado empresaFiliado;
 	
-	private DropDownChoice<Municipio> comboMunicipio;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	
 	public RelatorioTitulosFiliadoPage() {
 		this.titulo = new TituloFiliado();
 		this.empresaFiliado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
-		form.add(dataEnvioInicio());
-		form.add(dataEnvioFinal());
-		form.add(pracaProtesto());
-		form.add(botaoEnviar());
-		add(form);
-	}
-	
-	private Component botaoEnviar() {
-		return new Button("botaoBuscar") {
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
 			/** */
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void onSubmit() {
+				TituloFiliado titulo = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				
@@ -87,9 +78,14 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				setResponsePage(new ListaTitulosRelatorioFiliado(empresaFiliado, dataInicio, dataFim, comboMunicipio.getModelObject()));
+				setResponsePage(new ListaTitulosRelatorioFiliado(empresaFiliado, dataInicio, dataFim, titulo.getPracaProtesto()));
 			}
 		};
+		form.add(dataEnvioInicio());
+		form.add(dataEnvioFinal());
+		form.add(pracaProtesto());
+		form.add(new Button("botaoBuscar"));
+		add(form);
 	}
 	
 	private TextField<LocalDate> dataEnvioInicio() {
@@ -105,7 +101,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 
 	private Component pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		this.comboMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(),municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
 		return comboMunicipio;
 	}
 
