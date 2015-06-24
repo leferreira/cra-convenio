@@ -1,3 +1,4 @@
+
 package br.com.ieptbto.cra.page.usuario;
 
 import java.util.Arrays;
@@ -110,6 +111,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 		PasswordTextField senha = new PasswordTextField("usuario.senha");
 		senha.setLabel(new Model<String>("Senha"));
 		senha.setVisible(verificaExistencia());
+		senha.setRequired(verificaExistencia());
 		return senha;
 	}
 
