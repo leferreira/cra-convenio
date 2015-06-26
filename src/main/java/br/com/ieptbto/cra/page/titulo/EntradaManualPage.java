@@ -109,7 +109,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(cepDevedor());
 		form.add(ufDevedor());
 		form.add(especieTitulo());
-
+		form.add(campoAlinea());
 		add(form);
 	}
 
@@ -209,6 +209,12 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private DropDownChoice<TipoEspecieTitulo> especieTitulo() {
 		List<TipoEspecieTitulo> status = Arrays.asList(TipoEspecieTitulo.values());
 		return new DropDownChoice<TipoEspecieTitulo>("especieTitulo", status);
+	}
+	
+	private TextField<String> campoAlinea() {
+		TextField<String> textField = new TextField<String>("alinea");
+		textField.setOutputMarkupId(true);
+		return textField;
 	}
 	
 	@Override

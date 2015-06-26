@@ -24,4 +24,5 @@ $().ready(function() {
 	$("#celular").mask("(99) 9999-9999");
 	$("#hora").mask("99:99");
 	$("#hora1").mask("99:99");
+	$("#alinea").mask("99");
 });
