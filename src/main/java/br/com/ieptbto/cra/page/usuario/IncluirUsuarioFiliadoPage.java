@@ -72,13 +72,13 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
 					else {
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
-						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("USER"));
+						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
 						usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);
 					}
-					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso na CRA ! "));
+					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso ! "));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
-					error("Não foi possível cadastrar o novo usuário ! Entre em contato com a CRA !");
+					error("Não foi possível cadastrar o novo usuário ! Entre em contato com o IEPTB !");
 				}
 			}
 		};

@@ -213,7 +213,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	
 	private TextField<String> campoAlinea() {
 		TextField<String> textField = new TextField<String>("alinea");
-		textField.setOutputMarkupId(true);
+		textField.setMarkupId("alinea");
 		return textField;
 	}
 	

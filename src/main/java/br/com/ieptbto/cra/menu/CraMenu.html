@@ -6,26 +6,42 @@
 			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
 				<div class="nav">
 				<ul class="nav" id="side-menu">
-					<li class="dropdown-submenu">
+					<li wicket:id="titulosFiliado" class="dropdown-submenu">
 						<a href="#" class="link-icones">
 							<span class="glyphicon glyphicon-align-left icon-menu" ></span>
 							<br>T&iacute;tulos
 						</a>
 						<ul class="dropdown-menu">
 							<li><a wicket:id="EntradaManual" href="EntradaManual">Entrada de T&iacute;tulos</a></li>
-							<li><a wicket:id="ConsultarTitulosConvenio" href="ConsultarTitulosConvenio">Buscar T&iacute;tulos</a></li>
 							<li><a wicket:id="ConsultarTitulosFiliado" href="ConsultarTitulosFiliado">Buscar T&iacute;tulos</a></li>
 							<li><a wicket:id="EnviarTitulosPendentes" href="EnviarTitulosPendentes">Enviar Pendentes</a></li>
 						</ul>
 					</li>
-					<li class="dropdown-submenu">
+					<li wicket:id="titulosConvenio" class="dropdown-submenu">
+						<a href="#" class="link-icones">
+							<span class="glyphicon glyphicon-align-left icon-menu" ></span>
+							<br>T&iacute;tulos
+						</a>
+						<ul class="dropdown-menu">
+							<li><a wicket:id="ConsultarTitulosConvenio" href="ConsultarTitulosConvenio">Buscar T&iacute;tulos</a></li>
+						</ul>
+					</li>
+					<li wicket:id="relatorioFiliado" class="dropdown-submenu">
+						<a href="#" class="link-icones">
+							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
+							<br>Relat&oacute;rios
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="RelatorioTitulosFiliado" wicket:id="RelatorioTitulosFiliado">Anal&iacute;tico de T&iacute;tulos</a></li>
+						</ul>
+					</li>
+					<li wicket:id="relatorioConvenio" class="dropdown-submenu">
 						<a href="#" class="link-icones">
 							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
 							<br>Relat&oacute;rios
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="RelatorioTitulosConvenio" wicket:id="RelatorioTitulosConvenio">Anal&iacute;tico de T&iacute;tulos</a></li>
-							<li><a href="RelatorioTitulosFiliado" wicket:id="RelatorioTitulosFiliado">Anal&iacute;tico de T&iacute;tulos</a></li>
 						</ul>
 					</li>
 					<li wicket:id="adminConvenio" class="dropdown-submenu">
