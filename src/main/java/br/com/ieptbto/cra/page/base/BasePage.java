@@ -47,7 +47,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 			nome = getUser().getNome();
 		}
 
-		add(new Label(SAUDACAO, "Olá " + nome));
+		add(new Label(SAUDACAO, nome));
 
 		addFeedbackPanel();
 		addLogout();
