@@ -31,7 +31,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ModalWindow modalContrato;
 	
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
@@ -42,8 +41,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	}
 	
 	private void carregarContratoEntradaDeTitulos() {
-		
-		modalContrato = new ModalWindow("modalContrato");
+
+		final ModalWindow modalContrato = new ModalWindow("modalContrato");
 		modalContrato.setPageCreator(new ModalWindow.PageCreator() {
             /***/
 			private static final long serialVersionUID = 1L;
@@ -64,7 +63,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
         modalContrato.setHeightUnit("em");
         add(modalContrato);
 		
-		add(new AjaxLink<Void>("showModal1"){
+		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
             /***/
 			private static final long serialVersionUID = 1L;
 
@@ -72,10 +71,13 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
             public void onClick(AjaxRequestTarget target){
             	modalContrato.show(target);
             }
-        });
+		};
+		if (!verificarAceiteUsuarioContrato()) {
+			openModal.setMarkupId("showModal");
+		}
+		add(openModal);
 	}
 	
-	@SuppressWarnings("unused")
 	private boolean verificarAceiteUsuarioContrato(){
 		UsuarioFiliado usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
 		if (usuarioFiliado != null) {

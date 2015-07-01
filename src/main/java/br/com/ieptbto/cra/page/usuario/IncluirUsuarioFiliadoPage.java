@@ -71,6 +71,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 					if (usuarioFiliado.getId() != 0)
 						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
 					else {
+						usuarioFiliado.setTermosContratoAceite(false);
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
 						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
 						usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);

@@ -10,6 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
+import br.com.ieptbto.cra.page.login.LoginPage;
 
 /**
  * @author Thasso Araújo
@@ -67,7 +68,9 @@ public class ContratoModal extends WebPage {
 				
 				usuarioFiliadoMediator.naoAceiteTermosContrato(getUsuario());
 				fecharModal(target);
-				getSession().clear();
+				logger.info("O usuário <<" + getUsuario().getNome() + ">> saiu do sistema pois não aceitou os termos !.");
+				getSession().invalidateNow();
+				setResponsePage(LoginPage.class);
 			}
 		});
 	}

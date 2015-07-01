@@ -20,7 +20,6 @@
 <link href="css/sb-admin.css" rel="stylesheet">
 <link href="css/geral.css" rel="stylesheet">
 <script src="js/formatador.js"></script>
-<script src="js/acoesEntradaManual.js"></script>
 </head>
 <body>
 	<wicket:child>
@@ -115,6 +114,10 @@
             $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
         });
 
+        jQuery(function($){
+        	$('#showModal').click();
+        });
+        	
          $(function() {
             $( "#date" ).datepicker();
           });
