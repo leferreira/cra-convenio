@@ -113,6 +113,10 @@ body {
 	max-height: 150px;
 	 width: 15%;
 }
+.ola {
+	margin-top: 1%;
+	font-family: 'TitilliumWebRegular';
+}
 
 .green {
 	color: #3d8cbe;
