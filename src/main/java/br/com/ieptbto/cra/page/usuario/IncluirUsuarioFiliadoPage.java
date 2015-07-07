@@ -39,6 +39,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	private static final long serialVersionUID = 1L;
 	private UsuarioFiliado usuarioFiliado;
+	private String senhaAntiga;
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
@@ -54,6 +55,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
 		this.usuarioFiliado = usuario;
+		this.senhaAntiga = usuario.getUsuario().getSenha();
 		carregarFormulario();
 	}
 
@@ -65,12 +67,16 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 			@Override
 			protected void onSubmit() {
 				UsuarioFiliado usuarioFiliado = getModelObject();
+				String novaSenha = "";
 				
 				try {
-
-					if (usuarioFiliado.getId() != 0)
-						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
-					else {
+					
+					if (usuarioFiliado.getId() != 0) {
+						if (usuarioFiliado.getUsuario().getSenha() != null)
+							novaSenha=usuarioFiliado.getUsuario().getSenha();
+					
+						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado, senhaAntiga, novaSenha);
+					} else {
 						usuarioFiliado.setTermosContratoAceite(false);
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
 						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
@@ -79,7 +85,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso ! "));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
-					error("Não foi possível cadastrar o novo usuário ! Entre em contato com o IEPTB !");
+					error("Não foi salvar os dados do usuário ! Entre em contato com o IEPTB !");
 				}
 			}
 		};
@@ -111,7 +117,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("usuario.senha");
 		senha.setLabel(new Model<String>("Senha"));
-		senha.setVisible(verificaExistencia());
 		senha.setRequired(verificaExistencia());
 		return senha;
 	}
@@ -119,7 +124,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
-		confirmarSenha.setVisible(verificaExistencia());
+		confirmarSenha.setRequired(verificaExistencia());
 		return confirmarSenha;
 	}
 

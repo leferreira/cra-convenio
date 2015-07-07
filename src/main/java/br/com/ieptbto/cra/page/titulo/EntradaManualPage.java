@@ -1,9 +1,7 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -105,7 +103,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(dataVencimento());
 		form.add(pracaProtesto());
 		form.add(documentoDevedor());
-		form.add(outroDocumento());
 		form.add(valorTitulo());
 		form.add(valorSaldoTitulo());
 		form.add(nomeDevedor());
@@ -205,15 +202,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		return textField;
 	}
 
-	private TextField<String> outroDocumento() {
-		TextField<String> textField = new TextField<String>("documentoDevedor");
-		textField.setLabel(new Model<String>("Documento Devedor"));
-		return textField;
-	}
-	
 	private DropDownChoice<TipoEspecieTitulo> especieTitulo() {
-		List<TipoEspecieTitulo> status = Arrays.asList(TipoEspecieTitulo.values());
-		final DropDownChoice<TipoEspecieTitulo> dropDownEspecie =  new DropDownChoice<TipoEspecieTitulo>("especieTitulo", status);
+		IChoiceRenderer<TipoEspecieTitulo> renderer = new ChoiceRenderer<TipoEspecieTitulo>("label");
+		final DropDownChoice<TipoEspecieTitulo> dropDownEspecie =  new DropDownChoice<TipoEspecieTitulo>("especieTitulo", Arrays.asList(TipoEspecieTitulo.values()), renderer);
 		dropDownEspecie.add(new OnChangeAjaxBehavior() {
 			/***/
 			private static final long serialVersionUID = 1L;
@@ -221,9 +212,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
             protected void onUpdate(AjaxRequestTarget target){
                 
             	TipoEspecieTitulo tipoEspecie = dropDownEspecie.getModelObject();
-            	if (tipoEspecie.equals(TipoEspecieTitulo.CH)) {
-            		comboAlinea.setEnabled(true);
-            		comboAlinea.setRequired(true);
+            	if (tipoEspecie != null) {
+	            	if (tipoEspecie.equals(TipoEspecieTitulo.CH)) {
+	            		comboAlinea.setEnabled(true);
+	            		comboAlinea.setRequired(true);
+	            	} else {
+	            		comboAlinea.setEnabled(false);
+	            		comboAlinea.setRequired(false);
+	            	}
             	} else {
             		comboAlinea.setEnabled(false);
             		comboAlinea.setRequired(false);
@@ -237,11 +233,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	
 	private DropDownChoice<TipoAlineaCheque> campoAlinea() {
 		IChoiceRenderer<TipoAlineaCheque> renderer = new ChoiceRenderer<TipoAlineaCheque>("label");
-		List<TipoAlineaCheque> tipoAlineas = new ArrayList<TipoAlineaCheque>();
-		for (TipoAlineaCheque tipoAlinea: TipoAlineaCheque.values()) {
-			tipoAlineas.add(tipoAlinea);
-		}
-		comboAlinea = new DropDownChoice<TipoAlineaCheque>("alinea", tipoAlineas, renderer);
+		comboAlinea = new DropDownChoice<TipoAlineaCheque>("alinea", Arrays.asList(TipoAlineaCheque.values()), renderer);
 		comboAlinea.setLabel(new Model<String>("Alínea"));
 		comboAlinea.setEnabled(false);
 		comboAlinea.setOutputMarkupId(true);
