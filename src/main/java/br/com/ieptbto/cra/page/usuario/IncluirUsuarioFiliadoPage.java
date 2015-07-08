@@ -39,7 +39,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	private static final long serialVersionUID = 1L;
 	private UsuarioFiliado usuarioFiliado;
-	private String senhaAntiga;
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
@@ -55,7 +54,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
 		this.usuarioFiliado = usuario;
-		this.senhaAntiga = usuario.getUsuario().getSenha();
 		carregarFormulario();
 	}
 
@@ -67,16 +65,12 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 			@Override
 			protected void onSubmit() {
 				UsuarioFiliado usuarioFiliado = getModelObject();
-				String novaSenha = "";
 				
 				try {
 					
-					if (usuarioFiliado.getId() != 0) {
-						if (usuarioFiliado.getUsuario().getSenha() != null)
-							novaSenha=usuarioFiliado.getUsuario().getSenha();
-					
-						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado, senhaAntiga, novaSenha);
-					} else {
+					if (usuarioFiliado.getId() != 0) 
+						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
+					else {
 						usuarioFiliado.setTermosContratoAceite(false);
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
 						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
