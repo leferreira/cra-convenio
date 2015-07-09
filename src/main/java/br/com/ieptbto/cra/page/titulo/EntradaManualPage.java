@@ -1,7 +1,9 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -19,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
@@ -36,14 +39,13 @@ import br.com.ieptbto.cra.util.EstadoUtils;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	private TituloFiliado tituloFiliado;
+	private List<Avalista> avalistas;
 	private TextField<String> dataVencimentoField;
 	private TextField<String> dataEmissaoField;
 	private DropDownChoice<TipoAlineaCheque> comboAlinea;
@@ -57,16 +59,19 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	public EntradaManualPage() {
 		this.tituloFiliado = new TituloFiliado();
+		this.avalistas = new ArrayList<Avalista>();
 		carregarEntradaManualPage();
 	}
 	
 	public EntradaManualPage(String mensagem) {
 		this.tituloFiliado = new TituloFiliado();
+		this.avalistas = new ArrayList<Avalista>();
 		info(mensagem);
 		carregarEntradaManualPage();
 	}
 	
 	public EntradaManualPage(TituloFiliado titulo) {
+		this.avalistas = titulo.getAvalistas();
 		this.tituloFiliado = titulo;
 		carregarEntradaManualPage();
 	}
@@ -74,9 +79,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	public void carregarEntradaManualPage() {
 
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
-			
-			/***/
-			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onSubmit() {
 				TituloFiliado titulo = getModelObject();
@@ -112,6 +114,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(ufDevedor());
 		form.add(especieTitulo());
 		form.add(campoAlinea());
+		form.add(new AvalistaInputPanel("avalistaInputPanel", getModel() ,getAvalistas()));
 		add(form);
 	}
 
@@ -238,6 +241,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		comboAlinea.setEnabled(false);
 		comboAlinea.setOutputMarkupId(true);
 		return comboAlinea;
+	}
+
+	public List<Avalista> getAvalistas() {
+		return avalistas;
+	}
+
+	public void setAvalistas(List<Avalista> avalistas) {
+		this.avalistas = avalistas;
 	}
 	
 	@Override

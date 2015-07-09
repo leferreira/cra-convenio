@@ -111,14 +111,16 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("usuario.senha");
 		senha.setLabel(new Model<String>("Senha"));
-		senha.setRequired(verificaExistencia());
+		senha.setVisible(verificarExistencia());
+		senha.setRequired(verificarExistencia());
 		return senha;
 	}
 
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
-		confirmarSenha.setRequired(verificaExistencia());
+		confirmarSenha.setVisible(verificarExistencia());
+		confirmarSenha.setRequired(verificarExistencia());
 		return confirmarSenha;
 	}
 
@@ -148,8 +150,8 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 		return comboFiliado;		
 	}
 	
-	private boolean verificaExistencia() {
-		if (usuarioFiliado.getId() == 0) {
+	private boolean verificarExistencia() {
+		if (usuarioFiliado.getUsuario().getId() == 0) {
 			return true;
 		}
 		return false;
