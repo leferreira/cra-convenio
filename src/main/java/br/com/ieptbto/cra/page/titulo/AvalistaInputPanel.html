@@ -1,0 +1,77 @@
+<head>
+<meta charset="UTF8">
+</head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
+	charset="utf8">
+				<div class="row">
+					<div class="col-md-6">
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Nome:</label>
+							<div class="col-md-8">
+								<input maxlength="45" type="text"
+									onkeyup="this.value = this.value.toUpperCase()"
+									class="form-control input-md" wicket:id="nome">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">CNPJ/CPF:</label>
+							<div class="col-md-8">
+								<input maxlength="18"
+									onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+									onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+									class="form-control input-md" wicket:id="documento" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">CEP:</label>
+							<div class="col-md-8">
+								<input id="cep1" maxlength="10" class="form-control input-md"
+									wicket:id="cep">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<!-- Select Basic -->
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="ufDevedor">UF:</label>
+							<div class="col-md-8">
+								<select class="form-control" wicket:id="uf">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Cidade:</label>
+							<div class="col-md-8">
+								<input min="4" maxlength="20"
+									onkeyup="this.value = this.value.toUpperCase()"
+									class="form-control input-md" wicket:id="cidade">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<!-- Textarea -->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Endereço:</label>
+							<div class="col-md-8">
+								<textarea class="form-control" maxlength="45"
+									onkeyup="this.value = this.value.toUpperCase()"
+									wicket:id="endereco"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+</wicket:panel>

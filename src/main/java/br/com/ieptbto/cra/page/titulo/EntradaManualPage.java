@@ -1,9 +1,7 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -21,7 +19,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
@@ -45,7 +42,10 @@ import br.com.ieptbto.cra.util.EstadoUtils;
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	private TituloFiliado tituloFiliado;
-	private List<Avalista> avalistas;
+//	@SuppressWarnings("unused")
+//	private Avalista avalista;
+//	private List<Avalista> avalistas;
+	
 	private TextField<String> dataVencimentoField;
 	private TextField<String> dataEmissaoField;
 	private DropDownChoice<TipoAlineaCheque> comboAlinea;
@@ -59,20 +59,22 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	public EntradaManualPage() {
 		this.tituloFiliado = new TituloFiliado();
-		this.avalistas = new ArrayList<Avalista>();
+//		this.avalista = new Avalista();
+//		setAvalistas(tituloFiliado.getAvalistas());
 		carregarEntradaManualPage();
 	}
 	
 	public EntradaManualPage(String mensagem) {
 		this.tituloFiliado = new TituloFiliado();
-		this.avalistas = new ArrayList<Avalista>();
+//		this.avalista = new Avalista();
+//		setAvalistas(tituloFiliado.getAvalistas());
 		info(mensagem);
 		carregarEntradaManualPage();
 	}
 	
 	public EntradaManualPage(TituloFiliado titulo) {
-		this.avalistas = titulo.getAvalistas();
 		this.tituloFiliado = titulo;
+//		setAvalistas(tituloFiliado.getAvalistas());
 		carregarEntradaManualPage();
 	}
 
@@ -114,9 +116,40 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(ufDevedor());
 		form.add(especieTitulo());
 		form.add(campoAlinea());
-		form.add(new AvalistaInputPanel("avalistaInputPanel", getModel() ,getAvalistas()));
+//		form.add(new AvalistaInputPanel("avalistaInputPanel", new CompoundPropertyModel<Avalista>(avalista)));
+//		form.add(new Link<Avalista>("adicionarAvalista"){
+//			@Override
+//			public void onClick() {
+//				getAvalistas().add(avalista);
+//			}
+//		});
+//		form.add(carregarListaAvalistas());
 		add(form);
 	}
+	
+//	private ListView<Avalista> carregarListaAvalistas(){
+//		return new ListView<Avalista>("listaAvalistas", getModel().getObject().getAvalistas() ) {
+//			@Override
+//			protected void populateItem(ListItem<Avalista> item) {
+//				Avalista avalista = item.getModelObject();
+//				item.add(new Label("nomeAvalista", avalista.getNome()));
+//				item.add(new Label("documentoAvalista", avalista.getDocumento()));
+//				item.add(new Label("cepAvalista", avalista.getCep()));
+//				item.add(new Label("cidadeAvalista", avalista.getCidade()));
+//				item.add(new Label("ufAvalista", avalista.getUf()));
+//				item.add(removerAvalista(avalista));
+//			}
+//			
+//			private Component removerAvalista(final Avalista avalista) {
+//				return new Link<Avalista>("remover") {
+//					@Override
+//					public void onClick() {
+//						getAvalistas().remove(avalista);
+//					}
+//				};
+//			}
+//		};
+//	}
 
 	private TextField<String> numeroTitulo() {
 		TextField<String> textField = new TextField<String>("numeroTitulo");
@@ -243,13 +276,13 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		return comboAlinea;
 	}
 
-	public List<Avalista> getAvalistas() {
-		return avalistas;
-	}
-
-	public void setAvalistas(List<Avalista> avalistas) {
-		this.avalistas = avalistas;
-	}
+//	public List<Avalista> getAvalistas() {
+//		return avalistas;
+//	}
+//
+//	public void setAvalistas(List<Avalista> avalistas) {
+//		this.avalistas = avalistas;
+//	}
 	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
