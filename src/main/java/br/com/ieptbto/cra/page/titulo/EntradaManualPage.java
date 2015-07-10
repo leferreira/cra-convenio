@@ -18,6 +18,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -91,11 +92,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
 					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento())) 
 						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+					else 
+						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 				} else if (titulo.getId() != 0) {
 					tituloFiliadoMediator.alterarTituloFiliado(titulo);
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				} else {
 					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
+					titulo.setDataEnvioCRA(new LocalDate());
 					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
 					tituloFiliadoMediator.salvarTituloFiliado(titulo);
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));

@@ -120,7 +120,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
 		confirmarSenha.setVisible(verificarExistencia());
-		confirmarSenha.setRequired(verificarExistencia());
 		return confirmarSenha;
 	}
 
@@ -151,7 +150,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	}
 	
 	private boolean verificarExistencia() {
-		if (usuarioFiliado.getUsuario().getId() == 0) {
+		if (usuarioFiliado.getId() == 0) {
 			return true;
 		}
 		return false;
