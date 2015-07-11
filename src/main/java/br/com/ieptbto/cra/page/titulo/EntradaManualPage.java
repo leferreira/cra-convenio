@@ -18,7 +18,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -99,7 +98,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				} else {
 					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
-					titulo.setDataEnvioCRA(new LocalDate());
 					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
 					tituloFiliadoMediator.salvarTituloFiliado(titulo);
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));

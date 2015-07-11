@@ -30,12 +30,11 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EnviarTitulosPage.class);
 	private TituloFiliado titulo;
 	private List<TituloFiliado> listaTitulosFiliado;
@@ -61,12 +60,10 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	private void carregarFormEnviar() {
 		this.listaTitulosFiliado = getListaTitulosParaEnvio();
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
-			/***/
-			private static final long serialVersionUID = 1L;
+
 			@Override
             protected void onSubmit(){
 				try {
-				
 					tituloFiliadoMediator.enviarTitulosPendentes(listaTitulosFiliado);
 				
 					setResponsePage(new EnviarTitulosPage("Os títulos foram encaminhados com sucesso !"));
@@ -84,8 +81,6 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 
 	private ListView<TituloFiliado> carregarTitulosParaEnvio() {
 		return new ListView<TituloFiliado>("listViewTitulos", listaTitulosFiliado) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -96,9 +91,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				item.add(new Label("credor", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<String> linkAlterar = new Link<String>("linkAlterar") {
-					/***/
-					private static final long serialVersionUID = 1L;
-
+					
 					@Override
 					public void onClick() {
 						setResponsePage(new EntradaManualPage(tituloLista));
@@ -110,20 +103,16 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("dataVencimento", DataUtil.localDateToString(tituloLista.getDataVencimento())));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
-//				item.add(new LabelValorMonetario<String>("valorSaldo", tituloLista.getValorSaldoTitulo()));
 				item.add(removerTitulo(tituloLista));
 			}
 			
 			private Component removerTitulo(final TituloFiliado titulo) {
 				return new Link<Arquivo>("remover") {
-					/***/
-					private static final long serialVersionUID = 1L;
 					
 					@Override
 					public void onClick() {
 						
 						try {
-							
 							tituloFiliadoMediator.removerTituloFiliado(titulo);
 							setResponsePage(new EnviarTitulosPage("O título foi removido com sucesso da CRA !"));
 						} catch (Exception ex) {
