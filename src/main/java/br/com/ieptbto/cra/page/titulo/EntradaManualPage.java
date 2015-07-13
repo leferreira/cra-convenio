@@ -117,6 +117,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(cepDevedor());
 		form.add(ufDevedor());
 		form.add(especieTitulo());
+		form.add(bairroDevedor());
 		form.add(campoAlinea());
 //		form.add(new AvalistaInputPanel("avalistaInputPanel", new CompoundPropertyModel<Avalista>(avalista)));
 //		form.add(new Link<Avalista>("adicionarAvalista"){
@@ -222,6 +223,13 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		textField.setLabel(new Model<String>("Valor de Protesto"));
 		textField.setRequired(true);
 		textField.setOutputMarkupId(true);
+		return textField;
+	}
+	
+	private TextField<String> bairroDevedor() {
+		TextField<String> textField = new TextField<String>("bairroDevedor");
+		textField.setLabel(new Model<String>("Bairro do Devedor"));
+		textField.setRequired(true);
 		return textField;
 	}
 

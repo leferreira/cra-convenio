@@ -137,11 +137,11 @@
 						</div>
 						<div class="row">
 							<div class="col-md-4">
-								<!-- Textarea -->
+								<!-- Text input-->
 								<div class="form-group">
-								  <label class="col-md-4 control-label">Endereço:</label>
-								  <div class="col-md-8">                     
-								    <textarea class="form-control" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" wicket:id="enderecoDevedor"></textarea>
+								  <label class="col-md-4 control-label">Bairro:</label>  
+								  <div class="col-md-8">
+								  <input maxlength="20" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="bairroDevedor">
 								  </div>
 								</div>
 							</div>
@@ -218,7 +218,16 @@
 <!-- 		                </div> -->
 <!-- 				     </fieldset> -->
 				     <div class="row">
-						<div class="col-md-12">
+				     	<div class="col-md-4">
+				     		<!-- Textarea -->
+							<div class="form-group">
+							  <label class="col-md-4 control-label">Endereço:</label>
+							  <div class="col-md-8">                     
+							    <textarea class="form-control" maxlength="45" onkeyup="this.value = this.value.toUpperCase()" wicket:id="enderecoDevedor"></textarea>
+							  </div>
+							</div>
+				     	</div>
+						<div class="col-md-8">
 							<!-- Button -->
 							<div class="form-group">
 							  <label class="col-md-4 control-label" for="salvar"></label>
