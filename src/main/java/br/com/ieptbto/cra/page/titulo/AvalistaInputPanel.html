@@ -3,6 +3,14 @@
 </head>
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
 	charset="utf8">
+	<div class="modal-dialog" style="width: 60%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel">Adicionar Avalista</h4>
+			</div>
+			<div class="modal-body">
 				<div class="row">
 					<div class="col-md-6">
 						<!-- Text input-->
@@ -74,4 +82,12 @@
 						</div>
 					</div>
 				</div>
+				<div class="modal-footer">
+					<button type="button" style="margin-right: 10px;" wicket:id="adicionarAvalista"
+						class="btn btn-primary">Salvar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </wicket:panel>

@@ -16,10 +16,9 @@ import br.com.ieptbto.cra.page.login.LoginPage;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class ContratoModal extends WebPage {
 	
-	/***/
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ContratoModal.class);
 	
 	private ModalWindow modalWindow;
@@ -40,16 +39,14 @@ public class ContratoModal extends WebPage {
 	
 	private void botaoConcordo(){
 		add(new AjaxLink<Void>("botaoConcordo") {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
             public void onClick(AjaxRequestTarget target)    {
 				
 				try {
-				
 					usuarioFiliadoMediator.confirmarAceiteTermosContrato(getUsuario());
 					fecharModal(target);
+				
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 					error("Não foi possível realizar o aceite dos termos do usuário ! \n");
@@ -60,8 +57,6 @@ public class ContratoModal extends WebPage {
 
 	private void botaoNaoConcordo(){
 		add(new AjaxLink<Void>("botaoNaoConcordo") {
-			/***/
-			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public void onClick(AjaxRequestTarget target)    {

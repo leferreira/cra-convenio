@@ -1,8 +1,11 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -17,14 +20,26 @@ import br.com.ieptbto.cra.util.EstadoUtils;
 @SuppressWarnings( "serial" )
 public class AvalistaInputPanel extends Panel {
 
-	public AvalistaInputPanel(String id, CompoundPropertyModel<Avalista> model) {
-		super(id, model);
+	private Avalista avalista;
+	private List<Avalista> avalistas;
+	
+	public AvalistaInputPanel(String id, List<Avalista> avalistas) {
+		super(id);
+		this.avalista = new Avalista();
+		setAvalistas(avalistas);
 		add(campoNome());
 		add(campoDocumento());
 		add(campoEndereco());
 		add(campoCidade());
 		add(campoCep());
 		add(campoUf());
+		add(new Link<Avalista>("adicionarAvalista"){
+
+			@Override
+			public void onClick() {
+				getAvalistas().add(avalista);
+			}
+		});
 	}
 
 	private TextField<String> campoNome() {
@@ -67,5 +82,27 @@ public class AvalistaInputPanel extends Panel {
 		textField.setLabel(new Model<String>("Endereco"));
 		textField.setRequired(true);
 		return textField;
+	}
+
+	public Avalista getAvalista() {
+		return avalista;
+	}
+
+	public void setAvalista(Avalista avalista) {
+		this.avalista = avalista;
+	}
+
+	public List<Avalista> getAvalistas() {
+		return avalistas;
+	}
+
+	public void setAvalistas(List<Avalista> avalistas) {
+		this.avalistas = avalistas;
+	}
+	
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		setDefaultModel(new CompoundPropertyModel<Avalista>(avalista));
 	}
 }
