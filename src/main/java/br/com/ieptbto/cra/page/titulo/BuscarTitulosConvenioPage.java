@@ -38,13 +38,11 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	@SpringBean
 	FiliadoMediator filiadoMediator;
 	@SpringBean
@@ -61,8 +59,6 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 		this.tituloBuscado = new TituloFiliado();
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
 		form.add(new Button("botaoEnviar"){
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
@@ -84,8 +80,6 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", buscarTitulos()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -100,8 +94,6 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 				item.add(new Label("filiado", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
@@ -111,16 +103,13 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 		        item.add(linkHistorico);
 				
 				if (tituloRemessa == null) {
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 					item.add(new Label("dataSituacao", StringUtils.EMPTY));
 					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao()));
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					} else { 
-						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 						item.add(new Label("protocolo", StringUtils.EMPTY));
 					}
 					
@@ -129,7 +118,7 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 			        } else {
 			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
 			        }
-					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
+					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
 				}
 			}
 		};
@@ -137,8 +126,6 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 	
 	private IModel<List<TituloFiliado>> buscarTitulos() {
 		return new LoadableDetachableModel<List<TituloFiliado>>() {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<TituloFiliado> load() {

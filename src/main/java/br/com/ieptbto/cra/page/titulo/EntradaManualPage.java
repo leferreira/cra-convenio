@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -32,6 +32,7 @@ import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
 import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
+import br.com.ieptbto.cra.mediator.AvalistaMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
@@ -49,54 +50,58 @@ import br.com.ieptbto.cra.util.EstadoUtils;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
-	private TituloFiliado tituloFiliado;
-	private List<Avalista> avalistas;
-	
-	private TextField<String> dataVencimentoField;
-	private TextField<String> dataEmissaoField;
-	private DropDownChoice<TipoAlineaCheque> comboAlinea;
-
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	@SpringBean
+	AvalistaMediator avalistaMediator;
+	private TituloFiliado tituloFiliado;
+	private List<Avalista> avalistas;
+	private TextField<String> dataVencimentoField;
+	private TextField<String> dataEmissaoField;
+	private DropDownChoice<TipoAlineaCheque> comboAlinea;
 
 	public EntradaManualPage() {
 		this.tituloFiliado = new TituloFiliado();
 		setAvalistas(tituloFiliado.getAvalistas());
-		carregarEntradaManualPage();
+		
+		carregarFormularioTitulo();
 	}
 	
 	public EntradaManualPage(String mensagem) {
 		this.tituloFiliado = new TituloFiliado();
 		setAvalistas(tituloFiliado.getAvalistas());
 		info(mensagem);
-		carregarEntradaManualPage();
+		
+		carregarFormularioTitulo();
 	}
 	
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.tituloFiliado = titulo;
-		setAvalistas(tituloFiliado.getAvalistas());
-		carregarEntradaManualPage();
+		setAvalistas(avalistaMediator.buscarAvalistasPorTitulo(titulo));
+		
+		carregarFormularioTitulo();
 	}
 
-	public void carregarEntradaManualPage() {
+	public void carregarFormularioTitulo() {
 
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
+		form.add(new Button("salvarTitulo"){
+			
 			@Override
-			protected void onSubmit() {
-				TituloFiliado titulo = getModelObject();
+			public void onSubmit() {
+				super.onSubmit();
+				TituloFiliado titulo = EntradaManualPage.this.getModel().getObject();
 				
+				titulo.setAvalistas(getAvalistas());
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
 				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
-					if (!titulo.getDataEmissao().isEqual(titulo.getDataVencimento())) 
-						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-					else 
-						error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+					error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 				} else if (titulo.getId() != 0) {
 					tituloFiliadoMediator.alterarTituloFiliado(titulo);
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
@@ -107,7 +112,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
 				}
 			}
-		};
+		});
 		form.add(numeroTitulo());
 		form.add(dataEmissao());
 		form.add(dataVencimento());
@@ -123,10 +128,11 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(especieTitulo());
 		form.add(bairroDevedor());
 		form.add(campoAlinea());
-		form.add(new AvalistaInputPanel("avalistaInputPanel", getAvalistas()));
+		form.add(new AvalistaInputPanel("avalistaPanel", getModel() ,getAvalistas()));
 		form.add(carregarListaAvalistas());
 		add(form);
 	}
+
 	
 	private ListView<Avalista> carregarListaAvalistas(){
 		return new ListView<Avalista>("listaAvalistas", getAvalistas() ) {
@@ -134,19 +140,22 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			@Override
 			protected void populateItem(ListItem<Avalista> item) {
 				Avalista avalista = item.getModelObject();
+				item.add(new Label("contador", item.getIndex()+1));
 				item.add(new Label("nomeAvalista", avalista.getNome()));
 				item.add(new Label("documentoAvalista", avalista.getDocumento()));
-				item.add(new Label("cepAvalista", avalista.getCep()));
 				item.add(new Label("cidadeAvalista", avalista.getCidade()));
 				item.add(new Label("ufAvalista", avalista.getUf()));
 				item.add(removerAvalista(avalista));
 			}
 			
-			private Component removerAvalista(final Avalista avalista) {
+			private Link<Avalista> removerAvalista(final Avalista avalista) {
 				return new Link<Avalista>("remover") {
 					
 					@Override
 					public void onClick() {
+						if (avalista.getId() != 0) {
+							avalistaMediator.removerAvalista(avalista);
+						}
 						getAvalistas().remove(avalista);
 					}
 				};
@@ -163,6 +172,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	private TextField<String> dataEmissao() {
 		dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
+		if (tituloFiliado.getDataEmissao() != null) {
+			dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
+		}
 		dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
 		dataEmissaoField.setRequired(true);
 		return dataEmissaoField;
@@ -170,6 +182,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	private TextField<String> dataVencimento() {
 		dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
+		if (tituloFiliado.getDataVencimento() != null) {
+			dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataVencimento())));
+		}
 		dataVencimentoField.setLabel(new Model<String>("Data de Vencimento"));
 		dataVencimentoField.setRequired(true);
 		return dataVencimentoField;
@@ -252,7 +267,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		IChoiceRenderer<TipoEspecieTitulo> renderer = new ChoiceRenderer<TipoEspecieTitulo>("label");
 		final DropDownChoice<TipoEspecieTitulo> dropDownEspecie =  new DropDownChoice<TipoEspecieTitulo>("especieTitulo", Arrays.asList(TipoEspecieTitulo.values()), renderer);
 		dropDownEspecie.add(new OnChangeAjaxBehavior() {
-
 			@Override
             protected void onUpdate(AjaxRequestTarget target){
                 

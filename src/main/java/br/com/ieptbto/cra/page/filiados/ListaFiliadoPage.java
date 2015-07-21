@@ -20,13 +20,10 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({ "rawtypes", "serial" })
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class ListaFiliadoPage extends BasePage<Filiado>{
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	private Filiado filiado;
 	
@@ -45,8 +42,6 @@ public class ListaFiliadoPage extends BasePage<Filiado>{
 	private void carregarListaFiliadoPage(){
 		this.filiado = new Filiado();
 		add(new Link("botaoNovo") {
-            /***/
-			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
 				setResponsePage(new IncluirFiliadoPage());
@@ -58,17 +53,11 @@ public class ListaFiliadoPage extends BasePage<Filiado>{
 	private ListView<Filiado> carregarListaFiliados(){
 		return new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
 
-			/***/
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void populateItem(ListItem<Filiado> item) {
-				// TODO Auto-generated method stub
 				final Filiado filiado = item.getModelObject();
 				
 				Link linkAlterar = new Link("linkAlterar") {
-					 /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirFiliadoPage(filiado));
@@ -87,8 +76,8 @@ public class ListaFiliadoPage extends BasePage<Filiado>{
 	
 	private String verificarSituacao(Boolean ativo){ 
 		if (ativo.equals(true))
-			return "Ativo";
-		return "Não Ativo";
+			return "Sim";
+		return "Não";
 	}
 	
 	@Override

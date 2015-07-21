@@ -88,9 +88,6 @@ th{
 td{
 	  text-align: center;
 }
-.table{
-	font-size: 12px !important;
-}
 .download-ico{
   	 width: 40%;
 }
@@ -115,4 +112,37 @@ MOdal chrome e explorer
 }
 .w_close{
 	display: none !important;
+}
+/**
+TABLES
+*/
+th{
+	  text-align: left;
+}
+td{
+	  text-align: left;
+}
+.col-center{
+	text-align: center;
+}
+.col-left{
+	text-align: left;
+}
+.col-right{
+	text-align: right;
+}
+.valor{
+	font-weight: bold;
+}
+table.dataTable thead > tr > th {
+  padding-left: 8px; 
+  padding-right: 0px; 
+}
+.info-titulo{
+	background: #337AB7 none repeat scroll 0% 0%;
+    color: #FFF;
+    font-weight: bold;
+    padding: 3px;
+    font-size: 10px;
+    width: 100%;
 }

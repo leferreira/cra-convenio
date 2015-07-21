@@ -39,10 +39,8 @@ public class ContratoModal extends WebPage {
 	
 	private void botaoConcordo(){
 		add(new AjaxLink<Void>("botaoConcordo") {
-
 			@Override
             public void onClick(AjaxRequestTarget target)    {
-				
 				try {
 					usuarioFiliadoMediator.confirmarAceiteTermosContrato(getUsuario());
 					fecharModal(target);
@@ -57,7 +55,6 @@ public class ContratoModal extends WebPage {
 
 	private void botaoNaoConcordo(){
 		add(new AjaxLink<Void>("botaoNaoConcordo") {
-			
 			@Override
 			public void onClick(AjaxRequestTarget target)    {
 				
