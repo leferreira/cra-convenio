@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="3.138428376721004"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="209"/>
+	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.x" value="377"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="DATA_INICIO" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
@@ -52,13 +52,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CONVENIO}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="0" y="0" width="180" height="30" uuid="12dc0bc2-7870-4b2a-820d-4f56a6d1f55b"/>
-				<textElement verticalAlignment="Middle">
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[IEPTB-TO (CONVÊNIO)]]></text>
-			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="380" height="60" uuid="81e75e9b-bcb9-4f15-9640-333501f69404"/>
+				<imageExpression><![CDATA["C:\\Users\\Thasso Araújo\\git\\cra-convenio\\src\\main\\webapp\\img\\ieptb.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -78,9 +75,9 @@
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Associado :" + $P{FILIADO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{FILIADO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
