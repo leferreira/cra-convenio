@@ -3,7 +3,11 @@ package br.com.ieptbto.cra.page.relatorio;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import org.joda.time.LocalDate;
+import org.apache.commons.lang.StringUtils;
+
+import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -14,13 +18,14 @@ public class TituloFiliadoJRDataSource implements Serializable {
 	/***/
 	private static final long serialVersionUID = 1L;
 	private String numeroTitulo;
-	private LocalDate dataEmissao;
+	private String dataEmissao;
 	private String pracaProtesto;
 	private String protocolo;
 	private String nomeDevedor;
 	private BigDecimal valorTitulo;
-	private LocalDate dataConfirmacao;
-	private LocalDate dataSitucao;
+	private BigDecimal valorSaldoTitulo;
+	private String dataConfirmacao;
+	private String dataSitucao;
 	private String situacaoTituloConvenio;
 	private String filiado;
 
@@ -28,7 +33,7 @@ public class TituloFiliadoJRDataSource implements Serializable {
 		return numeroTitulo;
 	}
 
-	public LocalDate getDataEmissao() {
+	public String getDataEmissao() {
 		return dataEmissao;
 	}
 
@@ -48,11 +53,11 @@ public class TituloFiliadoJRDataSource implements Serializable {
 		return valorTitulo;
 	}
 
-	public LocalDate getDataConfirmacao() {
+	public String getDataConfirmacao() {
 		return dataConfirmacao;
 	}
 
-	public LocalDate getDataSitucao() {
+	public String getDataSitucao() {
 		return dataSitucao;
 	}
 
@@ -68,7 +73,7 @@ public class TituloFiliadoJRDataSource implements Serializable {
 		this.numeroTitulo = numeroTitulo;
 	}
 
-	public void setDataEmissao(LocalDate dataEmissao) {
+	public void setDataEmissao(String dataEmissao) {
 		this.dataEmissao = dataEmissao;
 	}
 
@@ -88,11 +93,11 @@ public class TituloFiliadoJRDataSource implements Serializable {
 		this.valorTitulo = valorTitulo;
 	}
 
-	public void setDataConfirmacao(LocalDate dataConfirmacao) {
+	public void setDataConfirmacao(String dataConfirmacao) {
 		this.dataConfirmacao = dataConfirmacao;
 	}
 
-	public void setDataSitucao(LocalDate dataSitucao) {
+	public void setDataSitucao(String dataSitucao) {
 		this.dataSitucao = dataSitucao;
 	}
 
@@ -104,4 +109,37 @@ public class TituloFiliadoJRDataSource implements Serializable {
 		this.filiado = filiado;
 	}
 
+	public void parseTituloFiliado(TituloFiliado tituloFiliado, TituloRemessa tituloRemessa) {
+		this.setNumeroTitulo(tituloFiliado.getNumeroTitulo());
+		this.setDataEmissao(DataUtil.localDateToString(tituloFiliado.getDataEmissao()));
+		this.setPracaProtesto(tituloFiliado.getPracaProtesto().getNomeMunicipio());
+		this.setNomeDevedor(tituloFiliado.getNomeDevedor());
+		this.setValorTitulo(tituloFiliado.getValorTitulo());
+		this.setValorSaldoTitulo(tituloFiliado.getValorSaldoTitulo());
+		this.setFiliado(tituloFiliado.getFiliado().getRazaoSocial());
+		this.setSituacaoTituloConvenio(tituloFiliado.getSituacaoTituloConvenio().getSituacao());
+		
+		this.setProtocolo(StringUtils.EMPTY);
+		this.setDataConfirmacao(StringUtils.EMPTY);
+		this.setDataSitucao(DataUtil.localDateToString(tituloFiliado.getDataEnvioCRA()));
+		if (tituloRemessa != null) {
+			if (tituloRemessa.getConfirmacao() != null) {
+				this.setProtocolo(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio());
+				this.setDataConfirmacao(DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento()));
+				this.setDataSitucao(DataUtil.localDateToString(tituloRemessa.getConfirmacao().getDataOcorrencia()));
+			}
+			if (tituloRemessa.getRetorno() != null) {
+				this.setDataSitucao(DataUtil.localDateToString(tituloFiliado.getDataEnvioCRA()));
+			}
+			this.setSituacaoTituloConvenio(tituloRemessa.getSituacaoTitulo());
+		}
+	}
+
+	public BigDecimal getValorSaldoTitulo() {
+		return valorSaldoTitulo;
+	}
+
+	public void setValorSaldoTitulo(BigDecimal valorSaldoTitulo) {
+		this.valorSaldoTitulo = valorSaldoTitulo;
+	}
 }

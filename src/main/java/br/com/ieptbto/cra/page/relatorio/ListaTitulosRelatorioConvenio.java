@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +50,7 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
 	private Filiado filiado;
-	private List<TituloFiliadoJRDataSource> listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
-	
+	private List<TituloFiliadoJRDataSource> listaRelatorio;
 	private List<TituloFiliado> listaTitulos;
 	
 	@SpringBean
@@ -76,9 +76,8 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 
 			@Override
 			public void onSubmit() {
-				
 				try {
-					JasperPrint jasperPrint = novoRelatorioDeTitulosPorConvenio(convenio, filiado, dataInicio, dataFim, pracaProtesto, listaTitulos);
+					JasperPrint jasperPrint = novoRelatorioDeTitulosPorConvenio(convenio, filiado, dataInicio, dataFim, pracaProtesto, getListaRelatorio());
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -94,24 +93,17 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
-				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
-				TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
 				
-				tituloFiliado.setNumeroTitulo(tituloLista.getNumeroTitulo());
-				tituloFiliado.setDataEmissao(tituloLista.getDataEmissao());
-				tituloFiliado.setPracaProtesto(tituloLista.getPracaProtesto().getNomeMunicipio());
-				tituloFiliado.setValorTitulo(tituloLista.getValorTitulo());
-				tituloFiliado.setFiliado(tituloLista.getFiliado().getRazaoSocial());
-				tituloFiliado.setNomeDevedor(tituloLista.getNomeDevedor());
+				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
+				ListaTitulosRelatorioConvenio.this.parseToTituloFiliadoJRDataSource(tituloLista, tituloRemessa);
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("emissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", tituloLista.getValorTitulo()));
 				item.add(new Label("filiado", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
-
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
@@ -120,42 +112,64 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		        item.add(linkHistorico);
 				
 				if (tituloRemessa == null) {
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao()));
-					tituloFiliado.setSituacaoTituloConvenio(tituloLista.getSituacaoTituloConvenio().getSituacao());
+					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
-						tituloFiliado.setDataConfirmacao(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento());
-						tituloFiliado.setNomeDevedor(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio());
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					} else { 
-						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 						item.add(new Label("protocolo", StringUtils.EMPTY));
 					}
 					
 			        if (tituloRemessa.getRetorno() != null){
-			        	tituloFiliado.setDataSitucao(tituloRemessa.getRetorno().getDataOcorrencia());
 		        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 			        } else {
-			        	tituloFiliado.setDataSitucao(tituloRemessa.getDataOcorrencia());
 			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
 			        }
-					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
-					tituloFiliado.setSituacaoTituloConvenio(tituloRemessa.getSituacaoTitulo());				
+					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
 				}
-				getListaRelatorio().add(tituloFiliado);
 			}
 		};
 	}
 	
+	private void parseToTituloFiliadoJRDataSource(TituloFiliado tituloLista, TituloRemessa tituloRemessa) {
+		TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
+		tituloFiliado.parseTituloFiliado(tituloLista, tituloRemessa);
+		getListaRelatorio().add(tituloFiliado);
+	}
+	
+	private JasperPrint novoRelatorioDeTitulosPorConvenio(Instituicao convenio,Filiado filiado, LocalDate dataInicio, 
+			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliadoJRDataSource> listaTitulos) throws JRException {
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		
+		if (listaTitulos.isEmpty())
+			throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
 
+		parametros.put("CONVENIO", convenio.getNomeFantasia());
+		parametros.put("FILIADO", filiado.getRazaoSocial());
+		parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
+		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
+
+		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(listaTitulos);
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTituloConvenio.jrxml"));
+		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
+
+	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
+		if (listaRelatorio == null) {
+			listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
+		}
+		return listaRelatorio;
+	}
+	
+	public void setListaRelatorio(List<TituloFiliadoJRDataSource> listaRelatorio) {
+		this.listaRelatorio = listaRelatorio;
+	}
+	
 	public List<TituloFiliado> getListaTitulos() {
 		return listaTitulos;
 	}
-
+	
 	public void setListaTitulos(List<TituloFiliado> listaTitulos) {
 		this.listaTitulos = listaTitulos;
 	}
@@ -165,29 +179,4 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		return new CompoundPropertyModel<TituloFiliado>(titulo);
 	}
 
-	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
-		return listaRelatorio;
-	}
-
-	public void setListaRelatorio(List<TituloFiliadoJRDataSource> listaRelatorio) {
-		this.listaRelatorio = listaRelatorio;
-	}
-	
-	private JasperPrint novoRelatorioDeTitulosPorConvenio(Instituicao convenio,Filiado filiado, LocalDate dataInicio, 
-			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliado> beans) throws JRException {
-		
-		HashMap<String, Object> parametros = new HashMap<String, Object>();
-		
-		if (beans.isEmpty())
-			throw new InfraException("Não foi possível gerar o relatório. A busca não retornou resultados!");
-
-		parametros.put("CONVENIO", convenio.getNomeFantasia());
-		parametros.put("FILIADO", filiado.getRazaoSocial());
-		parametros.put("DATA_INICIO", DataUtil.localDateToString(dataInicio));
-		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
-
-		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(beans);
-		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTituloConvenio.jrxml"));
-		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
-	}
 }

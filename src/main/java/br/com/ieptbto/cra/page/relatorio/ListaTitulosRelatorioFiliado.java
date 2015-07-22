@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,6 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
 	private List<TituloFiliadoJRDataSource> listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
-	
 	private List<TituloFiliado> listaTitulos;
 	
 	@SpringBean
@@ -75,7 +75,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 			@Override
 			public void onSubmit() {
 				try {
-					JasperPrint jasperPrint = novoRelatorioDeTitulosPorFiliado(empresaFiliado, dataInicio, dataFim, pracaProtesto, listaTitulos);
+					JasperPrint jasperPrint = novoRelatorioDeTitulosPorFiliado(empresaFiliado, dataInicio, dataFim, pracaProtesto, getListaRelatorio());
 					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -91,23 +91,16 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
+
 				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista);
-				TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
-				
-				tituloFiliado.setNumeroTitulo(tituloLista.getNumeroTitulo());
-				tituloFiliado.setDataEmissao(tituloLista.getDataEmissao());
-				tituloFiliado.setPracaProtesto(tituloLista.getPracaProtesto().getNomeMunicipio());
-				tituloFiliado.setValorTitulo(tituloLista.getValorTitulo());
-				tituloFiliado.setFiliado(tituloLista.getFiliado().getRazaoSocial());
-				tituloFiliado.setNomeDevedor(tituloLista.getNomeDevedor());
+				ListaTitulosRelatorioFiliado.this.parseToTituloFiliadoJRDataSource(tituloLista, tituloRemessa);
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
 				item.add(new Label("emissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", tituloLista.getValorTitulo()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
-
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
@@ -116,35 +109,31 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 		        item.add(linkHistorico);
 				
 				if (tituloRemessa == null) {
-					item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao()));
-					tituloFiliado.setSituacaoTituloConvenio(tituloLista.getSituacaoTituloConvenio().getSituacao());
+					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
-						tituloFiliado.setDataConfirmacao(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento());
-						tituloFiliado.setNomeDevedor(tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio());
-						item.add(new Label("dataConfirmacao", DataUtil.localDateToString(tituloRemessa.getConfirmacao().getRemessa().getDataRecebimento())));
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
 					} else { 
-						item.add(new Label("dataConfirmacao", StringUtils.EMPTY));
 						item.add(new Label("protocolo", StringUtils.EMPTY));
 					}
 					
 			        if (tituloRemessa.getRetorno() != null){
-			        	tituloFiliado.setDataSitucao(tituloRemessa.getRetorno().getDataOcorrencia());
 		        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
 			        } else {
-			        	tituloFiliado.setDataSitucao(tituloRemessa.getDataOcorrencia());
 			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
 			        }
-					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo()));
-					tituloFiliado.setSituacaoTituloConvenio(tituloRemessa.getSituacaoTitulo());	
+					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
 				}
-				getListaRelatorio().add(tituloFiliado);
 			}
 		};
+	}
+	
+	private void parseToTituloFiliadoJRDataSource(TituloFiliado tituloLista, TituloRemessa tituloRemessa) {
+		TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
+		tituloFiliado.parseTituloFiliado(tituloLista, tituloRemessa);
+		getListaRelatorio().add(tituloFiliado);
 	}
 	
 	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
@@ -160,7 +149,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 	}
 	
 	private JasperPrint novoRelatorioDeTitulosPorFiliado(Filiado filiado, LocalDate dataInicio, 
-			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliado> beans) throws JRException {
+			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliadoJRDataSource> beans) throws JRException {
 		
 		HashMap<String, Object> parametros = new HashMap<String, Object>();
 		
