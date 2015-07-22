@@ -9,35 +9,35 @@
 	    		<button wicket:id="botaoBuscar" style="margin-bottom: 5px;" class="btn btn-primary"><span class="fa fa-print"></span>&nbsp;Gerar Relat&oacute;rio</button>
 			</form>
 			<br style="clear: both;">
-			<table id="table" class="table table-striped table-bordered table-hover" style="font-size: 12px;">
+			<table id="table" class="table table-striped table-hover" style="font-size: 12px;">
 				<thead>
 					<tr>
-						<th>T&iacute;tulo</th>
-						<th>Emiss&atilde;o</th>
+						<th class="col-center">T&iacute;tulo</th>
+						<th class="col-center">Protoc.</th>
+						<th class="col-center">Emiss&atilde;o</th>
 						<th>Pra&ccedil;a</th>
-						<th>Protoc.</th>
 						<th>Devedor</th>
-						<th>Valor</th>
-						<th>Data Conf.</th>
-						<th>Data S.</th>
-						<th>Situa&ccedil;&atilde;o</th>
+						<th class="col-right">Valor</th>
+						<th class="col-center">Data Conf.</th>
+						<th class="col-center">Data S.</th>
+						<th class="col-center"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr wicket:id="listViewTitulos">
-						<td wicket:id="numeroTitulo"></td>
-						<td wicket:id="emissao"></td>
+						<td class="col-center" wicket:id="numeroTitulo"></td>
+						<td class="col-center" wicket:id="protocolo"></td>
+						<td class="col-center" wicket:id="emissao"></td>
 						<td wicket:id="pracaProtesto"></td>
-						<td wicket:id="protocolo"></td>
 						<td>
 							<a href="#" wicket:id="linkHistorico" >
 							<span class="link" style="font-weight: bold;" wicket:id="nomeDevedor"></span>
 							</a>
 						</td>
-						<td wicket:id="valor" style="font-weight: bold;"></td>
-						<td wicket:id="dataConfirmacao"></td>
-						<td wicket:id="dataSituacao"></td>
-						<td wicket:id="situacaoTitulo" class="destaque"></td>
+						<td class="col-right" wicket:id="valor" style="font-weight: bold;"></td>
+						<td class="col-center" wicket:id="dataConfirmacao"></td>
+						<td class="col-center" wicket:id="dataSituacao"></td>
+						<td class="col-center valor"><span wicket:id="situacaoTitulo" class="info-titulo"></span></td>
 					</tr>
 				</tbody>
 			</table>

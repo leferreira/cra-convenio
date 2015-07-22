@@ -44,9 +44,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	RemessaMediator remessaMediator;
-	
 	private TituloFiliado titulo;
-	
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	
@@ -70,7 +68,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), titulo.getFiliado(),dataInicio, dataFim, titulo.getPracaProtesto()));
+				setResponsePage(new ListaTitulosRelatorioConvenio(getUser().getInstituicao(), titulo.getFiliado(), dataInicio, dataFim, titulo.getPracaProtesto()));
 			}
 		};
 		form.add(dataEnvioInicio());
