@@ -13,7 +13,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -41,10 +40,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	private TituloFiliado titulo;
 	private Instituicao convenio;
@@ -66,6 +63,7 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.pracaProtesto = pracaProtesto;
+		
 		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioConvenio(convenio, filiado,dataInicio, dataFim, pracaProtesto));
 		add(carregarListaTitulos());
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
@@ -73,10 +71,9 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		add(form);
 	}
 	
-	private Component botaoEnviar() {
+	private Button botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				
@@ -93,8 +90,6 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -116,8 +111,6 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 				item.add(new Label("filiado", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));

@@ -101,6 +101,9 @@ td{
   font-size: 16px;
   font-style: italic;
 }
+.historico {
+   margin-bottom: 5px !important;	
+}
 #table_wrapper{
   margin: 0 -5px;
 }

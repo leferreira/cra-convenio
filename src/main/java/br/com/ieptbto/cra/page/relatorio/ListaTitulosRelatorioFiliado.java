@@ -3,7 +3,7 @@ package br.com.ieptbto.cra.page.relatorio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
- 
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -27,7 +27,6 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
@@ -41,11 +40,8 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("serial")
 public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	private TituloFiliado titulo;
 	private Filiado empresaFiliado;
@@ -65,6 +61,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.pracaProtesto = pracaProtesto;
+		
 		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioFiliado(filiado, dataInicio, dataFim, pracaProtesto));
 		add(carregarListaTitulos());
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
@@ -74,8 +71,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 	
 	private Component botaoEnviar() {
 		return new Button("botaoBuscar") {
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				try {
@@ -91,8 +87,6 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 	
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
-			/***/
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -113,8 +107,6 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
-		            /***/
-					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));

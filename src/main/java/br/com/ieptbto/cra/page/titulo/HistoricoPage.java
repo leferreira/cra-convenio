@@ -22,13 +22,11 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER})
 public class HistoricoPage extends BasePage<TituloRemessa> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
 	@SpringBean
 	TituloMediator tituloMediator;
 	@SpringBean
@@ -110,122 +108,71 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private TextField<String> pracaProtesto() {
-		if (tituloRemessa == null){
-			return new TextField<String>("pracaProtesto", new Model<String>(tituloFiliado.getPracaProtesto().getNomeMunicipio()));
-		}
-		return new TextField<String>("pracaProtesto", new Model<String>(tituloRemessa.getPracaProtesto()));
+		return new TextField<String>("pracaProtesto", new Model<String>(tituloFiliado.getPracaProtesto().getNomeMunicipio()));
 	}
 
 	 private TextField<String> status(){
-		 if (tituloRemessa == null){
-				return new TextField<String>("situacaoTitulo", new Model<String>(tituloFiliado.getSituacaoTituloConvenio().getSituacao()));
-		 }
-		 return new TextField<String>("situacaoTitulo", new Model<String>(tituloRemessa.getSituacaoTitulo()));
+		return new TextField<String>("situacaoTitulo", new Model<String>(tituloFiliado.getSituacaoTituloConvenio().getSituacao()));
 	 }
 
 	private TextField<String> dataRemessa(){
-		if (tituloRemessa == null){
-			return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(StringUtils.EMPTY));
-		}
-		return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(DataUtil.localDateToString(tituloRemessa.getRemessa().getArquivo().getDataEnvio())));
+		return new TextField<String>("remessa.arquivo.dataEnvio", new Model<String>(StringUtils.EMPTY));
 	}
 	
 	private TextField<String> nomeSacadorVendedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("nomeSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getRazaoSocial()));
-		}
-		return new TextField<String>("nomeSacadorVendedor", new Model<String>(tituloRemessa.getNomeSacadorVendedor()));
+		return new TextField<String>("nomeSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getRazaoSocial()));
 	}
 
 	private TextField<String> documentoSacador() {
-		if (tituloRemessa == null){
-			return new TextField<String>("documentoSacador", new Model<String>(tituloFiliado.getFiliado().getCnpjCpf()));
-		}
-		return new TextField<String>("documentoSacador", new Model<String>(tituloRemessa.getDocumentoSacador()));
+		return new TextField<String>("documentoSacador", new Model<String>(tituloFiliado.getFiliado().getCnpjCpf()));
 	}
 
 	private TextField<String> ufSacadorVendedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("ufSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getUf()));
-		}
-		return new TextField<String>("ufSacadorVendedor", new Model<String>(tituloRemessa.getUfSacadorVendedor()));
+		return new TextField<String>("ufSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getUf()));
 	}
 
 	private TextField<String> cepSacadorVendedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("cepSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getCep()));
-		}
-		return new TextField<String>("cepSacadorVendedor", new Model<String>(tituloRemessa.getCepSacadorVendedor()));
+		return new TextField<String>("cepSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getCep()));
 	}
 
 	private TextField<String> cidadeSacadorVendedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("cidadeSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getMunicipio().getNomeMunicipio()));
-		}
-		return new TextField<String>("cidadeSacadorVendedor", new Model<String>(tituloRemessa.getCidadeSacadorVendedor()));
+		return new TextField<String>("cidadeSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getMunicipio().getNomeMunicipio()));
 	}
 
 	private TextField<String> enderecoSacadorVendedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("enderecoSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getEndereco()));
-		}
-		return new TextField<String>("enderecoSacadorVendedor", new Model<String>(tituloRemessa.getEnderecoSacadorVendedor()));
+		return new TextField<String>("enderecoSacadorVendedor", new Model<String>(tituloFiliado.getFiliado().getEndereco()));
 	}
 
 	private TextField<String> nomeDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("nomeDevedor", new Model<String>(tituloFiliado.getNomeDevedor()));
-		}
-		return new TextField<String>("nomeDevedor", new Model<String>(tituloRemessa.getNomeDevedor()));
+		return new TextField<String>("nomeDevedor", new Model<String>(tituloFiliado.getNomeDevedor()));
 	}
 
 	private TextField<String> documentoDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("documentoDevedor", new Model<String>(tituloFiliado.getDocumentoDevedor()));
-		}
-		return new TextField<String>("documentoDevedor", new Model<String>(tituloRemessa.getDocumentoDevedor()));
+		return new TextField<String>("documentoDevedor", new Model<String>(tituloFiliado.getDocumentoDevedor()));
 	}
 
 	private TextField<String> ufDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("ufDevedor", new Model<String>(tituloFiliado.getUfDevedor()));
-		}
-		return new TextField<String>("ufDevedor", new Model<String>(tituloRemessa.getUfDevedor()));
+		return new TextField<String>("ufDevedor", new Model<String>(tituloFiliado.getUfDevedor()));
 	}
 
 	private TextField<String> cepDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("cepDevedor", new Model<String>(tituloFiliado.getCepDevedor()));
-		}
-		return new TextField<String>("cepDevedor", new Model<String>(tituloRemessa.getCepDevedor()));
+		return new TextField<String>("cepDevedor", new Model<String>(tituloFiliado.getCepDevedor()));
 	}
 
 	private TextField<String> cidadeDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("cidadeDevedor", new Model<String>(tituloFiliado.getCidadeDevedor()));
-		}
-		return new TextField<String>("cidadeDevedor", new Model<String>(tituloRemessa.getCidadeDevedor()));
+		return new TextField<String>("cidadeDevedor", new Model<String>(tituloFiliado.getCidadeDevedor()));
 	}
 
 	private TextField<String> enderecoDevedor() {
-		if (tituloRemessa == null){
-			return new TextField<String>("enderecoDevedor", new Model<String>(tituloFiliado.getEnderecoDevedor()));
-		}
-		return new TextField<String>("enderecoDevedor", new Model<String>(tituloRemessa.getEnderecoDevedor()));
+		return new TextField<String>("enderecoDevedor", new Model<String>(tituloFiliado.getEnderecoDevedor()));
 	}
 
 	private TextField<String> numeroTitulo() {
-		if (tituloRemessa == null){
-			return new TextField<String>("numeroTitulo", new Model<String>(tituloFiliado.getNumeroTitulo()));
-		}
-		return new TextField<String>("numeroTitulo", new Model<String>(tituloRemessa.getNumeroTitulo()));
+		return new TextField<String>("numeroTitulo", new Model<String>(tituloFiliado.getNumeroTitulo()));
 	}
 
 	private TextField<String> portador(){
-		if (tituloRemessa == null){
-			return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(tituloFiliado.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
-		}
-		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(tituloRemessa.getRemessa().getCabecalho().getNomePortador()));
+		return new TextField<String>("remessa.arquivo.instituicaoEnvio.nomeFantasia", new Model<String>(tituloFiliado.getFiliado().getInstituicaoConvenio().getNomeFantasia()));
 	}
 
 	 private TextField<String> agencia(){
@@ -236,31 +183,23 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	 }
 
 	private TextField<String> nossoNumero() {
-		if (tituloRemessa == null){
-			return new TextField<String>("nossoNumero", new Model<String>(StringUtils.EMPTY));
-		}
-		return new TextField<String>("nossoNumero", new Model<String>(tituloRemessa.getNossoNumero()));
+		return new TextField<String>("nossoNumero", new Model<String>(gerarNossoNumero(tituloFiliado.getFiliado().getInstituicaoConvenio().getCodigoCompensacao() + tituloFiliado.getId())));
+	}
+	
+	private String gerarNossoNumero(String nossoNumero) {
+		return StringUtils.rightPad(nossoNumero, 15, "0");
 	}
 
 	private TextField<String> especieTitulo() {
-		if (tituloRemessa == null){
-			return new TextField<String>("especieTitulo", new Model<String>(StringUtils.EMPTY));
-		}
-		return new TextField<String>("especieTitulo", new Model<String>(tituloRemessa.getEspecieTitulo()));
+		return new TextField<String>("especieTitulo", new Model<String>(tituloFiliado.getEspecieTitulo().getConstante()));
 	}
 
 	private TextField<String> dataEmissaoTitulo() {
-		if (tituloRemessa == null){
-			return new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
-		}
-		return new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataEmissaoTitulo())));
+		return new TextField<String>("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
 	}
 
 	private TextField<String> dataVencimentoTitulo() {
-		if (tituloRemessa == null){
-			return new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataVencimento())));
-		}
-		return new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(tituloRemessa.getDataVencimentoTitulo())));
+		return new TextField<String>("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataVencimento())));
 	}
 
 	public TextField<String> valorTitulo() {
@@ -306,22 +245,15 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	public TextField<String> nomeCedenteFavorecido() {
-		if (tituloRemessa == null){
-			return new TextField<String>("nomeCedenteFavorecido", new Model<String>(StringUtils.EMPTY));
-		}
-		return new TextField<String>("nomeCedenteFavorecido", new Model<String>(tituloRemessa.getNomeCedenteFavorecido()));
+		return new TextField<String>("nomeCedenteFavorecido", new Model<String>(tituloFiliado.getFiliado().getRazaoSocial()));
 	}
 
 	public TextField<String> agenciaCodigoCedente() {
-		if (tituloRemessa == null){
-			return new TextField<String>("agenciaCodigoCedente", new Model<String>(StringUtils.EMPTY));
-		}
-		return new TextField<String>("agenciaCodigoCedente", new Model<String>(tituloRemessa.getAgenciaCodigoCedente()));
+		return new TextField<String>("agenciaCodigoCedente", new Model<String>(tituloFiliado.getFiliado().getCodigoFiliado()));
 	}
 	
 	@Override
 	protected IModel<TituloRemessa> getModel() {
 		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
 	}
-
 }

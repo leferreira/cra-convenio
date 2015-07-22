@@ -101,7 +101,7 @@ public class BuscarTitulosFiliadoPage extends BasePage<TituloFiliado>{
 				if (tituloRemessa == null) {
 					item.add(new Label("protocolo", StringUtils.EMPTY));
 					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao()));
+					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
 						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));

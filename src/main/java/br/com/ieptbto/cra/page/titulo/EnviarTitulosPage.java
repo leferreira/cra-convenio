@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -102,7 +103,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				
 				item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("dataVencimento", DataUtil.localDateToString(tituloLista.getDataVencimento())));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+				item.add(new LabelValorMonetario<BigDecimal>("valor", tituloLista.getValorTitulo()));
 				item.add(removerTitulo(tituloLista));
 			}
 			

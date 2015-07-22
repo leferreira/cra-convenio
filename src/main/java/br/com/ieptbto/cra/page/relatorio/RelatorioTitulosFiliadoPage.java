@@ -6,7 +6,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice; 
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
@@ -32,12 +32,10 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
@@ -60,8 +58,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 		this.titulo = new TituloFiliado();
 		this.empresaFiliado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
-			/** */
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();

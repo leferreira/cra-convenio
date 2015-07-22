@@ -31,12 +31,10 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
-
-	/***/
-	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
@@ -54,10 +52,8 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 	
 	public RelatorioTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
-		
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
-			/***/
-			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();
