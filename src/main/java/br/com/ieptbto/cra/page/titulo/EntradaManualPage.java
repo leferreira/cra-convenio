@@ -286,7 +286,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
             	target.add(comboAlinea);
             }
         });
-		dropDownEspecie.setOutputMarkupId(true);
+		dropDownEspecie.setLabel(new Model<String>("Espécie do Documento"));
+		dropDownEspecie.setRequired(true);
 		return dropDownEspecie;
 	}
 	

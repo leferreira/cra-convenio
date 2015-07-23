@@ -148,7 +148,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private TextField<String> documentoDevedor() {
-		return new TextField<String>("documentoDevedor", new Model<String>(tituloFiliado.getDocumentoDevedor()));
+		return new TextField<String>("documentoDevedor", new Model<String>(tituloFiliado.getCpfCnpj()));
 	}
 
 	private TextField<String> ufDevedor() {
