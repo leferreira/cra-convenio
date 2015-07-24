@@ -45,7 +45,7 @@ public class AvalistaInputPanel extends Panel {
 				try {
 					if (avalistaTitulo.getNome() == null || avalistaTitulo.getEndereco() == null ||
 							avalistaTitulo.getCidade() == null || avalistaTitulo.getUf() == null ||
-							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null ) {
+							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null || avalistaTitulo.getBairro() == null) {
 						throw new InfraException("O Avalista não pode ter informações em branco !");
 					} else {
 						getAvalistas().add(avalistaTitulo);		
@@ -55,7 +55,7 @@ public class AvalistaInputPanel extends Panel {
 						getModel().setObject(novoAvalista);
 					}
 				} catch (InfraException ex) {
-					error("O Avalista não pode ter informações em branco !");
+					error(ex.getMessage());
 				}
 			}
 		};
@@ -65,6 +65,7 @@ public class AvalistaInputPanel extends Panel {
 		formAvalista.add(campoCidade());
 		formAvalista.add(campoCep());
 		formAvalista.add(campoUf());
+		formAvalista.add(campoBairro());
 		formAvalista.add(new Button("adicionarAvalista"));
 		add(formAvalista);
 	}
@@ -104,6 +105,12 @@ public class AvalistaInputPanel extends Panel {
 		TextArea<String> fieldEndereco = new TextArea<String>("endereco");
 		fieldEndereco.setLabel(new Model<String>("Endereco do Avalista"));
 		return fieldEndereco;
+	}
+	
+	private TextField<String> campoBairro() {
+		TextField<String> fieldBairro = new TextField<String>("bairro");
+		fieldBairro.setLabel(new Model<String>("Bairro do Avalista"));
+		return fieldBairro;
 	}
 
 	public List<Avalista> getAvalistas() {
