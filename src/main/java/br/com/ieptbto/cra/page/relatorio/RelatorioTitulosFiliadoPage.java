@@ -98,7 +98,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 
 	private Component pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
 

@@ -192,7 +192,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;

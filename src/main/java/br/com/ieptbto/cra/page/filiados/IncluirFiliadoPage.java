@@ -31,18 +31,16 @@ import br.com.ieptbto.cra.util.EstadoUtils;
  * @author Thasso Araújo
  *
  */
+@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirFiliadoPage extends BasePage<Filiado> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	private Filiado filiado;
-	
 	@SpringBean
 	MunicipioMediator municipioMediator;
 	@SpringBean
 	FiliadoMediator filiadoMediator;
+	private Filiado filiado;
 	
 	public IncluirFiliadoPage() {
 		this.filiado = new Filiado();
@@ -57,8 +55,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	private void carregarCampos() {
 		Form<?> form = new Form<Filiado>("form", getModel()){
 
-			/***/
-			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onSubmit() {
 				Filiado novoFiliado = getModelObject();
@@ -96,7 +92,7 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 
 	private DropDownChoice<Municipio> campoCidadeCredor() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;

@@ -159,7 +159,7 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 	
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.listarTodos(), renderer);
+		DropDownChoice<Municipio> campoPracaProtesto = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		return campoPracaProtesto;
 	}
 	
