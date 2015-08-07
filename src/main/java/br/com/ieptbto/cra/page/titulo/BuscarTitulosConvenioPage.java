@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -129,6 +130,10 @@ public class BuscarTitulosConvenioPage extends BasePage<TituloFiliado>{
 
 			@Override
 			protected List<TituloFiliado> load() {
+				if (tituloBuscado.getNumeroTitulo() == null && tituloBuscado.getNomeDevedor() == null && tituloBuscado.getDocumentoDevedor() == null 
+						&& tituloBuscado.getDataEmissao() == null && tituloBuscado.getPracaProtesto() == null) {
+					return new ArrayList<TituloFiliado>();
+				}
 				return tituloFiliadoMediator.consultarTitulosConvenio(getUser().getInstituicao(), tituloBuscado);
 			}
 		};
