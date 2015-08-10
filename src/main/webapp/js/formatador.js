@@ -180,7 +180,7 @@ function FormataValor(id, tammax, teclapres) {
 function aplica_mascara_cpfcnpj(campo,tammax,teclapres) {
 	var tecla = teclapres.keyCode;
 
-	if ((tecla < 48 || tecla > 57) && (tecla < 96 || tecla > 105) && tecla != 46 && tecla != 8 && tecla != 9) {
+	if ((tecla < 48 || tecla > 57) && (tecla < 96 || tecla > 105) && tecla != 46 && tecla != 8 && tecla != 8) {
 		return false;
 	}
 
