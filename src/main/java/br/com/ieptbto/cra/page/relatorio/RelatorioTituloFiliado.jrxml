@@ -52,8 +52,8 @@
 				<textFieldExpression><![CDATA[$P{FILIADO}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="0" width="380" height="60" uuid="31f3c801-1101-459d-b391-524c0512095e"/>
-				<imageExpression><![CDATA["\\usr\\share\\tomcat\\webapps\\img\\ieptb.gif"]]></imageExpression>
+				<reportElement x="2" y="0" width="378" height="60" uuid="ea189026-68fb-4c99-87d5-f9a367efae86"/>
+				<imageExpression><![CDATA["//usr//share//tomcat//webapps//img//ieptb.gif"]]></imageExpression>
 			</image>
 		</band>
 	</title>
