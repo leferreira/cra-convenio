@@ -66,6 +66,7 @@ public class CraMenu extends Panel {
 		MenuItem menuRelatorioConvenio = menuLateral.addItem("relatorioConvenio", rolesAdmin);
 		menuRelatorioConvenio.setVisible(verificaPermissao(user, "convenio"));
 		menuRelatorioConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
+		menuRelatorioConvenio.addItem("RelatorioSinteticoAssociadosConvenio", rolesAdmin);
 
 		/** Menus Aministracao Convenio */
 		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesAdmin);

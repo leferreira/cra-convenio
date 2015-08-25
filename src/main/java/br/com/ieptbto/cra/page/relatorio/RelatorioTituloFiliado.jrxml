@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.4641000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="DATA_INICIO" class="java.lang.String">
@@ -52,7 +52,7 @@
 				<textFieldExpression><![CDATA[$P{FILIADO}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="2" y="0" width="378" height="60" uuid="ea189026-68fb-4c99-87d5-f9a367efae86"/>
+				<reportElement x="0" y="0" width="380" height="60" uuid="682cccb5-2258-4b54-a146-edcc985c2ce9"/>
 				<imageExpression><![CDATA["//usr//share//tomcat//webapps//img//ieptb.gif"]]></imageExpression>
 			</image>
 		</band>

@@ -58,6 +58,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
 	AvalistaMediator avalistaMediator;
+	
 	private TituloFiliado tituloFiliado;
 	private List<Avalista> avalistas;
 	private TextField<String> dataVencimentoField;

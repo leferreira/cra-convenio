@@ -112,12 +112,12 @@ public class TituloFiliadoJRDataSource implements Serializable {
 	public void parseTituloFiliado(TituloFiliado tituloFiliado, TituloRemessa tituloRemessa) {
 		this.setNumeroTitulo(tituloFiliado.getNumeroTitulo());
 		this.setDataEmissao(DataUtil.localDateToString(tituloFiliado.getDataEmissao()));
-		this.setPracaProtesto(tituloFiliado.getPracaProtesto().getNomeMunicipio());
+		this.setPracaProtesto(tituloFiliado.getPracaProtesto().getNomeMunicipio().toUpperCase());
 		this.setNomeDevedor(tituloFiliado.getNomeDevedor());
 		this.setValorTitulo(tituloFiliado.getValorTitulo());
 		this.setValorSaldoTitulo(tituloFiliado.getValorSaldoTitulo());
 		this.setFiliado(tituloFiliado.getFiliado().getRazaoSocial());
-		this.setSituacaoTituloConvenio(tituloFiliado.getSituacaoTituloConvenio().getSituacao());
+		this.setSituacaoTituloConvenio(tituloFiliado.getSituacaoTituloConvenio().getSituacao().toUpperCase());
 		
 		this.setProtocolo(StringUtils.EMPTY);
 		this.setDataConfirmacao(StringUtils.EMPTY);

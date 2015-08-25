@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
@@ -76,10 +81,17 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 			public void onSubmit() {
 				try {
 					JasperPrint jasperPrint = novoRelatorioDeTitulosPorFiliado(empresaFiliado, dataInicio, dataFim, pracaProtesto, getListaRelatorio());
-					getResponse().write(JasperExportManager.exportReportToPdf(jasperPrint));
-				} catch (JRException e) {
-					e.printStackTrace();
-					error("Não foi possível gerar o relatório !");
+				
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(
+					        new ResourceStreamRequestHandler(resourceStream, "CRA_Titulos_Enviados.pdf"));
+				} catch (InfraException ex) { 
+					error(ex.getMessage());
+				} catch (Exception e) { 
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+					System.out.println(e);
 				}
 			}
 		};

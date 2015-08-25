@@ -25,11 +25,13 @@ import br.com.ieptbto.cra.util.EstadoUtils;
 public class AvalistaInputPanel extends Panel {
 
 	private Avalista avalista;
+	private TituloFiliado titulo;
 	private List<Avalista> avalistas;
 
 	public AvalistaInputPanel(String id, IModel<TituloFiliado> model, List<Avalista> avalistas) {
 		super(id, model);
 		this.avalistas = avalistas;
+		this.titulo = model.getObject();
 		this.avalista = new Avalista();
 		
 		carregarComponentes();
@@ -127,5 +129,9 @@ public class AvalistaInputPanel extends Panel {
 
 	public void setAvalista(Avalista avalista) {
 		this.avalista = avalista;
+	}
+
+	public TituloFiliado getTitulo() {
+		return titulo;
 	}
 }
