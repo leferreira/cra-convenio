@@ -32,7 +32,7 @@ import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.ConvenioJRDataSource;
+import br.com.ieptbto.cra.ireport.RelatorioConvenioBean;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -51,7 +51,7 @@ public class RelatorioEmpresasConvenioPage extends BasePage<Instituicao>{
 	TituloFiliadoMediator tituloFiliadoMediador;
 	private Instituicao instituicao;
 	private List<Filiado> filiados;
-	private List<ConvenioJRDataSource> beansRelatorio;
+	private List<RelatorioConvenioBean> beansRelatorio;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private TextField<LocalDate> fieldDataInicio;
@@ -137,7 +137,7 @@ public class RelatorioEmpresasConvenioPage extends BasePage<Instituicao>{
 				item.add(new Label("total", soma));
 				
 				if (soma > 0) {
-					ConvenioJRDataSource bean = new ConvenioJRDataSource();
+					RelatorioConvenioBean bean = new RelatorioConvenioBean();
 					bean.setNomeFiliado(filiado.getRazaoSocial());
 					bean.setMunicipio(filiado.getMunicipio().getNomeMunicipio().toUpperCase());
 					bean.setUf(filiado.getUf());
@@ -197,14 +197,14 @@ public class RelatorioEmpresasConvenioPage extends BasePage<Instituicao>{
 		this.dataFim = dataFim;
 	}
 
-	public List<ConvenioJRDataSource> getBeansRelatorio() {
+	public List<RelatorioConvenioBean> getBeansRelatorio() {
 		if (beansRelatorio == null) {
-			beansRelatorio = new ArrayList<ConvenioJRDataSource>();
+			beansRelatorio = new ArrayList<RelatorioConvenioBean>();
 		}
 		return beansRelatorio;
 	}
 
-	public void setBeansRelatorio(List<ConvenioJRDataSource> beansRelatorio) {
+	public void setBeansRelatorio(List<RelatorioConvenioBean> beansRelatorio) {
 		this.beansRelatorio = beansRelatorio;
 	}
 
