@@ -25,6 +25,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Municipio;
@@ -101,7 +102,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
-				if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
+				if (titulo.getDataVencimento().equals(new LocalDate()) || titulo.getDataVencimento().isAfter(new LocalDate())) {
+					error("A Data de Vencimento do título não pode ser igual ou futura a data atual !");
+				} else if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
 					error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 				} else if (titulo.getId() != 0) {
 					tituloFiliadoMediator.alterarTituloFiliado(titulo);
