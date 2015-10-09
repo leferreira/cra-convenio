@@ -28,11 +28,11 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.RelatorioConvenioBean;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.ireport.RelatorioConvenioBean;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -51,7 +51,7 @@ public class RelatorioEmpresasConvenioPage extends BasePage<Instituicao>{
 	TituloFiliadoMediator tituloFiliadoMediador;
 	private Instituicao instituicao;
 	private List<Filiado> filiados;
-	private List<RelatorioConvenioBean> beansRelatorio;
+	private List<RelatorioConvenioBean> beansRelatorio; 
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private TextField<LocalDate> fieldDataInicio;
