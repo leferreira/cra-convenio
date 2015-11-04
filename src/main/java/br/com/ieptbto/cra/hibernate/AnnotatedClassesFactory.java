@@ -49,6 +49,7 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.TituloSemTaxaCRA;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
  * 
@@ -99,7 +100,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
 		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
-		// classesHibernate.add(CraCustomRevisionEntity.class);
+		classesHibernate.add(CraCustomRevisionEntity.class);
 		classesHibernate.add(RemessaDesistenciaProtesto.class);
 		classesHibernate.add(CabecalhoArquivo.class);
 		classesHibernate.add(CabecalhoCartorio.class);
