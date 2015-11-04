@@ -24,6 +24,8 @@ import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
+import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
+import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
@@ -44,8 +46,10 @@ import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.TituloSemTaxaCRA;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
  * 
@@ -86,6 +90,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Historico.class);
 		classesHibernate.add(Batimento.class);
 		classesHibernate.add(InstrumentoProtesto.class);
+		classesHibernate.add(EnvelopeSLIP.class);
+		classesHibernate.add(EtiquetaSLIP.class);
 		classesHibernate.add(AgenciaCAF.class);
 		classesHibernate.add(AgenciaBancoDoBrasil.class);
 		classesHibernate.add(AgenciaBradesco.class);
@@ -94,7 +100,7 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
 		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
-		// classesHibernate.add(CraCustomRevisionEntity.class);
+		classesHibernate.add(CraCustomRevisionEntity.class);
 		classesHibernate.add(RemessaDesistenciaProtesto.class);
 		classesHibernate.add(CabecalhoArquivo.class);
 		classesHibernate.add(CabecalhoCartorio.class);
@@ -102,6 +108,8 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RodapeCartorio.class);
 		classesHibernate.add(DesistenciaProtesto.class);
 		classesHibernate.add(PedidoDesistenciaCancelamento.class);
+		
+		classesHibernate.add(TituloSemTaxaCRA.class);
 	}
 
 	/**
