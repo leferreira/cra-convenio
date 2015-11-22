@@ -16,6 +16,7 @@ import java.util.List;
 import br.com.ieptbto.cra.entidade.AgenciaBancoDoBrasil;
 import br.com.ieptbto.cra.entidade.AgenciaBradesco;
 import br.com.ieptbto.cra.entidade.AgenciaCAF;
+import br.com.ieptbto.cra.entidade.Anexo;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Batimento;
@@ -29,9 +30,9 @@ import br.com.ieptbto.cra.entidade.EtiquetaSLIP;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Historico;
-import br.com.ieptbto.cra.entidade.HistoricoOcorrenciaTitulo;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
+import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PedidoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
@@ -99,7 +100,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Filiado.class);
 		classesHibernate.add(TituloFiliado.class);
 		classesHibernate.add(Avalista.class);
-		classesHibernate.add(HistoricoOcorrenciaTitulo.class);
 		classesHibernate.add(CraCustomRevisionEntity.class);
 		classesHibernate.add(RemessaDesistenciaProtesto.class);
 		classesHibernate.add(CabecalhoArquivo.class);
@@ -108,8 +108,9 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(RodapeCartorio.class);
 		classesHibernate.add(DesistenciaProtesto.class);
 		classesHibernate.add(PedidoDesistenciaCancelamento.class);
-		
+		classesHibernate.add(LayoutFiliado.class);
 		classesHibernate.add(TituloSemTaxaCRA.class);
+		classesHibernate.add(Anexo.class);
 	}
 
 	/**
