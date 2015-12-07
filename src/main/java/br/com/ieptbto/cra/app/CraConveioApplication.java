@@ -21,19 +21,21 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
+import br.com.ieptbto.cra.page.arquivo.BuscarArquivoConvenioPage;
+import br.com.ieptbto.cra.page.arquivo.ListaArquivosConvenioPage;
+import br.com.ieptbto.cra.page.arquivo.TitulosArquivoConvenioPage;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
-import br.com.ieptbto.cra.page.filiados.IncluirFiliadoPage;
-import br.com.ieptbto.cra.page.filiados.ListaFiliadoPage;
+import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
+import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioConvenio;
 import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioFiliado;
-import br.com.ieptbto.cra.page.relatorio.RelatorioEmpresasConvenioPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioSinteticoEmpresasConvenioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosConvenioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosFiliadoPage;
-import br.com.ieptbto.cra.page.titulo.BuscarTitulosConvenioPage;
-import br.com.ieptbto.cra.page.titulo.BuscarTitulosFiliadoPage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
@@ -116,24 +118,31 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
+		
+		/*CONVENIO*/
+		mountPage("BuscarArquivoConvenio", BuscarArquivoConvenioPage.class);
+		mountPage("ListaArquivoConvenio", ListaArquivosConvenioPage.class);
+		mountPage("TitulosArquivoConvenio", TitulosArquivoConvenioPage.class);
+		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
+		mountPage("RelatorioSinteticoEmpresasConvenio", RelatorioSinteticoEmpresasConvenioPage.class);
+		mountPage("ListaTitulosRelatorioConvenio", ListaTitulosRelatorioConvenio.class);
+		
+		mountPage("EmpresasConvenioPage", ListaFiliadoPage.class);
+		mountPage("IncluirEmpresaConvenioPage", IncluirFiliadoPage.class);
+		
+		mountPage("UsuariosEmpresaConvenioPage", ListaUsuarioFiliadoPage.class);
+		mountPage("IncluirUsuarioEmpresaConvenioPage", IncluirUsuarioFiliadoPage.class);
 
+		/*AMBOS*/
+		mountPage("BuscarTitulos", BuscarTitulosPage.class);
+
+		/*EMPRESA CONVENIO*/
 		mountPage("EntradaManual", EntradaManualPage.class);
-		mountPage("ConsultarTitulosConvenio", BuscarTitulosConvenioPage.class);
-		mountPage("ConsultarTitulosFiliado", BuscarTitulosFiliadoPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
-
-		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
-		mountPage("ListaTitulosRelatorioConvenio", ListaTitulosRelatorioConvenio.class);
 		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
 		mountPage("ListaTitulosRelatorioFiliado", ListaTitulosRelatorioFiliado.class);
-		mountPage("RelatorioSinteticoAssociadosConvenio", RelatorioEmpresasConvenioPage.class);
 		
-		mountPage("FiliadosPage", ListaFiliadoPage.class);
-		mountPage("IncluirFiliadoPage", IncluirFiliadoPage.class);
-
-		mountPage("IncluirUsuarioFiliadoPage", IncluirUsuarioFiliadoPage.class);
-		mountPage("UsuariosFiliadoPage", ListaUsuarioFiliadoPage.class);
 	}
 
 	/**

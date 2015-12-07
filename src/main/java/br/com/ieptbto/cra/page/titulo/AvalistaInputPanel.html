@@ -2,14 +2,14 @@
 <form class="form-horizontal" wicket:id="formAvalista">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="myModalLabel">Adicionar Avalista</h4>
+        <h4 class="modal-title" id="myModalLabel">INCLUIR AVALISTA</h4>
     </div>
     <div class="modal-body">
     	<div class="row">
 			<div class="col-md-6">
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="col-md-4 control-label">Nome:</label>
+					<label class="col-md-4 control-label">NOME:</label>
 					<div class="col-md-8">
 						<input maxlength="45" type="text"
 							onkeyup="this.value = this.value.toUpperCase()"
@@ -56,7 +56,7 @@
 			<div class="col-md-6">
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="col-md-4 control-label">Cidade:</label>
+					<label class="col-md-4 control-label">CIDADE:</label>
 					<div class="col-md-8">
 						<input min="4" maxlength="20"
 							onkeyup="this.value = this.value.toUpperCase()"
@@ -66,7 +66,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label class="col-md-4 control-label">Bairro:</label>
+					<label class="col-md-4 control-label">BAIRRO:</label>
 					<div class="col-md-8">
 						<input min="4" maxlength="20"
 							onkeyup="this.value = this.value.toUpperCase()"
@@ -79,7 +79,7 @@
 			<div class="col-md-6">
 				<!-- Textarea -->
 				<div class="form-group">
-					<label class="col-md-4 control-label">Endereço:</label>
+					<label class="col-md-4 control-label">ENDERE&Ccedil;O:</label>
 					<div class="col-md-8">
 						<textarea class="form-control" maxlength="45"
 							onkeyup="this.value = this.value.toUpperCase()"
@@ -90,8 +90,8 @@
 		</div>
     </div>
     <div class="modal-footer">
-        <button type="submit" wicket:id="adicionarAvalista" class="btn btn-primary">Incluir Avalista</button>
-        <button type="button" style="margin-right: 5px;" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" wicket:id="adicionarAvalista" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+        <button type="button" style="margin-right: 5px;" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
     </div>
 </form>
 </wicket:panel>

@@ -31,19 +31,22 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EnviarTitulosPage extends BasePage<TituloFiliado> {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EnviarTitulosPage.class);
+
+	@SpringBean
+	private TituloFiliadoMediator tituloFiliadoMediator;
+	@SpringBean
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	private TituloFiliado titulo;
 	private List<TituloFiliado> listaTitulosFiliado;
-	
-	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
-	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	
 	public EnviarTitulosPage() {
 		this.titulo = new TituloFiliado();
@@ -61,6 +64,9 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	private void carregarFormEnviar() {
 		this.listaTitulosFiliado = getListaTitulosParaEnvio();
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
             protected void onSubmit(){
@@ -83,6 +89,9 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	private ListView<TituloFiliado> carregarTitulosParaEnvio() {
 		return new ListView<TituloFiliado>("listViewTitulos", listaTitulosFiliado) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
@@ -93,6 +102,9 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				
 				Link<String> linkAlterar = new Link<String>("linkAlterar") {
 					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						setResponsePage(new EntradaManualPage(tituloLista));
@@ -110,6 +122,9 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 			private Component removerTitulo(final TituloFiliado titulo) {
 				return new Link<Arquivo>("remover") {
 					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public void onClick() {
 						

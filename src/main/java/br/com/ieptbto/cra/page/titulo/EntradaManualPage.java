@@ -52,14 +52,13 @@ import br.com.ieptbto.cra.util.EstadoUtils;
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	@SpringBean
-	MunicipioMediator municipioMediator;
+	private MunicipioMediator municipioMediator;
 	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	AvalistaMediator avalistaMediator;
-	
+	private AvalistaMediator avalistaMediator;
 	private TituloFiliado tituloFiliado;
 	private List<Avalista> avalistas;
 	private TextField<String> dataVencimentoField;
@@ -98,6 +97,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 				super.onSubmit();
 				TituloFiliado titulo = EntradaManualPage.this.getModel().getObject();
 				
+				titulo.setDataEntrada(new LocalDate());
 				titulo.setAvalistas(getAvalistas());
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));

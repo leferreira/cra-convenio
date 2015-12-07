@@ -7,14 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -41,6 +33,13 @@ import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  * @author Thasso Araújo
@@ -163,7 +162,7 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		parametros.put("DATA_FIM", DataUtil.localDateToString(dataFim));
 
 		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(listaTitulos);
-		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioTituloConvenio.jrxml"));
+		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioTituloConvenio.jrxml"));
 		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}
 

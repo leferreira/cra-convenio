@@ -6,42 +6,35 @@
 <body>
 	<wicket:extend>
 		<form wicket:id="form" id="form" class="form-horizontal">
-			<div class="panel panel-primary">
-			<div class="panel-heading">Cadastro de Usuários</div>
-			<div class="panel-body">
-				<a href="UsuariosFiliadoPage" style="float: right; margin-bottom: 5px;"><span class="fa fa-mail-reply"></span>Voltar a página anterior!</a>
-				<br style="clear: both;">
-				<div class="row">
-					<div class="col-md-6">
-						<!-- Text input-->
+			<div class="panel">
+             <div class="panel-body">
+             	<h4 class="titulo-top">CADASTRO DE USUÁRIOS
+					<span class="pull-right">
+						<a href="UsuariosEmpresaConvenioPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+					</span>
+				</h4>  
+				<br style="clear: both;"/>
+				<div class="col-md-6">
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Nome:</label>  
+						  <label class="col-md-4 control-label">NOME:</label>  
 						  <div class="col-md-6">
 						  <input autofocus="autofocus" tabindex="1" onkeyup="this.value = this.value.toUpperCase()" placeholder="" wicket:id="usuario.nome" class="form-control input-md" required="required">
-						    
 						  </div>
 						</div>
-							
-						<!-- Text input-->
 						<div class="form-group">
-						  <label class="col-md-4 control-label" for="login">Login:</label>  
+						  <label class="col-md-4 control-label" for="login">LOGIN:</label>  
 						  <div class="col-md-6">
 						  <input wicket:id="usuario.login" tabindex="2" class="form-control input-md">
-						    
 						  </div>
 						</div>
-						<!-- Text input-->
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Email:</label>  
+						  <label class="col-md-4 control-label">EMAIL:</label>  
 						  <div class="col-md-6">
 						  <input wicket:id="usuario.email" tabindex="3" class="form-control input-md">
-						    
 						  </div>
 						</div>
-							
-						<!-- Select Basic -->
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Empresa Associada:</label>
+						  <label class="col-md-4 control-label">EMPRESA (LOCAL):</label>
 						  <div class="col-md-6">
 						    <select class="form-control" tabindex="4" wicket:id="filiado">
 						    </select>
@@ -49,48 +42,41 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<!-- Password input-->
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Senha:</label>
+						  <label class="col-md-4 control-label">SENHA:</label>
 						  <div class="col-md-6">
 						    <input type="password" wicket:id="usuario.senha" tabindex="5" class="form-control input-md">
-						    
 						  </div>
 						</div>
 						<!-- Password input-->
 						<div class="form-group">
-						  <label class="col-md-4 control-label" for="confirmar">Confirmar Senha:</label>
+						  <label class="col-md-4 control-label" for="confirmar">CONFIRMAR SENHA:</label>
 						  <div class="col-md-6">
 						    <input type="password" wicket:id="usuario.confirmarSenha" tabindex="6" class="form-control input-md">
 						  </div>
 						</div>
-						<!-- Text input-->
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Telefone:</label>  
+						  <label class="col-md-4 control-label">TELEFONE:</label>  
 						  <div class="col-md-6">
 						  <input wicket:id="usuario.contato" tabindex="7" class="form-control input-md">
-						    
 						  </div>
 						</div>
-						<!-- Multiple Radios (inline) -->
 						<div class="form-group">
-						  <label class="col-md-4 control-label">Situação:</label>
+						  <label class="col-md-4 control-label">SITUAÇÃO:</label>
 						  <div class="col-md-6" style="text-align: left;"> 
 						    <span class="radio-inline inline" tabindex="8" wicket:id="usuario.situacao"></span>
 						  </div>
 						</div>
-						<!-- Button -->
 						<div class="form-group">
 						  <label class="col-md-4 control-label"></label>
 						  <div class="col-md-6">
-						    <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;Salvar</button>
+						    <button type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
 				    	</div>
 						</div>
 					</div>
-				</div>
 			</div>
-			</div>
-		</form>
+		</div>
+	</form>
 	</wicket:extend>
 </body>
 </html>

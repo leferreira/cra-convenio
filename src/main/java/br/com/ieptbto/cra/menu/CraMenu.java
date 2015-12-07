@@ -29,50 +29,34 @@ public class CraMenu extends Panel {
 		this.usuario = usuario;
 		Menu menu = new Menu("CraMenu");
 		adicionarMenuLateral(menu);
-		// adicionarMenuAgenda(menu);
-		// adicionarMenuClinico(menu);
-		// adicionarMenuRelatorio(menu);
 
 		add(menu);
 	}
 
 	private void adicionarMenuLateral(Menu menu) {
-		// String[] rolesIncluir = { CraRoles.ADMIN, CraRoles.SUPER,
-		// CraRoles.USER };
-		UsuarioFiliado user = usuarioFiliado.buscarUsuarioFiliado(usuario);
 		String[] rolesAdmin = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER };
 		String[] rolesUser = { CraRoles.USER };
 
 		MenuItem menuLateral = menu.addItem("menuLateral", rolesUser);
 
+		UsuarioFiliado user = usuarioFiliado.buscarUsuarioFiliado(usuario);
 		/** Menus Titulos Filiado */
-		MenuItem menuTitulosFiliado = menuLateral.addItem("titulosFiliado", rolesUser);
-		menuTitulosFiliado.setVisible(verificaPermissao(user , "filiado"));
-		menuTitulosFiliado.addItem("EntradaManual", rolesUser);
-		menuTitulosFiliado.addItem("ConsultarTitulosFiliado", rolesUser);
-		menuTitulosFiliado.addItem("EnviarTitulosPendentes", rolesUser);
+		MenuItem menuFiliado = menuLateral.addItem("menuFiliado", rolesUser);
+		menuFiliado.setVisible(verificaPermissao(user, "filiado"));
+		menuFiliado.addItem("EntradaManual", rolesUser);
+		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
+		menuFiliado.addItem("RelatorioTitulosFiliado", rolesUser);
+		menuFiliado.addItem("BuscarTitulos", rolesUser);
 
 		/** Menus Titulos Convenio */
-		MenuItem menuTitulosConvenio = menuLateral.addItem("titulosConvenio", rolesAdmin);
-		menuTitulosConvenio.setVisible(verificaPermissao(user, "convenio"));
-		menuTitulosConvenio.addItem("ConsultarTitulosConvenio", rolesAdmin);
-
-		/** Menus Relatorio Filiado */
-		MenuItem menuRelatorioFiliado = menuLateral.addItem("relatorioFiliado", rolesUser);
-		menuRelatorioFiliado.setVisible(verificaPermissao(user, "filiado"));
-		menuRelatorioFiliado.addItem("RelatorioTitulosFiliado", rolesUser);
-
-		/** Menus Relatorio Convenio */
-		MenuItem menuRelatorioConvenio = menuLateral.addItem("relatorioConvenio", rolesAdmin);
-		menuRelatorioConvenio.setVisible(verificaPermissao(user, "convenio"));
-		menuRelatorioConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
-		menuRelatorioConvenio.addItem("RelatorioSinteticoAssociadosConvenio", rolesAdmin);
-
-		/** Menus Aministracao Convenio */
-		MenuItem menuadmin = menuLateral.addItem("adminConvenio", rolesAdmin);
-		menuadmin.setVisible(verificaPermissao(user, "convenio"));
-		menuadmin.addItem("UsuariosFiliadoPage", rolesAdmin);
-		menuadmin.addItem("FiliadosPage", rolesAdmin);
+		MenuItem menuConvenio = menuLateral.addItem("menuConvenio", rolesAdmin);
+		menuConvenio.setVisible(verificaPermissao(user, "convenio"));
+		menuConvenio.addItem("BuscarArquivoConvenio", rolesAdmin);
+		menuConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
+		menuConvenio.addItem("RelatorioSinteticoEmpresasConvenio", rolesAdmin);
+		menuConvenio.addItem("EmpresasConvenioPage", rolesAdmin);
+		menuConvenio.addItem("UsuariosEmpresaConvenioPage", rolesAdmin);
+		menuConvenio.addItem("BuscarTitulos", rolesAdmin);
 	}
 
 	private boolean verificaPermissao(UsuarioFiliado user, String chave) {

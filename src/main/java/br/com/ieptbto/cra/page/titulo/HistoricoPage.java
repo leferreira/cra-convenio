@@ -74,6 +74,10 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(status());
 	}
 	
+	public HistoricoPage(TituloRemessa tituloLista) {
+		// TODO Auto-generated constructor stub
+	}
+
 	private TextField<String> numeroProtocoloCartorio() {
 		if (tituloRemessa == null){
 			return new TextField<String>("numeroProtocoloCartorio", new Model<String>(StringUtils.EMPTY));
