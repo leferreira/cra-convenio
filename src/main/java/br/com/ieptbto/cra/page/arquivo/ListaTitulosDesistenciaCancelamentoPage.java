@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.titulo;
+package br.com.ieptbto.cra.page.arquivo;
 
 import java.util.List;
 
@@ -14,36 +14,31 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 
 /**
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
-public class ListaTitulosPage extends BasePage<TituloFiliado> {
+public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloFiliado> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	private TituloFiliadoMediator tituloFiliadoMediator;
 	private TituloFiliado tituloFiliado;
 	private List<TituloFiliado> titulos;
 	
-	public ListaTitulosPage(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TituloFiliado titulo) {
+	public ListaTitulosDesistenciaCancelamentoPage(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TituloFiliado titulo) {
 		this.tituloFiliado = new TituloFiliado();
-		this.titulos = tituloFiliadoMediator.consultarTitulosFiliado(filiado, dataInicio, dataFim, pracaProtesto ,titulo, null);
-		
-		carregarComponentes();
-	}
-	
-	public ListaTitulosPage(Instituicao convenio, LocalDate dataInicio, LocalDate dataFim, Filiado filiado, Municipio pracaProtesto, TituloFiliado tituloBuscado) {
-		this.tituloFiliado = new TituloFiliado();
-		this.titulos = tituloFiliadoMediator.consultarTitulosConvenio(convenio, dataInicio, dataFim, filiado, pracaProtesto ,tituloBuscado);
+		this.titulos = tituloFiliadoMediator.consultarTitulosFiliado(filiado, dataInicio, dataFim, pracaProtesto ,titulo, SituacaoTituloConvenio.AGUARDANDO);
 		
 		carregarComponentes();
 	}
@@ -55,18 +50,24 @@ public class ListaTitulosPage extends BasePage<TituloFiliado> {
 	private ListView<TituloFiliado> carregarListaTitulos() {
 		return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliados()) {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
 				final TituloFiliado tituloLista = item.getModelObject();
-				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
+				final TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
 				
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("emissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
 				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
 
+					/***/
+					private static final long serialVersionUID = 1L;
+					
+					@Override
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
@@ -76,7 +77,6 @@ public class ListaTitulosPage extends BasePage<TituloFiliado> {
 				
 				if (tituloRemessa == null) {
 					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
 					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
 				} else {
 					if (tituloRemessa.getConfirmacao() != null) {
@@ -85,13 +85,18 @@ public class ListaTitulosPage extends BasePage<TituloFiliado> {
 						item.add(new Label("protocolo", StringUtils.EMPTY));
 					}
 					
-			        if (tituloRemessa.getRetorno() != null){
-		        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
-			        } else {
-			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
-			        }
 					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
 				}
+				item.add(new Link<TituloFiliado>("solicitar"){
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					public void onClick() {
+						setResponsePage(new TituloDesistenciaCancelamentoSolicitadoPage(tituloLista, tituloRemessa));
+					}
+				});
 			}
 		};
 	}
@@ -99,6 +104,9 @@ public class ListaTitulosPage extends BasePage<TituloFiliado> {
 	private IModel<List<TituloFiliado>> getTitulosFiliados() {
 		return new LoadableDetachableModel<List<TituloFiliado>>() {
 
+			/***/
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			protected List<TituloFiliado> load() {
 				return titulos;

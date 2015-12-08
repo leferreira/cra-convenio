@@ -47,6 +47,7 @@ public class CraMenu extends Panel {
 		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
 		menuFiliado.addItem("RelatorioTitulosFiliado", rolesUser);
 		menuFiliado.addItem("BuscarTitulos", rolesUser);
+		menuFiliado.addItem("SolicitarDesistenciaCancelamentoEmpresa", rolesUser);
 
 		/** Menus Titulos Convenio */
 		MenuItem menuConvenio = menuLateral.addItem("menuConvenio", rolesAdmin);

@@ -187,14 +187,14 @@
 				     		</div>
 						</div>
 					  </fieldset>
-				  
 					  <fieldset>
 					  	<legend class="legend">INFORMAÇÕES DE AVALISTAS</legend>
-						  	<div class="row">
+						  	<div class="well well-sm">
 								<div class="col-md-12">
-		                          		<a href="#" class="link" data-toggle="modal" data-target="#myModal" style="float: right;">
+	                          		<a href="#" class="link" data-toggle="modal" data-target="#myModal" style="float: right;">
 		                                <span class="fa fa-plus"></span>&nbsp;ADICIONAR AVALISTA
 		                            </a>
+		                                <br style="clear: both;">
 		                          		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 		                                <div class="modal-dialog" style="width: 60%;">
 		                                    <div class="modal-content">
@@ -207,29 +207,30 @@
 		                                <table class="table table-striped">
 		                                    <thead>
 		                                       <tr>
-		                                       		<th>#</th>
+		                                       		<th class="col-center">#</th>
 													<th>NOME</th>
 													<th>DOCUMENTO</th>
 													<th>CIDADE</th>
-													<th>UF</th>
-													<th style="width: 30px;">REMOVER</th>
+													<th class="col-center">UF</th>
+													<th class="col-center" style="width: 30px;">REMOVER</th>
 												</tr>
 		                                    </thead>
 		                                    <tbody>
 		                                        <tr wicket:id="listaAvalistas" style="text-align: center;">
-		                                        	<td wicket:id="contador" style="font-weight: bold;"></td>
-							                    	<td wicket:id="nomeAvalista"></td>
-							                    	<td wicket:id="documentoAvalista"></td>
-							                    	<td wicket:id="cidadeAvalista"></td>
-							                    	<td wicket:id="ufAvalista"></td>
-							                    	<td style="float: left;">
+		                                        	<td class="col-center" wicket:id="contador" style="font-weight: bold;"></td>
+							                    	<td class="col-left" wicket:id="nomeAvalista"></td>
+							                    	<td class="col-left" wicket:id="documentoAvalista"></td>
+							                    	<td class="col-left" wicket:id="cidadeAvalista"></td>
+							                    	<td class="col-center" wicket:id="ufAvalista"></td>
+							                    	<td class="col-center">
 							                    		<button type="button" wicket:id="remover"><span class="fa fa-trash-o"></span></button>
 							                    	</td>
 						                    	</tr>
 					                    	</tbody>
 		                               </table>
                      			 </div>
-		               	  	 </div>	
+		               	  	 </div>
+		               	  	 <br style="clear: both;">	
 		                </div>
 				     </fieldset>
 				    <button type="submit" wicket:id="salvarTitulo" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>

@@ -23,6 +23,9 @@ import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.arquivo.BuscarArquivoConvenioPage;
 import br.com.ieptbto.cra.page.arquivo.ListaArquivosConvenioPage;
+import br.com.ieptbto.cra.page.arquivo.ListaTitulosDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.arquivo.SolicitarDesistenciaCancelamentoEmpresaPage;
+import br.com.ieptbto.cra.page.arquivo.TituloDesistenciaCancelamentoSolicitadoPage;
 import br.com.ieptbto.cra.page.arquivo.TitulosArquivoConvenioPage;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
@@ -135,11 +138,15 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 
 		/*AMBOS*/
 		mountPage("BuscarTitulos", BuscarTitulosPage.class);
+		mountPage("HistoricoPage", HistoricoPage.class);
 
 		/*EMPRESA CONVENIO*/
 		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("HistoricoDoTitulo", HistoricoPage.class);
 		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
+		mountPage("SolicitarDesistenciaCancelamentoEmpresa", SolicitarDesistenciaCancelamentoEmpresaPage.class);
+		mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
+		mountPage("TituloDesistenciaCancelamentoSolicitado", TituloDesistenciaCancelamentoSolicitadoPage.class);
 		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
 		mountPage("ListaTitulosRelatorioFiliado", ListaTitulosRelatorioFiliado.class);
 		
