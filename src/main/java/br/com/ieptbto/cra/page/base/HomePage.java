@@ -81,7 +81,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	
 	private void carregarHomeConvenioEAssociados() {
 		if (getUsuarioFiliado() == null) {
-			this.arquivo = remessaMediator.confirmacoesPendentes(getUser().getInstituicao());
+			this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
 			this.titulosFiliado = new ArrayList<TituloFiliado>();
 		} else {
 			this.arquivo = new Arquivo();
