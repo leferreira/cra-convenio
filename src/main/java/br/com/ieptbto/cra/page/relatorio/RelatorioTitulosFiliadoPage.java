@@ -1,14 +1,16 @@
 package br.com.ieptbto.cra.page.relatorio;
 
+import java.util.Arrays;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -19,6 +21,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.enumeration.TipoRelatorio;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -32,36 +35,46 @@ import br.com.ieptbto.cra.util.DataUtil;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 
-	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
-	@SpringBean
-	FiliadoMediator filiadoMediator;
-	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
-	MunicipioMediator municipioMediator;
-	@SpringBean
-	RemessaMediator remessaMediator;
+	/***/
+	private static final long serialVersionUID = 1L;
 	
+	@SpringBean
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	@SpringBean
+	private FiliadoMediator filiadoMediator;
+	@SpringBean
+	private InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	private MunicipioMediator municipioMediator;
+	@SpringBean
+	private RemessaMediator remessaMediator;
 	private TituloFiliado titulo;
-	private Filiado empresaFiliado;
-	
+	private Filiado filiado;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
+	private TipoRelatorio tipoRelatorio;
 	
 	public RelatorioTitulosFiliadoPage() {
 		this.titulo = new TituloFiliado();
-		this.empresaFiliado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
+		this.filiado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
+		
+		carregarFormulario();
+	}
+	
+	private void carregarFormulario() {
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();
+				Municipio municipio = titulo.getPracaProtesto();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				
@@ -75,16 +88,16 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				setResponsePage(new ListaTitulosRelatorioFiliado(empresaFiliado, dataInicio, dataFim, titulo.getPracaProtesto()));
+				setResponsePage(new ListaTitulosRelatorioFiliado(getFiliado(), dataInicio, dataFim, tipoRelatorio, municipio));
 			}
 		};
 		form.add(dataEnvioInicio());
 		form.add(dataEnvioFinal());
 		form.add(pracaProtesto());
-		form.add(new Button("botaoBuscar"));
+		form.add(tipoRelatorio());
 		add(form);
 	}
-	
+
 	private TextField<LocalDate> dataEnvioInicio() {
 		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
 		dataEnvioInicio.setLabel(new Model<String>("Período de Datas"));
@@ -100,6 +113,18 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
+	}
+	
+	private RadioChoice<TipoRelatorio> tipoRelatorio(){
+		IChoiceRenderer<TipoRelatorio> renderer = new ChoiceRenderer<TipoRelatorio>("label");
+		RadioChoice<TipoRelatorio> radio = new RadioChoice<>("tipoRelatorio", new Model<TipoRelatorio>(tipoRelatorio), Arrays.asList(TipoRelatorio.values()), renderer);
+		radio.setRequired(true);
+		radio.setLabel(new Model<String>("Situação dos Títulos"));
+		return radio;
+	}
+	
+	public Filiado getFiliado() {
+		return filiado;
 	}
 
 	@Override

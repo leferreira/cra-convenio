@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,6 +26,7 @@ import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -45,47 +44,49 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
+	@SpringBean
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	private TituloFiliado titulo;
 	private Filiado empresaFiliado;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
-	private List<TituloFiliadoJRDataSource> listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
+	private List<TituloFiliadoJRDataSource> listaTitulosRelatorio;
 	private List<TituloFiliado> listaTitulos;
 	
-	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
-	
-	public ListaTitulosRelatorioFiliado(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto) {
+	public ListaTitulosRelatorioFiliado(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, TipoRelatorio tipoRelatorio, Municipio pracaProtesto) {
 		this.titulo = new TituloFiliado();
 		this.empresaFiliado = filiado;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.pracaProtesto = pracaProtesto;
+		this.listaTitulos = tituloFiliadoMediator.buscarTitulosParaRelatorioFiliado(filiado, dataInicio, dataFim, tipoRelatorio, pracaProtesto);
 		
-		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioFiliado(filiado, dataInicio, dataFim, pracaProtesto));
-		add(carregarListaTitulos());
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
-		form.add(botaoEnviar());
-		add(form);
+		adicionarFormulario();
+		carregarListaTitulos();
 	}
 	
-	private Component botaoEnviar() {
-		return new Button("botaoBuscar") {
+	private void adicionarFormulario() {
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onSubmit() {
+			protected void onSubmit() {
 				try {
-					JasperPrint jasperPrint = novoRelatorioDeTitulosPorFiliado(empresaFiliado, dataInicio, dataFim, pracaProtesto, getListaRelatorio());
-				
+					JasperPrint jasperPrint = novoRelatorioDeTitulosPorFiliado(empresaFiliado, dataInicio, dataFim, pracaProtesto, getListaTitulosRelatorio());
+					
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_Titulos_Enviados.pdf"));
+							new ResourceStreamRequestHandler(resourceStream, "CRA_Titulos_Enviados.pdf"));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (Exception e) { 
@@ -94,10 +95,15 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 				}
 			}
 		};
+		add(form);
 	}
+
 	
-	private ListView<TituloFiliado> carregarListaTitulos() {
-		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
+	private void carregarListaTitulos() {
+		ListView<TituloFiliado> listaViewTitulos = new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -112,6 +118,10 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 				item.add(new LabelValorMonetario<BigDecimal>("valor", tituloLista.getValorTitulo()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
@@ -139,26 +149,16 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 				}
 			}
 		};
+		add(listaViewTitulos);
 	}
 	
 	private void parseToTituloFiliadoJRDataSource(TituloFiliado tituloLista, TituloRemessa tituloRemessa) {
 		TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
 		tituloFiliado.parseTituloFiliado(tituloLista, tituloRemessa);
-		getListaRelatorio().add(tituloFiliado);
+		getListaTitulosRelatorio().add(tituloFiliado);
 	}
 	
-	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
-		return listaRelatorio;
-	}
 
-	public List<TituloFiliado> getListaTitulos() {
-		return listaTitulos;
-	}
-
-	public void setListaTitulos(List<TituloFiliado> listaTitulos) {
-		this.listaTitulos = listaTitulos;
-	}
-	
 	private JasperPrint novoRelatorioDeTitulosPorFiliado(Filiado filiado, LocalDate dataInicio, 
 			LocalDate dataFim,	Municipio pracaProtesto, List<TituloFiliadoJRDataSource> beans) throws JRException {
 		
@@ -175,6 +175,20 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 		JRBeanCollectionDataSource beanCollection = new JRBeanCollectionDataSource(beans);
 		JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioTituloFiliado.jrxml"));
 		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
+	}
+
+	public List<TituloFiliado> getListaTitulos() {
+		if (listaTitulos == null) {
+			listaTitulos = new ArrayList<TituloFiliado>();
+		}
+		return listaTitulos;
+	}
+	
+	public List<TituloFiliadoJRDataSource> getListaTitulosRelatorio() {
+		if (listaTitulosRelatorio == null) {
+			listaTitulosRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
+		}
+		return listaTitulosRelatorio;
 	}
 	
 	@Override

@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,6 +27,7 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.TipoRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -45,49 +45,52 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
+	@SpringBean
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	private TituloFiliado titulo;
 	private Instituicao convenio;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private Municipio pracaProtesto;
 	private Filiado filiado;
-	private List<TituloFiliadoJRDataSource> listaRelatorio;
 	private List<TituloFiliado> listaTitulos;
+	private List<TituloFiliadoJRDataSource> listaTitulosRelatorio;
 	
-	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
-	
-	public ListaTitulosRelatorioConvenio(Instituicao convenio, Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto) {
+	public ListaTitulosRelatorioConvenio(Instituicao convenio, Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TipoRelatorio tipoRelatorio) {
 		this.titulo = new TituloFiliado();
 		this.convenio = convenio;
 		this.filiado = filiado;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.pracaProtesto = pracaProtesto;
-		
-		setListaTitulos(tituloFiliadoMediator.buscarTitulosParaRelatorioConvenio(convenio, filiado,dataInicio, dataFim, pracaProtesto));
-		add(carregarListaTitulos());
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
-		form.add(botaoEnviar());
-		add(form);
+		this.listaTitulos = tituloFiliadoMediator.buscarTitulosParaRelatorioConvenio(convenio, filiado,dataInicio, dataFim, pracaProtesto, tipoRelatorio);
+
+		carregarListaTitulos();
+		carregarFormulario();
 	}
 	
-	private Button botaoEnviar() {
-		return new Button("botaoBuscar") {
+	private void carregarFormulario() {
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onSubmit() {
+			protected void onSubmit() {
+				
 				try {
-					JasperPrint jasperPrint = novoRelatorioDeTitulosPorConvenio(convenio, filiado, dataInicio, dataFim, pracaProtesto, getListaRelatorio());
-
+					JasperPrint jasperPrint = novoRelatorioDeTitulosPorConvenio(convenio, filiado, dataInicio, dataFim, pracaProtesto, getListaTitulosRelatorio());
+					
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
 					IResourceStream resourceStream = new FileResourceStream(pdf);
 					getRequestCycle().scheduleRequestHandlerAfterCurrent(
-					        new ResourceStreamRequestHandler(resourceStream, "CRA_Titulos_Enviados.pdf"));
+							new ResourceStreamRequestHandler(resourceStream, "CRA_Titulos_Enviados.pdf"));
 				} catch (InfraException ex) { 
 					error(ex.getMessage());
 				} catch (Exception e) { 
@@ -96,10 +99,14 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 				}
 			}
 		};
+		add(form);
 	}
-	
-	private ListView<TituloFiliado> carregarListaTitulos() {
-		return new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
+
+	private void carregarListaTitulos() {
+		ListView<TituloFiliado>listView =  new ListView<TituloFiliado>("listViewTitulos", getListaTitulos()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<TituloFiliado> item) {
@@ -115,6 +122,10 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 				item.add(new Label("filiado", tituloLista.getFiliado().getRazaoSocial()));
 				
 				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
+					
+					/***/
+					private static final long serialVersionUID = 1L;
+
 					public void onClick() {
 						setResponsePage(new HistoricoPage(tituloLista));
 		            }
@@ -131,22 +142,17 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 					} else { 
 						item.add(new Label("protocolo", StringUtils.EMPTY));
 					}
-					
-			        if (tituloRemessa.getRetorno() != null){
-		        		item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
-			        } else {
-			        	item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
-			        }
 					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
 				}
 			}
 		};
+		add(listView);
 	}
 	
 	private void parseToTituloFiliadoJRDataSource(TituloFiliado tituloLista, TituloRemessa tituloRemessa) {
 		TituloFiliadoJRDataSource tituloFiliado = new TituloFiliadoJRDataSource();
 		tituloFiliado.parseTituloFiliado(tituloLista, tituloRemessa);
-		getListaRelatorio().add(tituloFiliado);
+		getListaTitulosRelatorio().add(tituloFiliado);
 	}
 	
 	private JasperPrint novoRelatorioDeTitulosPorConvenio(Instituicao convenio,Filiado filiado, LocalDate dataInicio, 
@@ -166,28 +172,22 @@ public class ListaTitulosRelatorioConvenio extends BasePage<TituloFiliado> {
 		return JasperFillManager.fillReport(jasperReport, parametros, beanCollection);
 	}
 
-	public List<TituloFiliadoJRDataSource> getListaRelatorio() {
-		if (listaRelatorio == null) {
-			listaRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
-		}
-		return listaRelatorio;
-	}
-	
-	public void setListaRelatorio(List<TituloFiliadoJRDataSource> listaRelatorio) {
-		this.listaRelatorio = listaRelatorio;
-	}
-	
 	public List<TituloFiliado> getListaTitulos() {
+		if (listaTitulos == null) {
+			listaTitulos = new ArrayList<TituloFiliado>();
+		}
 		return listaTitulos;
 	}
 	
-	public void setListaTitulos(List<TituloFiliado> listaTitulos) {
-		this.listaTitulos = listaTitulos;
+	public List<TituloFiliadoJRDataSource> getListaTitulosRelatorio() {
+		if (listaTitulosRelatorio == null) {
+			listaTitulosRelatorio = new ArrayList<TituloFiliadoJRDataSource>();
+		}
+		return listaTitulosRelatorio;
 	}
 	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(titulo);
 	}
-
 }
