@@ -164,6 +164,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					@Override
 					public void onClick() {
 						try {
+							getApplication().getResourceSettings().getPropertiesFactory().clearCache();
+							
 							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 	
