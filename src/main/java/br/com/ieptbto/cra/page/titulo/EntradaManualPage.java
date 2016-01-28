@@ -103,7 +103,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
 				if (titulo.getDataVencimento().equals(new LocalDate()) || titulo.getDataVencimento().isAfter(new LocalDate())) {
-					error("A Data de Vencimento do título não pode ser igual ou futura a data atual !");
+					if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH)) {
+						error("A Data de Vencimento do título não pode ser igual ou futura a data atual !");
+					}
 				} else if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
 					error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
 				} else if (titulo.getId() != 0) {
