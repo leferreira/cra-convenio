@@ -21,7 +21,7 @@ import org.joda.time.LocalDate;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.TipoRelatorio;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -56,7 +56,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	private Filiado filiado;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private TipoRelatorio tipoRelatorio;
+	private SituacaoTituloRelatorio tipoRelatorio;
 	
 	public RelatorioTitulosFiliadoPage() {
 		this.titulo = new TituloFiliado();
@@ -115,9 +115,9 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 		return comboMunicipio;
 	}
 	
-	private RadioChoice<TipoRelatorio> tipoRelatorio(){
-		IChoiceRenderer<TipoRelatorio> renderer = new ChoiceRenderer<TipoRelatorio>("label");
-		RadioChoice<TipoRelatorio> radio = new RadioChoice<>("tipoRelatorio", new Model<TipoRelatorio>(tipoRelatorio), Arrays.asList(TipoRelatorio.values()), renderer);
+	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio(){
+		IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
+		RadioChoice<SituacaoTituloRelatorio> radio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(tipoRelatorio), Arrays.asList(SituacaoTituloRelatorio.values()), renderer);
 		radio.setRequired(true);
 		radio.setLabel(new Model<String>("Situação dos Títulos"));
 		return radio;

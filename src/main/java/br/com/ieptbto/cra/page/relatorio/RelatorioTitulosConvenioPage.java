@@ -22,7 +22,7 @@ import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.TipoRelatorio;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -53,7 +53,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 	private TituloFiliado titulo;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private TipoRelatorio tipoRelatorio;
+	private SituacaoTituloRelatorio tipoRelatorio;
 	
 	public RelatorioTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
@@ -70,7 +70,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();
-				TipoRelatorio tipoRelatorio = getTipoRelatorio();
+				SituacaoTituloRelatorio tipoRelatorio = getTipoRelatorio();
 				Instituicao instituicao = getUser().getInstituicao();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
@@ -103,9 +103,9 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 		return dataEnvioInicio;
 	}
 	
-	private RadioChoice<TipoRelatorio> tipoRelatorio(){
-		IChoiceRenderer<TipoRelatorio> renderer = new ChoiceRenderer<TipoRelatorio>("label");
-		RadioChoice<TipoRelatorio> radio = new RadioChoice<>("tipoRelatorio", new Model<TipoRelatorio>(tipoRelatorio), Arrays.asList(TipoRelatorio.values()), renderer);
+	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio(){
+		IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
+		RadioChoice<SituacaoTituloRelatorio> radio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(tipoRelatorio), Arrays.asList(SituacaoTituloRelatorio.values()), renderer);
 		radio.setRequired(true);
 		radio.setLabel(new Model<String>("Situação dos Títulos"));
 		return radio;
@@ -126,7 +126,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 		return comboMunicipio;
 	}
 	
-	public TipoRelatorio getTipoRelatorio() {
+	public SituacaoTituloRelatorio getTipoRelatorio() {
 		return tipoRelatorio;
 	}
 

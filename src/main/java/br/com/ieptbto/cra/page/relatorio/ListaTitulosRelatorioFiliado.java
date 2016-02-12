@@ -26,7 +26,7 @@ import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoRelatorio;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -59,7 +59,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 	private List<TituloFiliadoJRDataSource> listaTitulosRelatorio;
 	private List<TituloFiliado> listaTitulos;
 	
-	public ListaTitulosRelatorioFiliado(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, TipoRelatorio tipoRelatorio, Municipio pracaProtesto) {
+	public ListaTitulosRelatorioFiliado(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, SituacaoTituloRelatorio tipoRelatorio, Municipio pracaProtesto) {
 		this.titulo = new TituloFiliado();
 		this.empresaFiliado = filiado;
 		this.dataInicio = dataInicio;
@@ -67,7 +67,7 @@ public class ListaTitulosRelatorioFiliado extends BasePage<TituloFiliado> {
 		this.pracaProtesto = pracaProtesto;
 		this.listaTitulos = tituloFiliadoMediator.buscarTitulosParaRelatorioFiliado(filiado, dataInicio, dataFim, tipoRelatorio, pracaProtesto);
 		
-		adicionarFormulario();
+		adicionarFormulario(); 
 		carregarListaTitulos();
 	}
 	
