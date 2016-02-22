@@ -11,7 +11,6 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -29,11 +28,13 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Municipio;
+import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
 import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
 import br.com.ieptbto.cra.mediator.AvalistaMediator;
+import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
@@ -46,79 +47,91 @@ import br.com.ieptbto.cra.util.EstadoUtils;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
+	/***/
+	private static final long serialVersionUID = 1L;
+	
 	@SpringBean
 	private MunicipioMediator municipioMediator;
 	@SpringBean
 	private TituloFiliadoMediator tituloFiliadoMediator;
+	@SpringBean
+	private FiliadoMediator filiadoMediator;
 	@SpringBean
 	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
 	private AvalistaMediator avalistaMediator;
 	private TituloFiliado tituloFiliado;
 	private List<Avalista> avalistas;
+	
+	private Form<TituloFiliado> form;
 	private TextField<String> dataVencimentoField;
 	private TextField<String> dataEmissaoField;
 	private DropDownChoice<TipoAlineaCheque> comboAlinea;
 
 	public EntradaManualPage() {
 		this.tituloFiliado = new TituloFiliado();
-		setAvalistas(tituloFiliado.getAvalistas());
+		this.avalistas = tituloFiliado.getAvalistas();
 		
 		carregarFormularioTitulo();
 	}
 	
-	public EntradaManualPage(String mensagem) {
-		this.tituloFiliado = new TituloFiliado();
-		setAvalistas(tituloFiliado.getAvalistas());
-		info(mensagem);
-		
-		carregarFormularioTitulo();
-	}
-	
+//	public EntradaManualPage(String message) {
+//		this.tituloFiliado = new TituloFiliado();
+//		this.avalistas = tituloFiliado.getAvalistas();
+//		
+//		carregarFormularioTitulo();
+//	}
+
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.tituloFiliado = titulo;
-		setAvalistas(avalistaMediator.buscarAvalistasPorTitulo(titulo));
+		this.avalistas = avalistaMediator.buscarAvalistasPorTitulo(titulo);
 		
 		carregarFormularioTitulo();
 	}
 
 	public void carregarFormularioTitulo() {
-
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel());
-		form.add(new Button("salvarTitulo"){
+		form = new Form<TituloFiliado>("form", getModel()){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public void onSubmit() {
-				super.onSubmit();
 				TituloFiliado titulo = EntradaManualPage.this.getModel().getObject();
 				
-				titulo.setDataEntrada(new LocalDate());
+				titulo.setUsuarioEntradaManual(getUser());
+				titulo.setDataEntrada(new LocalDate().toDate());
 				titulo.setAvalistas(getAvalistas());
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
-				if (titulo.getDataVencimento().equals(new LocalDate()) || titulo.getDataVencimento().isAfter(new LocalDate())) {
-					if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH)) {
+				if (titulo.getDataEmissao().equals(titulo.getDataVencimento()) || titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
+					if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH) && !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)) {
 						error("A Data de Vencimento do título não pode ser igual ou futura a data atual !");
 					}
 				} else if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
 					error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-				} else if (titulo.getId() != 0) {
+				} 
+
+				if (titulo.getId() != 0) {
 					tituloFiliadoMediator.alterarTituloFiliado(titulo);
-					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
+					
+					info("Os dados do título foram alterados com sucesso !");
 				} else {
 					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
 					tituloFiliadoMediator.salvarTituloFiliado(titulo);
-					setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
+					
+					info("Os dados do título foram salvos com sucesso !");
 				}
+				getAvalistas().clear();
+				form.setModelObject(new TituloFiliado());				
 			}
-		});
+		};
 		form.add(numeroTitulo());
 		form.add(dataEmissao());
 		form.add(dataVencimento());
@@ -133,15 +146,19 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(ufDevedor());
 		form.add(especieTitulo());
 		form.add(bairroDevedor());
-		form.add(campoAlinea());
-		form.add(new AvalistaInputPanel("avalistaPanel", getModel() ,getAvalistas()));
-		form.add(carregarListaAvalistas());
+		form.add(campoAlinea()); 
+		form.add(setor());
 		add(form);
+		add(new AvalistaInputPanel("avalistaPanel", getModel() ,getAvalistas()));
+		add(carregarListaAvalistas());
 	}
 
 	
 	private ListView<Avalista> carregarListaAvalistas(){
 		return new ListView<Avalista>("listaAvalistas", getAvalistas() ) {
+			
+			/***/
+			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void populateItem(ListItem<Avalista> item) {
@@ -156,6 +173,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			
 			private Link<Avalista> removerAvalista(final Avalista avalista) {
 				return new Link<Avalista>("remover") {
+					
+					/***/
+					private static final long serialVersionUID = 1L;
 					
 					@Override
 					public void onClick() {
@@ -200,6 +220,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
 		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
+		comboMunicipio.setRequired(true);
+		return comboMunicipio;
+	}
+	
+	private DropDownChoice<SetorFiliado> setor() {
+		IChoiceRenderer<SetorFiliado> renderer = new ChoiceRenderer<SetorFiliado>("descricao");
+		DropDownChoice<SetorFiliado> comboMunicipio = new DropDownChoice<SetorFiliado>("setor", filiadoMediator.buscarSetoresAtivosFiliado(usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado()), renderer);
+		comboMunicipio.setLabel(new Model<String>("Setor Filiado"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;
 	}
@@ -273,6 +301,10 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		IChoiceRenderer<TipoEspecieTitulo> renderer = new ChoiceRenderer<TipoEspecieTitulo>("label");
 		final DropDownChoice<TipoEspecieTitulo> dropDownEspecie =  new DropDownChoice<TipoEspecieTitulo>("especieTitulo", Arrays.asList(TipoEspecieTitulo.values()), renderer);
 		dropDownEspecie.add(new OnChangeAjaxBehavior() {
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
             protected void onUpdate(AjaxRequestTarget target){
                 
@@ -313,10 +345,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		return avalistas;
 	}
 
-	public void setAvalistas(List<Avalista> avalistas) {
-		this.avalistas = avalistas;
-	}
-	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);

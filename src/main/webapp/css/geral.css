@@ -309,3 +309,7 @@ COMUNICADO MODAL
 div.wicket-modal div.w_content_3{
 	    border: 0px solid #FFFFFF;
 }
+
+#table-no-pagination2_filter{
+	    float: right;
+}

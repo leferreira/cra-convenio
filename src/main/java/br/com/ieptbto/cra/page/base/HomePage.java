@@ -27,6 +27,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
@@ -69,7 +70,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private List<TituloFiliado> titulosFiliado;
 	
 	public HomePage() {
-		super();
 		this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());;
 		
 		carregarHomeConvenioEAssociados();
@@ -85,7 +85,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			this.titulosFiliado = new ArrayList<TituloFiliado>();
 		} else {
 			this.arquivo = new Arquivo();
-			this.titulosFiliado = tituloFiliadoMediator.titulosParaEnvioAoConvenio(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
+			this.titulosFiliado = tituloFiliadoMediator.buscarTitulosParaEnvio(getEmpresaFiliado(), null);
 		}
 	}
 
@@ -231,7 +231,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 				}; 
 				linkAlterar.add(new Label("devedor", tituloLista.getNomeDevedor()));
 				item.add(linkAlterar);
-				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(tituloLista.getDataEntrada().toDate(), new Date())));
+				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(tituloLista.getDataEntrada(), new Date())));
 			}
 		};
 	}
@@ -304,6 +304,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	
 	public UsuarioFiliado getUsuarioFiliado() {
 		return usuarioFiliado;
+	}
+	
+	private Filiado getEmpresaFiliado(){
+		return usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
 	}
 	
 	public List<TituloFiliado> getTitulosFiliado() {

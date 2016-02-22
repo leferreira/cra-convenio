@@ -210,7 +210,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
     private Label dataOcorrencia() {
-    	LocalDate dataOcorrencia = getTituloFiliado().getDataEntrada();
+    	LocalDate dataOcorrencia = new LocalDate(getTituloFiliado().getDataEntrada());
     	if (getTituloRemessa() != null) {
     		dataOcorrencia = getTituloRemessa().getRemessa().getCabecalho().getDataMovimento();
     	

@@ -126,7 +126,7 @@ public class TituloDesistenciaCancelamentoSolicitadoPage extends BasePage<Solici
 	}
 	
     private Label dataOcorrencia() {
-    	LocalDate dataOcorrencia = getTituloFiliado().getDataEntrada();
+    	LocalDate dataOcorrencia = new LocalDate(getTituloFiliado().getDataEntrada());
     	if (getTituloRemessa() != null) {
     		dataOcorrencia = getTituloRemessa().getRemessa().getCabecalho().getDataMovimento();
     	

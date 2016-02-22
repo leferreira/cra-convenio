@@ -11,44 +11,56 @@
 					<h4 class="titulo-top">ENTRADA DE TÍTULOS</h4>
 					<br style="clear: both;"/>
 					<form wicket:id="form" class="form-horizontal">
+						<fieldset>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+									  <label class="col-md-4 control-label" for="setor">SETOR:</label>
+									  <div class="col-md-8">
+									    <select class="form-control" wicket:id="setor">
+									    </select>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="control-label">(Para mais informações sobre a idenficação do setor, entre em contato com o IEPTB-TO)</label>
+								</div> 
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+								</div>
+							</div>
+						</fieldset>
 		              	<fieldset>
-						<!-- Form Name -->
 						<legend class="legend">INFORMAÇÕES DO DOCUMENTO</legend>
-						<div class="row">
-							<div class="col-md-4">
-		                 		<!-- Text input-->
-								<div class="form-group">
-								  <label class="col-md-4 control-label">NºTÍTULO:</label>  
-								  <div class="col-md-8">
-								  <input maxlength="11" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="numeroTitulo">
-								  </div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+									  <label class="col-md-4 control-label">NºTÍTULO:</label>  
+									  <div class="col-md-8">
+									  <input maxlength="11" onkeyup="this.value = this.value.toUpperCase()" class="form-control input-md" wicket:id="numeroTitulo">
+									  </div>
+									</div>
 								</div>
-							</div>
-							<div class="col-md-4">
-								<!-- Text input-->
-								<div class="form-group">
-								  <label class="col-md-4 control-label">DATA DE EMISSÃO:</label>  
-								  <div class="col-md-8">
-								  <input id="data" placeholder="__/__/____"  onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataEmissao">
-								    
-								  </div>
+								<div class="col-md-4">
+									<div class="form-group">
+									  <label class="col-md-4 control-label">DATA DE EMISSÃO:</label>  
+									  <div class="col-md-8">
+									  <input id="data" placeholder="__/__/____"  onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataEmissao">
+									    
+									  </div>
+									</div>
 								</div>
-							</div>
-							<div class="col-md-4">
-								<!-- Text input-->
-								<div class="form-group">
-								  <label class="col-md-4 control-label">DATA DE VENCIMENTO:</label>  
-								  <div class="col-md-8">
-								  <input id="data1" placeholder="__/__/____" onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataVencimento">
-								    
-								  </div>
-								</div>
-								
+								<div class="col-md-4">
+									<div class="form-group">
+									  <label class="col-md-4 control-label">DATA DE VENCIMENTO:</label>  
+									  <div class="col-md-8">
+									  <input id="data1" placeholder="__/__/____" onblur="fctValidaData(this);" class="form-control input-md" wicket:id="dataVencimento">
+									  </div>
+									</div>
 		                	    </div>
-						</div>
-						<div class="row">
-							<div class="col-md-4">
-								<!-- Text input-->
+							</div>
+							<div class="row">
+								<div class="col-md-4">
 								<div class="form-group">
 								  <label class="col-md-4 control-label">VALOR DOC:</label>  
 								  <div class="col-md-8">
@@ -60,7 +72,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">VALOR À PROTESTAR:</label>  
 								  <div class="col-md-8">
@@ -72,7 +83,6 @@
 								</div>
 							</div>	
 							<div class="col-md-4">
-								<!-- Select Basic -->
 								<div class="form-group">
 								  <label class="col-md-4 control-label" for="pracaProtesto">PRAÇA DE PROTESTO:</label>
 								  <div class="col-md-8">
@@ -117,7 +127,6 @@
 					 	<legend class="legend">INFORMAÇÕES DO DEVEDOR</legend>
 						 <div class="row">
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">NOME:</label>  
 								  <div class="col-md-8">
@@ -126,7 +135,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">CNPJ/CPF:</label>  
 								  <div class="col-md-8">
@@ -136,7 +144,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">CEP:</label>  
 								  <div class="col-md-8">
@@ -147,7 +154,6 @@
 						</div>
 						<div class="row">
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">BAIRRO:</label>  
 								  <div class="col-md-8">
@@ -156,7 +162,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<!-- Text input-->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">CIDADE:</label>  
 								  <div class="col-md-8">
@@ -165,7 +170,6 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<!-- Select Basic -->
 								<div class="form-group">
 								  <label class="col-md-4 control-label" for="ufDevedor">UF:</label>
 								  <div class="col-md-8">
@@ -177,7 +181,6 @@
 						</div>
 						<div class="row">
 							<div class="col-md-4">
-					     		<!-- Textarea -->
 								<div class="form-group">
 								  <label class="col-md-4 control-label">ENDEREÇO:</label>
 								  <div class="col-md-8">                     
@@ -187,7 +190,8 @@
 				     		</div>
 						</div>
 					  </fieldset>
-					  <fieldset>
+					</form>
+				  <fieldset>
 					  	<legend class="legend">INFORMAÇÕES DE AVALISTAS</legend>
 						  	<div class="well well-sm">
 								<div class="col-md-12">
@@ -233,8 +237,6 @@
 		               	  	 <br style="clear: both;">	
 		                </div>
 				     </fieldset>
-				    <button type="submit" wicket:id="salvarTitulo" class="btn btn-primary pull-right"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
-				</form>
 				</div>
 			</div>
 		</div>	
