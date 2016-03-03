@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo;
 
 import java.util.List;
 
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -13,6 +14,7 @@ import org.apache.wicket.model.Model;
 
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
@@ -23,98 +25,105 @@ public class AvalistaInputPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
 	private Avalista avalista;
 	private TituloFiliado titulo;
 	private List<Avalista> avalistas;
 	
-	private Form<Avalista> formAvalista;
-
 	public AvalistaInputPanel(String id, IModel<TituloFiliado> model, List<Avalista> avalistas) {
 		super(id, model);
+		this.avalista = new Avalista();
 		this.avalistas = avalistas;
 		this.titulo = model.getObject();
-		this.avalista = new Avalista();
 		
 		carregarComponentes();
 	}
 
 	private void carregarComponentes() {
-		formAvalista = new Form<Avalista>("formAvalista",  new CompoundPropertyModel<Avalista>(avalista)){
+		Form<Avalista> form = new Form<Avalista>("formAvalista", new CompoundPropertyModel<Avalista>(avalista)){
 			
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
+				super.onSubmit();
 				Avalista avalistaTitulo = getModelObject();
-
+				
 				try {
-					getAvalistas().add(avalistaTitulo);		
-					formAvalista.setModelObject(new Avalista());
-					
-				} catch (Exception ex) {
-					error("Não foi possível inserir o avaslista! Por favor entre em contato com o IEPTB !");
+					if (avalistaTitulo.getNome() == null || avalistaTitulo.getEndereco() == null ||
+							avalistaTitulo.getCidade() == null || avalistaTitulo.getUf() == null ||
+							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null ) {
+						throw new InfraException("O Avalista não pode ter informações em branco !");
+					} else {
+						getAvalistas().add(avalistaTitulo);		
+							
+						Avalista novoAvalista = new Avalista();
+						setAvalista(novoAvalista);
+						getModel().setObject(novoAvalista);
+					}
+				} catch (InfraException ex) {
+					error("O Avalista não pode ter informações em branco !");
 				}
 			}
 		};
-		formAvalista.add(campoNome());
-		formAvalista.add(campoDocumento());
-		formAvalista.add(campoEndereco());
-		formAvalista.add(campoCidade());
-		formAvalista.add(campoCep());
-		formAvalista.add(campoUf());
-		formAvalista.add(campoBairro());
-		add(formAvalista);
+		form.add(campoNome());
+		form.add(campoDocumento());
+		form.add(campoEndereco());
+		form.add(campoCidade());
+		form.add(campoCep());
+		form.add(campoUf());
+		form.add(campoBairro());
+		form.add(new Button("submitAvalista"));
+		add(form);
 	}
 
 	private TextField<String> campoNome() {
-		TextField<String> fieldNome = new TextField<String>("nome");
+		TextField<String> fieldNome;
+		fieldNome = new TextField<String>("nome");
 		fieldNome.setLabel(new Model<String>("Nome do Avalista"));
-		fieldNome.setRequired(true);
 		return fieldNome;
 	}
 
 	private TextField<String> campoDocumento() {
-		TextField<String> fieldDocumento = new TextField<String>("documento");
+		TextField<String> fieldDocumento;
+		fieldDocumento = new TextField<String>("documento");
 		fieldDocumento.setLabel(new Model<String>("CPF/CNPJ do Avalista"));
-		fieldDocumento.setRequired(true);
 		return fieldDocumento;
 	}
 
 	private DropDownChoice<String> campoUf() {
-		DropDownChoice<String> fieldUf = new DropDownChoice<String>("uf",
-				EstadoUtils.getEstadosToList());
+		DropDownChoice<String> fieldUf;
+		fieldUf = new DropDownChoice<String>("uf" ,EstadoUtils.getEstadosToList());
 		fieldUf.setLabel(new Model<String>("UF do Avalista"));
-		fieldUf.setRequired(true);
 		return fieldUf;
 	}
 
+	
 	private TextField<String> campoCep() {
-		TextField<String> fieldCep = new TextField<String>("cep");
+		TextField<String> fieldCep;
+		fieldCep = new TextField<String>("cep");
 		fieldCep.setLabel(new Model<String>("CEP do Avalista"));
-		fieldCep.setRequired(true);
 		return fieldCep;
 	}
 
 	private TextField<String> campoCidade() {
-		TextField<String> fieldCidade = new TextField<String>("cidade");
+		TextField<String> fieldCidade;
+		fieldCidade = new TextField<String>("cidade");
 		fieldCidade.setLabel(new Model<String>("Cidade do Avalista"));
-		fieldCidade.setRequired(true);
 		return fieldCidade;
 	}
 
 	private TextArea<String> campoEndereco() {
-		TextArea<String> fieldEndereco = new TextArea<String>("endereco");
+		TextArea<String> fieldEndereco;
+		fieldEndereco = new TextArea<String>("endereco");
 		fieldEndereco.setLabel(new Model<String>("Endereco do Avalista"));
-		fieldEndereco.setRequired(true);
 		return fieldEndereco;
 	}
 	
-	private TextField<String> campoBairro() {
-		TextField<String> fieldBairro = new TextField<String>("bairro");
+	private TextField<String> campoBairro() {  
+		TextField<String> fieldBairro;
+		fieldBairro = new TextField<String>("bairro");
 		fieldBairro.setLabel(new Model<String>("Bairro do Avalista"));
-		fieldBairro.setRequired(true);
 		return fieldBairro;
 	}
 
@@ -122,11 +131,15 @@ public class AvalistaInputPanel extends Panel {
 		return avalistas;
 	}
 
-	public Avalista getAvalista() {
-		return avalista;
-	}
-
 	public TituloFiliado getTitulo() {
 		return titulo;
+	}
+	
+	public void setAvalista(Avalista avalista) {
+		this.avalista = avalista;
+	}
+	
+	public Avalista getAvalista() {
+		return avalista;
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -28,6 +29,7 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
@@ -113,6 +115,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	}
 
 	private void formularioFiltroPorSetor() {
+		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
 		Form<SetorFiliado> formularioFitroSetor = new Form<SetorFiliado>("formFiltroSetor"){
 			
 			/***/
@@ -135,7 +138,11 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 			}
 		};
 		formularioFitroSetor.add(comboSetorFiliado());
-		add(formularioFitroSetor);
+		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
+			divSetoresFiliados.setVisible(false);
+		}
+		divSetoresFiliados.add(formularioFitroSetor);
+		add(divSetoresFiliados);
 	}
 
 	private DropDownChoice<SetorFiliado> comboSetorFiliado() {

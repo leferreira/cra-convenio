@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -30,9 +31,11 @@ import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
 import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.AvalistaMediator;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -79,13 +82,14 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		carregarFormularioTitulo();
 	}
 	
-//	public EntradaManualPage(String message) {
-//		this.tituloFiliado = new TituloFiliado();
-//		this.avalistas = tituloFiliado.getAvalistas();
-//		
-//		carregarFormularioTitulo();
-//	}
-
+	public EntradaManualPage(String message) {
+		info(message);
+		this.tituloFiliado = new TituloFiliado();
+		this.avalistas = tituloFiliado.getAvalistas();
+		
+		carregarFormularioTitulo();
+	}
+	
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.tituloFiliado = titulo;
 		this.avalistas = avalistaMediator.buscarAvalistasPorTitulo(titulo);
@@ -102,34 +106,50 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = EntradaManualPage.this.getModel().getObject();
-				
 				titulo.setUsuarioEntradaManual(getUser());
 				titulo.setDataEntrada(new LocalDate().toDate());
 				titulo.setAvalistas(getAvalistas());
 				titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
 				titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
 				
-				if (titulo.getDataEmissao().equals(titulo.getDataVencimento()) || titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
-					if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH) && !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)) {
-						error("A Data de Vencimento do título não pode ser igual ou futura a data atual !");
+				try {
+					if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
+						if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH) && !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)) {
+							throw new InfraException("A Data de Vencimento do título não pode ser igual a data atual!");
+						}
+					} 
+					if (titulo.getDataEmissao().isAfter(titulo.getDataVencimento())) {
+						throw new InfraException("A Data de Emissão do título deve ser antes do Data do Vencimento !");
+					} else if (titulo.getDataVencimento().isAfter(new LocalDate())) {
+						throw new InfraException("A Data de Vencimento do título deve ser antes da data atual!");
+					} else if (titulo.getDataEmissao().isAfter(new LocalDate())) {
+						throw new InfraException("A Data de Emissão do título deve ser antes da data atual!");
 					}
-				} else if (!titulo.getDataEmissao().isBefore(titulo.getDataVencimento())) {
-					error("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-				} 
-
-				if (titulo.getId() != 0) {
-					tituloFiliadoMediator.alterarTituloFiliado(titulo);
-					
-					info("Os dados do título foram alterados com sucesso !");
-				} else {
-					titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
-					titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-					tituloFiliadoMediator.salvarTituloFiliado(titulo);
-					
-					info("Os dados do título foram salvos com sucesso !");
+	
+					if (titulo.getId() != 0) {
+						tituloFiliadoMediator.alterarTituloFiliado(titulo);
+						
+						getAvalistas().clear();
+						setResponsePage(new EntradaManualPage("Os dados do título foram alterados com sucesso !"));
+					} else {
+						if (titulo.getSetor() == null) {
+							titulo.setSetor(filiadoMediator.buscarSetorPadraoFiliado(usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado()));
+						}
+						titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
+						titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
+						tituloFiliadoMediator.salvarTituloFiliado(titulo);
+						
+						getAvalistas().clear();
+						setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso !"));
+					}
+	
+				} catch (InfraException e) {
+					System.out.println(e.getMessage());
+					getFeedbackPanel().error(e.getMessage());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					getFeedbackPanel().error("Não foi possível realizar a entrada manual! Entre em contato com o IEPTB !");
 				}
-				getAvalistas().clear();
-				form.setModelObject(new TituloFiliado());				
 			}
 		};
 		form.add(numeroTitulo());
@@ -146,11 +166,17 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		form.add(ufDevedor());
 		form.add(especieTitulo());
 		form.add(bairroDevedor());
-		form.add(campoAlinea()); 
-		form.add(setor());
+		form.add(campoAlinea());   
+		
+		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
+		divSetoresFiliados.add(campoSetorTitulo());
+		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
+			divSetoresFiliados.setVisible(false);
+		}
+		form.add(divSetoresFiliados);
+		form.add(new AvalistaInputPanel("avalistaPanel", getModel() ,getAvalistas()));
+		form.add(carregarListaAvalistas());
 		add(form);
-		add(new AvalistaInputPanel("avalistaPanel", getModel() ,getAvalistas()));
-		add(carregarListaAvalistas());
 	}
 
 	
@@ -224,11 +250,10 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		return comboMunicipio;
 	}
 	
-	private DropDownChoice<SetorFiliado> setor() {
+	private DropDownChoice<SetorFiliado> campoSetorTitulo() {
 		IChoiceRenderer<SetorFiliado> renderer = new ChoiceRenderer<SetorFiliado>("descricao");
 		DropDownChoice<SetorFiliado> comboMunicipio = new DropDownChoice<SetorFiliado>("setor", filiadoMediator.buscarSetoresAtivosFiliado(usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado()), renderer);
 		comboMunicipio.setLabel(new Model<String>("Setor Filiado"));
-		comboMunicipio.setRequired(true);
 		return comboMunicipio;
 	}
 
