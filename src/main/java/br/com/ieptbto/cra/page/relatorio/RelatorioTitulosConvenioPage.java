@@ -85,7 +85,7 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				setResponsePage(new ListaTitulosRelatorioConvenio(instituicao, titulo.getFiliado(), dataInicio, dataFim, titulo.getPracaProtesto(), tipoRelatorio));
+
 			}
 		};
 		form.add(dataEnvioInicio());

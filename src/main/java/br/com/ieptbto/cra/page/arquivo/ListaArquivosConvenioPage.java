@@ -24,7 +24,6 @@ import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.RelatorioMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -38,117 +37,114 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class ListaArquivosConvenioPage extends BasePage<Arquivo> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
-	@SpringBean
-	private ArquivoMediator arquivoMediator;
-	@SpringBean
-	private RemessaMediator remessaMediator;
-	@SpringBean
-	private RelatorioMediator relatorioMediator;
-	private Arquivo arquivo;
-	private List<Arquivo> arquivos;
+    /***/
+    private static final long serialVersionUID = 1L;
 
-	public ListaArquivosConvenioPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<SituacaoArquivo> situacoes) {
-		this.arquivo = arquivo;
-		this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);
-		
-		add(carregarListaArquivos());
-	}
+    @SpringBean
+    private ArquivoMediator arquivoMediator;
+    @SpringBean
+    private RelatorioMediator relatorioMediator;
+    private Arquivo arquivo;
+    private List<Arquivo> arquivos;
 
-	private ListView<Arquivo> carregarListaArquivos() {
-		return new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
+    public ListaArquivosConvenioPage(Arquivo arquivo, Municipio municipio, LocalDate dataInicio, LocalDate dataFim, ArrayList<TipoArquivoEnum> tiposArquivo, ArrayList<SituacaoArquivo> situacoes) {
+	this.arquivo = arquivo;
+	this.arquivos = arquivoMediator.buscarArquivosAvancado(arquivo, getUser(), tiposArquivo, municipio, dataInicio, dataFim, situacoes);
 
-			/***/
-			private static final long serialVersionUID = 1L;
+	add(carregarListaArquivos());
+    }
 
-			@Override
-			protected void populateItem(ListItem<Arquivo> item) {
-				final Arquivo arquivo = item.getModelObject();
-				item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
-				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+    private ListView<Arquivo> carregarListaArquivos() {
+	return new ListView<Arquivo>("dataTableArquivo", getArquivos()) {
 
-					/***/
-					private static final long serialVersionUID = 1L;
+	    /***/
+	    private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						setResponsePage(new TitulosArquivoConvenioPage(arquivo));
-					}
-				};
-				linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
-				item.add(linkArquivo);
-				item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
-				item.add(new Label("horaEnvio", DataUtil.localTimeToString(arquivo.getHoraEnvio())));
-				item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
-				item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
-				item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
-				item.add(downloadArquivoTXT(arquivo));
-				item.add(relatorioArquivo(arquivo));
-			}
+	    @Override
+	    protected void populateItem(ListItem<Arquivo> item) {
+		final Arquivo arquivo = item.getModelObject();
+		item.add(new Label("tipoArquivo", arquivo.getTipoArquivo().getTipoArquivo().constante));
+		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
 
-			private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
-				return new Link<Arquivo>("downloadArquivo") {
+		    /***/
+		    private static final long serialVersionUID = 1L;
 
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override 
-					public void onClick() {
-						File file = remessaMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
-						IResourceStream resourceStream = new FileResourceStream(file);
-
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(
-						        new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
-					}
-				};
-			}
-			
-			private Link<Arquivo> relatorioArquivo(final Arquivo arquivo) {
-				return new Link<Arquivo>("gerarRelatorio") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
-						JasperPrint jasperPrint = null;
-
-						try {
-							if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-								jasperPrint = relatorioMediator.relatorioRemessa(arquivo, getUser().getInstituicao());
-							} else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-								jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
-							} else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-								JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-								jasperPrint = relatorioMediator.relatorioRetorno(jasperReport ,arquivo, getUser().getInstituicao()); 
-							}
-							
-							File pdf = File.createTempFile("report", ".pdf");
-							JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-							IResourceStream resourceStream = new FileResourceStream(pdf);
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_" + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
-						} catch (InfraException ex) { 
-							error(ex.getMessage());
-						} catch (Exception e) { 
-							error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-							e.printStackTrace();
-						}
-					}
-				};
-			}
+		    @Override
+		    public void onClick() {
+			setResponsePage(new TitulosArquivoConvenioPage(arquivo));
+		    }
 		};
-	}
+		linkArquivo.add(new Label("nomeArquivo", arquivo.getNomeArquivo()));
+		item.add(linkArquivo);
+		item.add(new Label("dataEnvio", DataUtil.localDateToString(arquivo.getDataEnvio())));
+		item.add(new Label("horaEnvio", DataUtil.localTimeToString(arquivo.getHoraEnvio())));
+		item.add(new Label("instituicao", arquivo.getInstituicaoEnvio().getNomeFantasia()));
+		item.add(new Label("destino", arquivo.getInstituicaoRecebe().getNomeFantasia()));
+		item.add(new Label("status", arquivo.getStatusArquivo().getSituacaoArquivo().getLabel().toUpperCase()).setMarkupId(arquivo.getStatusArquivo().getSituacaoArquivo().getLabel()));
+		item.add(downloadArquivoTXT(arquivo));
+		item.add(relatorioArquivo(arquivo));
+	    }
 
-	public List<Arquivo> getArquivos() {
-		return arquivos;
-	}
+	    private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
+		return new Link<Arquivo>("downloadArquivo") {
 
-	@Override
-	protected IModel<Arquivo> getModel() {
-		return new CompoundPropertyModel<Arquivo>(arquivo);
-	}
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    @Override
+		    public void onClick() {
+			File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+			IResourceStream resourceStream = new FileResourceStream(file);
+
+			getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
+		    }
+		};
+	    }
+
+	    private Link<Arquivo> relatorioArquivo(final Arquivo arquivo) {
+		return new Link<Arquivo>("gerarRelatorio") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    @Override
+		    public void onClick() {
+			TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
+			JasperPrint jasperPrint = null;
+
+			try {
+			    if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
+				jasperPrint = relatorioMediator.relatorioRemessa(arquivo, getUser().getInstituicao());
+			    } else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
+				jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
+			    } else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
+				JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
+				jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, arquivo, getUser().getInstituicao());
+			    }
+
+			    File pdf = File.createTempFile("report", ".pdf");
+			    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+			    IResourceStream resourceStream = new FileResourceStream(pdf);
+			    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
+				    + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
+			} catch (InfraException ex) {
+			    error(ex.getMessage());
+			} catch (Exception e) {
+			    error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+			    e.printStackTrace();
+			}
+		    }
+		};
+	    }
+	};
+    }
+
+    public List<Arquivo> getArquivos() {
+	return arquivos;
+    }
+
+    @Override
+    protected IModel<Arquivo> getModel() {
+	return new CompoundPropertyModel<Arquivo>(arquivo);
+    }
 }

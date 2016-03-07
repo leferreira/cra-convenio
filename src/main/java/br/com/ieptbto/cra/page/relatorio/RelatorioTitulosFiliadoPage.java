@@ -1,6 +1,9 @@
 package br.com.ieptbto.cra.page.relatorio;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
@@ -15,21 +18,28 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.relatorio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * @author Thasso Araújo
@@ -56,7 +66,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	private Filiado filiado;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
-	private SituacaoTituloRelatorio tipoRelatorio;
+	private RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo;
 	
 	public RelatorioTitulosFiliadoPage() {
 		this.titulo = new TituloFiliado();
@@ -74,7 +84,9 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();
+				Filiado filiado = getFiliado();
 				Municipio municipio = titulo.getPracaProtesto();
+				SituacaoTituloRelatorio situacaoTipoRelatorio = radioSituacaoTitulo.getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 				
@@ -88,7 +100,21 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 					}else
 						error("As duas datas devem ser preenchidas.");
 				} 
-				setResponsePage(new ListaTitulosRelatorioFiliado(getFiliado(), dataInicio, dataFim, tipoRelatorio, municipio));
+
+				try {
+					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacaoFiliado(situacaoTipoRelatorio, filiado, municipio, dataInicio, dataFim);
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+		                    "CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+				
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível gerar o relatório ! Entre em contato com o IEPTB-TO !");
+					e.printStackTrace();
+				}
 			}
 		};
 		form.add(dataEnvioInicio());
@@ -117,10 +143,12 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado>  {
 	
 	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio(){
 		IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
-		RadioChoice<SituacaoTituloRelatorio> radio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(tipoRelatorio), Arrays.asList(SituacaoTituloRelatorio.values()), renderer);
-		radio.setRequired(true);
-		radio.setLabel(new Model<String>("Situação dos Títulos"));
-		return radio;
+		List<SituacaoTituloRelatorio> situacoes = new ArrayList<SituacaoTituloRelatorio>();
+		situacoes.add(SituacaoTituloRelatorio.GERAL);
+		radioSituacaoTitulo = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(), situacoes, renderer);
+		radioSituacaoTitulo.setRequired(true);
+		radioSituacaoTitulo.setLabel(new Model<String>("Situação dos Títulos"));
+		return radioSituacaoTitulo;
 	}
 	
 	public Filiado getFiliado() {

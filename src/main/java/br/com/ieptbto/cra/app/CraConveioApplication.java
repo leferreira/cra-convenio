@@ -33,15 +33,12 @@ import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
-import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioConvenio;
-import br.com.ieptbto.cra.page.relatorio.ListaTitulosRelatorioFiliado;
 import br.com.ieptbto.cra.page.relatorio.RelatorioSinteticoEmpresasConvenioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosConvenioPage;
 import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosFiliadoPage;
 import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
-import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 import br.com.ieptbto.cra.page.usuario.IncluirUsuarioFiliadoPage;
 import br.com.ieptbto.cra.page.usuario.ListaUsuarioFiliadoPage;
 import br.com.ieptbto.cra.security.ISecureApplication;
@@ -57,128 +54,123 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 public class CraConveioApplication extends WebApplication implements ISecureApplication, IWebApplication {
 
-	public CraConveioApplication() {
+    public CraConveioApplication() {
+    }
+
+    @Override
+    public void init() {
+	super.init();
+	initSpring();
+	initConfig();
+	initAtributoDeDatas();
+	montaPaginas();
+
+    }
+
+    // start page
+    @Override
+    public Class<? extends Page> getHomePage() {
+	return HomePage.class;
+    }
+
+    // page for auth
+    @Override
+    public Class<? extends Page> getLoginPage() {
+	return LoginPage.class;
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+	return new UserSession<Usuario>(request, new UsuarioAnonimo());
+    }
+
+    protected void initSpring() {
+	getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+    }
+
+    private void initConfig() {
+	getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+
+	getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+
+	getRequestCycleSettings().setTimeout(Duration.minutes(10));
+
+	// don't throw exceptions for missing translations
+	getResourceSettings().setThrowExceptionOnMissingResource(false);
+	getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
+	getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
+
+	// customized auth strategy
+	getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
+
+	// make markup friendly as in deployment-mode
+	getMarkupSettings().setStripWicketTags(true);
+
+	if (isDevelopmentMode()) {
+	    // enable ajax debug etc.
+	    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+	    getDebugSettings().setAjaxDebugModeEnabled(true);
+	    System.out.println(RuntimeConfigurationType.DEVELOPMENT);
 	}
+    }
 
-	@Override
-	public void init() {
-		super.init();
-		initSpring();
-		initConfig();
-		initAtributoDeDatas();
-		montaPaginas();
+    private void montaPaginas() {
+	mountPage("LoginPage", LoginPage.class);
+	mountPage("HomePage", HomePage.class);
+	mountPage("CargaInicial", CargaInicialPage.class);
 
-	}
+	/* CONVENIO */
+	mountPage("BuscarArquivoConvenio", BuscarArquivoConvenioPage.class);
+	mountPage("ListaArquivoConvenio", ListaArquivosConvenioPage.class);
+	mountPage("TitulosArquivoConvenio", TitulosArquivoConvenioPage.class);
+	mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
+	mountPage("RelatorioSinteticoEmpresasConvenio", RelatorioSinteticoEmpresasConvenioPage.class);
 
-	// start page
-	@Override
-	public Class<? extends Page> getHomePage() {
-		return HomePage.class;
-	}
+	mountPage("EmpresasConvenioPage", ListaFiliadoPage.class);
+	mountPage("IncluirEmpresaConvenioPage", IncluirFiliadoPage.class);
 
-	// page for auth
-	@Override
-	public Class<? extends Page> getLoginPage() {
-		return LoginPage.class;
-	}
+	mountPage("UsuariosEmpresaConvenioPage", ListaUsuarioFiliadoPage.class);
+	mountPage("IncluirUsuarioEmpresaConvenioPage", IncluirUsuarioFiliadoPage.class);
 
-	@Override
-	public Session newSession(Request request, Response response) {
-		return new UserSession<Usuario>(request, new UsuarioAnonimo());
-	}
+	/* AMBOS */
+	mountPage("BuscarTitulos", BuscarTitulosPage.class);
 
-	protected void initSpring() {
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
-	}
+	/* EMPRESA CONVENIO */
+	mountPage("EntradaManual", EntradaManualPage.class);
+	mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
+	mountPage("SolicitarDesistenciaCancelamentoEmpresa", SolicitarDesistenciaCancelamentoEmpresaPage.class);
+	mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
+	mountPage("TituloDesistenciaCancelamentoSolicitado", TituloDesistenciaCancelamentoSolicitadoPage.class);
+	mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
+    }
 
-	private void initConfig() {
-		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+    /**
+     * Configura as data para a aplicação.
+     */
+    private void initAtributoDeDatas() {
+	Locale.setDefault(DataUtil.LOCALE);
+	DateTimeZone.setDefault(DataUtil.ZONE);
+    }
 
-		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+    public boolean isDevelopmentMode() {
+	return (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT);
+    }
 
-		getRequestCycleSettings().setTimeout(Duration.minutes(10));
+    @Override
+    public Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario) {
+	return new CraMenu("menu", usuario);
+    }
 
-		// don't throw exceptions for missing translations
-		getResourceSettings().setThrowExceptionOnMissingResource(false);
-		getApplicationSettings().setPageExpiredErrorPage(NotFoundPage.class);
-		getApplicationSettings().setAccessDeniedPage(NotFoundPage.class);
+    @Override
+    public String getTituloSistema(AbstractWebPage<?> page) {
+	return "CRA - Central de Remessa de Arquivos";
+    }
 
-		// customized auth strategy
-		getSecuritySettings().setAuthorizationStrategy(new UserRoleAuthorizationStrategy(new UserRolesAuthorizer()));
-
-		// make markup friendly as in deployment-mode
-		getMarkupSettings().setStripWicketTags(true);
-
-		if (isDevelopmentMode()) {
-			// enable ajax debug etc.
-			getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-			getDebugSettings().setAjaxDebugModeEnabled(true);
-			System.out.println(RuntimeConfigurationType.DEVELOPMENT);
-		}
-	}
-
-	private void montaPaginas() {
-		mountPage("LoginPage", LoginPage.class);
-		mountPage("HomePage", HomePage.class);
-		mountPage("CargaInicial", CargaInicialPage.class);
-		
-		/*CONVENIO*/
-		mountPage("BuscarArquivoConvenio", BuscarArquivoConvenioPage.class);
-		mountPage("ListaArquivoConvenio", ListaArquivosConvenioPage.class);
-		mountPage("TitulosArquivoConvenio", TitulosArquivoConvenioPage.class);
-		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
-		mountPage("RelatorioSinteticoEmpresasConvenio", RelatorioSinteticoEmpresasConvenioPage.class);
-		mountPage("ListaTitulosRelatorioConvenio", ListaTitulosRelatorioConvenio.class);
-		
-		mountPage("EmpresasConvenioPage", ListaFiliadoPage.class);
-		mountPage("IncluirEmpresaConvenioPage", IncluirFiliadoPage.class);
-		
-		mountPage("UsuariosEmpresaConvenioPage", ListaUsuarioFiliadoPage.class);
-		mountPage("IncluirUsuarioEmpresaConvenioPage", IncluirUsuarioFiliadoPage.class);
-
-		/*AMBOS*/
-		mountPage("BuscarTitulos", BuscarTitulosPage.class);
-		mountPage("HistoricoPage", HistoricoPage.class);
-
-		/*EMPRESA CONVENIO*/
-		mountPage("EntradaManual", EntradaManualPage.class);
-		mountPage("HistoricoDoTitulo", HistoricoPage.class);
-		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
-		mountPage("SolicitarDesistenciaCancelamentoEmpresa", SolicitarDesistenciaCancelamentoEmpresaPage.class);
-		mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
-		mountPage("TituloDesistenciaCancelamentoSolicitado", TituloDesistenciaCancelamentoSolicitadoPage.class);
-		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
-		mountPage("ListaTitulosRelatorioFiliado", ListaTitulosRelatorioFiliado.class);
-		
-	}
-
-	/**
-	 * Configura as data para a aplicação.
-	 */
-	private void initAtributoDeDatas() {
-		Locale.setDefault(DataUtil.LOCALE);
-		DateTimeZone.setDefault(DataUtil.ZONE); 
-	}
-
-	public boolean isDevelopmentMode() {
-		return (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT);
-	}
-
-	@Override
-	public Component createMenuSistema(AbstractWebPage<?> page, String containerId, Usuario usuario) {
-		return new CraMenu("menu", usuario);
-	}
-
-	@Override
-	public String getTituloSistema(AbstractWebPage<?> page) {
-		return "CRA - Central de Remessa de Arquivos";
-	}
-
-	/**
-	 * Metodo utilitario para obter a aplicacao corrente.
-	 */
-	public static CraConveioApplication get() {
-		return (CraConveioApplication) Application.get();
-	}
+    /**
+     * Metodo utilitario para obter a aplicacao corrente.
+     */
+    public static CraConveioApplication get() {
+	return (CraConveioApplication) Application.get();
+    }
 
 }

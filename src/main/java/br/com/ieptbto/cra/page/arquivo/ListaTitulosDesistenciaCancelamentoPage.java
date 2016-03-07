@@ -20,7 +20,6 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.HistoricoPage;
 
 /**
  * @author Thasso Araújo
@@ -28,98 +27,86 @@ import br.com.ieptbto.cra.page.titulo.HistoricoPage;
  */
 public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloFiliado> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
-	@SpringBean
-	private TituloFiliadoMediator tituloFiliadoMediator;
-	private TituloFiliado tituloFiliado;
-	private List<TituloFiliado> titulos;
-	
-	public ListaTitulosDesistenciaCancelamentoPage(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TituloFiliado titulo) {
-		this.tituloFiliado = new TituloFiliado();
-		this.titulos = tituloFiliadoMediator.consultarTitulosFiliado(filiado, dataInicio, dataFim, pracaProtesto ,titulo, SituacaoTituloConvenio.AGUARDANDO);
-		
-		carregarComponentes();
-	}
+    /***/
+    private static final long serialVersionUID = 1L;
 
-	private void carregarComponentes() {
-		add(carregarListaTitulos());
-	}
+    @SpringBean
+    private TituloFiliadoMediator tituloFiliadoMediator;
+    private TituloFiliado tituloFiliado;
+    private List<TituloFiliado> titulos;
 
-	private ListView<TituloFiliado> carregarListaTitulos() {
-		return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliados()) {
+    public ListaTitulosDesistenciaCancelamentoPage(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TituloFiliado titulo) {
+	this.tituloFiliado = new TituloFiliado();
+	this.titulos = tituloFiliadoMediator.consultarTitulosFiliado(filiado, dataInicio, dataFim, pracaProtesto, titulo, SituacaoTituloConvenio.AGUARDANDO);
 
-			/***/
-			private static final long serialVersionUID = 1L;
+	carregarComponentes();
+    }
 
-			@Override
-			protected void populateItem(ListItem<TituloFiliado> item) {
-				final TituloFiliado tituloLista = item.getModelObject();
-				final TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista); 
-				
-				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
-				
-				Link<TituloFiliado> linkHistorico = new Link<TituloFiliado>("linkHistorico") {
+    private void carregarComponentes() {
+	add(carregarListaTitulos());
+    }
 
-					/***/
-					private static final long serialVersionUID = 1L;
-					
-					@Override
-					public void onClick() {
-						setResponsePage(new HistoricoPage(tituloLista));
-		            }
-		        };
-		        linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
-		        item.add(linkHistorico);
-				
-				if (tituloRemessa == null) {
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
-				} else {
-					if (tituloRemessa.getConfirmacao() != null) {
-						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					} else { 
-						item.add(new Label("protocolo", StringUtils.EMPTY));
-					}
-					
-					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
-				}
-				item.add(new Link<TituloFiliado>("solicitar"){
-					
-					/***/
-					private static final long serialVersionUID = 1L;
-					
-					@Override
-					public void onClick() {
-						setResponsePage(new TituloDesistenciaCancelamentoSolicitadoPage(tituloLista, tituloRemessa));
-					}
-				});
-			}
-		};
-	}
-	
-	private IModel<List<TituloFiliado>> getTitulosFiliados() {
-		return new LoadableDetachableModel<List<TituloFiliado>>() {
+    private ListView<TituloFiliado> carregarListaTitulos() {
+	return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliados()) {
 
-			/***/
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected List<TituloFiliado> load() {
-				return titulos;
-			}
-		};
-	}
-	
-	public TituloFiliado getTituloFiliado() {
-		return tituloFiliado;
-	}
+	    /***/
+	    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected IModel<TituloFiliado> getModel() {
-		return null;
-	}
+	    @Override
+	    protected void populateItem(ListItem<TituloFiliado> item) {
+		final TituloFiliado tituloLista = item.getModelObject();
+		final TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista);
+
+		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
+		item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
+		item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
+		item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+
+		if (tituloRemessa == null) {
+		    item.add(new Label("protocolo", StringUtils.EMPTY));
+		    item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
+		} else {
+		    if (tituloRemessa.getConfirmacao() != null) {
+			item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
+		    } else {
+			item.add(new Label("protocolo", StringUtils.EMPTY));
+		    }
+
+		    item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
+		}
+		item.add(new Link<TituloFiliado>("solicitar") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    @Override
+		    public void onClick() {
+			setResponsePage(new TituloDesistenciaCancelamentoSolicitadoPage(tituloLista, tituloRemessa));
+		    }
+		});
+	    }
+	};
+    }
+
+    private IModel<List<TituloFiliado>> getTitulosFiliados() {
+	return new LoadableDetachableModel<List<TituloFiliado>>() {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    protected List<TituloFiliado> load() {
+		return titulos;
+	    }
+	};
+    }
+
+    public TituloFiliado getTituloFiliado() {
+	return tituloFiliado;
+    }
+
+    @Override
+    protected IModel<TituloFiliado> getModel() {
+	return null;
+    }
 }

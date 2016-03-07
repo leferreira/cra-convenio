@@ -5,9 +5,11 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.security.UserSession;
 
 /**
@@ -17,63 +19,66 @@ import br.com.ieptbto.cra.security.UserSession;
  * @param <T>
  */
 public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends WebPage implements IHeaderContributor {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/** * Wicket-ID do feedback panel. */
-	protected static final String WID_FEEDBACK = "feedback";
 
-	/**
-	 * Construtor padrao.
-	 */
-	public AbstractWebPage() {
-		super();
-		adicionarComponentes();
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    /** * Wicket-ID do feedback panel. */
+    protected static final String WID_FEEDBACK = "feedback";
+    @SpringBean
+    private UsuarioMediator usuarioMediator;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param model
-	 *            See Component
-	 * @see Component#Component(String, IModel)
-	 */
-	public AbstractWebPage(IModel<?> model) {
-		super(model);
-		adicionarComponentes();
-	}
+    /**
+     * Construtor padrao.
+     */
+    public AbstractWebPage() {
+	super();
+	adicionarComponentes();
+    }
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-	}
+    /**
+     * Constructor.
+     * 
+     * @param model
+     *            See Component
+     * @see Component#Component(String, IModel)
+     */
+    public AbstractWebPage(IModel<?> model) {
+	super(model);
+	adicionarComponentes();
+    }
 
-	protected void adicionarComponentes() {
-	}
+    @Override
+    protected void onInitialize() {
+	super.onInitialize();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public UserSession<Usuario> getSession() {
-		return (UserSession<Usuario>) super.getSession();
-	}
+    protected void adicionarComponentes() {
+    }
 
-	/**
-	 * Retorna o usuario corrente.
-	 * 
-	 * @return {@link Colaborador}
-	 */
-	public Usuario getUser() {
-		return getSession().getUser();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public UserSession<Usuario> getSession() {
+	return (UserSession<Usuario>) super.getSession();
+    }
 
-	/**
-	 * Recupera o {@link FeedbackPanel} da pagina.
-	 * 
-	 * @return {@link FeedbackPanel}
-	 */
-	public FeedbackPanel getFeedbackPanel() {
-		return (FeedbackPanel) get(WID_FEEDBACK);
-	}
+    /**
+     * Retorna o usuario corrente.
+     * 
+     * @return {@link Colaborador}
+     */
+    public Usuario getUser() {
+	return usuarioMediator.buscarUsuarioPorPK(getSession().getUser());
+    }
+
+    /**
+     * Recupera o {@link FeedbackPanel} da pagina.
+     * 
+     * @return {@link FeedbackPanel}
+     */
+    public FeedbackPanel getFeedbackPanel() {
+	return (FeedbackPanel) get(WID_FEEDBACK);
+    }
 
 }
