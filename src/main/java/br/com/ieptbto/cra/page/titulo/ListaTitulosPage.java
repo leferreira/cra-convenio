@@ -60,7 +60,7 @@ public class ListaTitulosPage extends BasePage<TituloFiliado> {
 		TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista);
 
 		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-		item.add(new Label("emissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
+		item.add(new Label("emissao", DataUtil.localDateToString(new LocalDate(tituloLista.getDataEmissao()))));
 		item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
 		item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
 		item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));

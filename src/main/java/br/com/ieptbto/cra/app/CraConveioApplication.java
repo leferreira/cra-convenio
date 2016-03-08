@@ -142,6 +142,8 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 	mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
 	mountPage("TituloDesistenciaCancelamentoSolicitado", TituloDesistenciaCancelamentoSolicitadoPage.class);
 	mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
+
+	mountPage("CargaInicial", CargaInicialPage.class);
     }
 
     /**

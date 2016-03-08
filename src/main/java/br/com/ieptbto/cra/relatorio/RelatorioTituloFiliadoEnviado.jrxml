@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioTitulos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="5acc556b-cc77-4a31-a5de-3a4c7465c200">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
-	<property name="ireport.zoom" value="1.4641000000000026"/>
+	<property name="ireport.zoom" value="1.3310000000000024"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
-	<parameter name="DATA_INICIO" class="java.util.Date">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="DATA_FIM" class="java.util.Date">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="AGENCIA_CODIGO_CEDENTE" class="java.lang.String">
+	<parameter name="FILIADO_ID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="LOGO" class="java.lang.Object"/>
 	<parameter name="RAZAO_SOCIAL_FILIADO" class="java.lang.String"/>
+	<parameter name="DATA_ENVIO" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select tit.praca_protesto, count(tit.id_titulo) AS total_titulos
-from tb_titulo AS tit
-WHERE tit.agencia_codigo_cedente=$P{AGENCIA_CODIGO_CEDENTE}
-AND tit.data_cadastro between $P{DATA_INICIO} and $P{DATA_FIM}
-group by tit.praca_protesto;]]>
+		<![CDATA[select tf.municipio_id, mun.nome_municipio, count(tf.id_titulo_filiado) AS total_titulos, sum(tf.valor_titulo) as total_valor, sum(tf.valor_saldo_titulo) as total_saldo
+from tb_titulo_filiado AS tf
+INNER JOIN tb_municipio AS mun ON tf.municipio_id=mun.id_municipio
+WHERE tf.filiado_id=$P{FILIADO_ID}
+AND tf.data_envio_cra=$P{DATA_ENVIO}
+group by tf.municipio_id, mun.nome_municipio;]]>
 	</queryString>
-	<field name="praca_protesto" class="java.lang.String"/>
+	<field name="municipio_id" class="java.lang.Integer"/>
+	<field name="nome_municipio" class="java.lang.String"/>
 	<field name="total_titulos" class="java.lang.Long"/>
+	<field name="total_valor" class="java.math.BigDecimal"/>
+	<field name="total_saldo" class="java.math.BigDecimal"/>
 	<background>
 		<band/>
 	</background>
@@ -39,15 +40,8 @@ group by tit.praca_protesto;]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RELATÓRIO DE TÍTULOS]]></text>
+				<text><![CDATA[RELATÓRIO DE TÍTULOS ENVIADOS]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="378" y="39" width="424" height="20" uuid="fa344a01-47a6-448a-9ba2-253f66bdef42"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["PERÍODO: ENTRE " + new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_INICIO}) + " E " + new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_FIM}) + "."]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="0" y="0" width="378" height="59" uuid="fe38ab7d-e116-47bb-80bd-656a95884071"/>
 				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
@@ -58,6 +52,13 @@ group by tit.praca_protesto;]]>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{RAZAO_SOCIAL_FILIADO}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="378" y="39" width="424" height="20" uuid="5f6ad26a-831f-4f83-80a5-1da94f4a2411"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -70,27 +71,30 @@ group by tit.praca_protesto;]]>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["PRAÇA DE PROTESTO: " + $F{praca_protesto}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PRAÇA DE PROTESTO: " + $F{nome_municipio}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="0" y="20" width="802" height="40" uuid="de9be90c-5910-4a68-aa6a-eadd01dc692a"/>
-				<subreportParameter name="DATA_INICIO">
-					<subreportParameterExpression><![CDATA[$P{DATA_INICIO}]]></subreportParameterExpression>
+				<reportElement x="0" y="20" width="802" height="40" uuid="9e6e2265-3cef-4109-87c0-c947660df4f9"/>
+				<subreportParameter name="MUNICIPIO_ID">
+					<subreportParameterExpression><![CDATA[$F{municipio_id}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="DATA_FIM">
-					<subreportParameterExpression><![CDATA[$P{DATA_FIM}]]></subreportParameterExpression>
+				<subreportParameter name="DATA_ENVIO">
+					<subreportParameterExpression><![CDATA[$P{DATA_ENVIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="FILIADO_ID">
+					<subreportParameterExpression><![CDATA[$P{FILIADO_ID}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="TOTAL_TITULOS">
 					<subreportParameterExpression><![CDATA[$F{total_titulos}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="AGENCIA_CODIGO_CEDENTE">
-					<subreportParameterExpression><![CDATA[$P{AGENCIA_CODIGO_CEDENTE}]]></subreportParameterExpression>
+				<subreportParameter name="TOTAL_VALOR">
+					<subreportParameterExpression><![CDATA[$F{total_valor}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="PRACA_PROTESTO">
-					<subreportParameterExpression><![CDATA[$F{praca_protesto}]]></subreportParameterExpression>
+				<subreportParameter name="TOTAL_SALDO">
+					<subreportParameterExpression><![CDATA[$F{total_saldo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SubrelatorioGeralFiliado.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SubrelatorioTituloFiliadoEnviado.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

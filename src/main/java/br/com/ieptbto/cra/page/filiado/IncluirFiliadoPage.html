@@ -10,7 +10,7 @@
 					 <div class="panel-body">
 						<h4 class="titulo-top">CADASTRO DE EMPRESA ASSOCIADA
 						<span class="pull-right">
-							<a href="EmpresasFiliadas" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
+							<a href="EmpresasConvenioPage" class="link" style="font-size: 16px;"><span class="fa fa-mail-reply"></span>&nbsp;VOLTAR</a>
 						</span> 
 						</h4> 
 						<br style="clear: both;"/>
@@ -31,18 +31,17 @@
 								    
 								  </div>
 								</div>
-								<div class="form-group">
-								  <label class="col-md-4 control-label">CONVÊNIO:</label>
-								  <div class="col-md-6">
-								    <select wicket:id="instituicaoConvenio" tabindex="5" class="form-control">
-								    </select>
-								  </div>
-								</div>
 								<div class="form-group"> 
 								  <label class="col-md-4 control-label" >SITUAÇÃO:</label>
 								  <div class="col-md-6" style="text-align: left;"> 
 								    <label class="radio-inline inline" tabindex="3" wicket:id="situacao">
 								    </label>
+								  </div>
+								</div>
+								<div class="form-group">
+								  <label class="col-md-4 control-label">ENDEREÇO:</label>
+								  <div class="col-md-6">                     
+								    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" rows="4" maxlength="45" wicket:id="endereco"></textarea>
 								  </div>
 								</div>
 							</div>
@@ -66,12 +65,6 @@
 								  <div class="col-md-6">
 								 	<select wicket:id="uf" tabindex="8" class="form-control">
 								    </select>
-								  </div>
-								</div>
-								<div class="form-group">
-								  <label class="col-md-4 control-label">ENDEREÇO:</label>
-								  <div class="col-md-6">                     
-								    <textarea onkeyup="this.value = this.value.toUpperCase()" tabindex="4" class="form-control" rows="4" maxlength="45" wicket:id="endereco"></textarea>
 								  </div>
 								</div>
 								<div class="form-group">

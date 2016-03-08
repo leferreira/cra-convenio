@@ -109,21 +109,22 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		titulo.setUsuarioEntradaManual(getUser());
 		titulo.setDataEntrada(new LocalDate().toDate());
 		titulo.setAvalistas(getAvalistas());
-		titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()));
-		titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()));
+		titulo.setDataEmissao(DataUtil.stringToLocalDate(dataEmissaoField.getModelObject()).toDate());
+		titulo.setDataVencimento(DataUtil.stringToLocalDate(dataVencimentoField.getModelObject()).toDate());
 
 		try {
 		    if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
 			if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH)
-				&& !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)) {
+				&& !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)
+				&& !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.ATC)) {
 			    throw new InfraException("A Data de Vencimento do título não pode ser igual a data atual!");
 			}
 		    }
-		    if (titulo.getDataEmissao().isAfter(titulo.getDataVencimento())) {
+		    if (new LocalDate(titulo.getDataEmissao()).isAfter(new LocalDate(titulo.getDataVencimento()))) {
 			throw new InfraException("A Data de Emissão do título deve ser antes do Data do Vencimento !");
-		    } else if (titulo.getDataVencimento().isAfter(new LocalDate())) {
+		    } else if (new LocalDate(titulo.getDataVencimento()).isAfter(new LocalDate())) {
 			throw new InfraException("A Data de Vencimento do título deve ser antes da data atual!");
-		    } else if (titulo.getDataEmissao().isAfter(new LocalDate())) {
+		    } else if (new LocalDate(titulo.getDataEmissao()).isAfter(new LocalDate())) {
 			throw new InfraException("A Data de Emissão do título deve ser antes da data atual!");
 		    }
 
@@ -225,7 +226,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
     private TextField<String> dataEmissao() {
 	dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
 	if (tituloFiliado.getDataEmissao() != null) {
-	    dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataEmissao())));
+	    dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataEmissao()))));
 	}
 	dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
 	dataEmissaoField.setRequired(true);
@@ -235,7 +236,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
     private TextField<String> dataVencimento() {
 	dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
 	if (tituloFiliado.getDataVencimento() != null) {
-	    dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(tituloFiliado.getDataVencimento())));
+	    dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataVencimento()))));
 	}
 	dataVencimentoField.setLabel(new Model<String>("Data de Vencimento"));
 	dataVencimentoField.setRequired(true);

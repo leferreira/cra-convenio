@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -95,8 +96,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 		    List<TituloFiliado> titulos = (List<TituloFiliado>) titulosSelecionados.getModelObject();
 		    tituloFiliadoMediator.enviarTitulosPendentes(titulos);
 
-		    getTitulos().clear();
-		    getFeedbackPanel().info("Os títulos foram encaminhados com sucesso !");
+		    setResponsePage(new RelatorioEnvioTituloFiliadoPage(getFiliado(), "Os títulos foram enviados para o IEPTB-TO com sucesso!"));
 		} catch (InfraException ex) {
 		    logger.error(ex.getMessage());
 		    error(ex.getMessage());
@@ -184,8 +184,8 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 		item.add(linkAlterar);
 
 		item.add(new Label("setor", tituloLista.getSetor().getDescricao()));
-		item.add(new Label("dataEmissao", DataUtil.localDateToString(tituloLista.getDataEmissao())));
-		item.add(new Label("dataVencimento", DataUtil.localDateToString(tituloLista.getDataVencimento())));
+		item.add(new Label("dataEmissao", DataUtil.localDateToString(new LocalDate(tituloLista.getDataEmissao()))));
+		item.add(new Label("dataVencimento", DataUtil.localDateToString(new LocalDate(tituloLista.getDataVencimento()))));
 		item.add(new LabelValorMonetario<BigDecimal>("valor", tituloLista.getValorTitulo()));
 		item.add(removerTitulo(tituloLista));
 	    }
