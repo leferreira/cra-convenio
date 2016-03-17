@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +20,11 @@ import org.apache.wicket.util.resource.IResourceStream;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.TipoArquivoEnum;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * @author Thasso Araújo
@@ -44,8 +39,6 @@ public class TitulosArquivoConvenioPage extends BasePage<Arquivo> {
     private TituloMediator tituloMediator;
     @SpringBean
     private ArquivoMediator arquivoMediator;
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     private Arquivo arquivo;
     private List<TituloRemessa> titulos;
 
@@ -102,22 +95,9 @@ public class TitulosArquivoConvenioPage extends BasePage<Arquivo> {
 
 	    @Override
 	    public void onClick() {
-		TipoArquivoEnum tipoArquivo = arquivo.getTipoArquivo().getTipoArquivo();
-		JasperPrint jasperPrint = null;
-
+		error("Não foi possível gerar o relatório ! Por favor entre com contato com o IEPTB-TO !");
 		try {
-		    if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-			jasperPrint = relatorioMediator.relatorioRemessa(arquivo, getUser().getInstituicao());
-		    } else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-			jasperPrint = relatorioMediator.relatorioConfirmacao(arquivo, getUser().getInstituicao());
-		    } else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-		    }
 
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-			    + arquivo.getNomeArquivo().replace(".", "_") + ".pdf"));
 		} catch (InfraException ex) {
 		    error(ex.getMessage());
 		} catch (Exception e) {
