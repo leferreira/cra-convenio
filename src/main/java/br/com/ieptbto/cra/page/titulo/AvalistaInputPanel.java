@@ -21,96 +21,108 @@ import br.com.ieptbto.cra.util.EstadoUtils;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings("serial")
 public class AvalistaInputPanel extends Panel {
 
+	/***/
+	private static final long serialVersionUID = 1L;
 	private Avalista avalista;
 	private TituloFiliado titulo;
 	private List<Avalista> avalistas;
-
+	
 	public AvalistaInputPanel(String id, IModel<TituloFiliado> model, List<Avalista> avalistas) {
 		super(id, model);
+		this.avalista = new Avalista();
 		this.avalistas = avalistas;
 		this.titulo = model.getObject();
-		this.avalista = new Avalista();
 		
 		carregarComponentes();
 	}
 
 	private void carregarComponentes() {
-		Form<Avalista> formAvalista = new Form<Avalista>("formAvalista",  new CompoundPropertyModel<Avalista>(avalista)){
+		Form<Avalista> form = new Form<Avalista>("formAvalista", new CompoundPropertyModel<Avalista>(avalista)){
+			
+			/***/
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
 				super.onSubmit();
 				Avalista avalistaTitulo = getModelObject();
-
+				
 				try {
 					if (avalistaTitulo.getNome() == null || avalistaTitulo.getEndereco() == null ||
 							avalistaTitulo.getCidade() == null || avalistaTitulo.getUf() == null ||
-							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null || avalistaTitulo.getBairro() == null) {
+							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null ) {
 						throw new InfraException("O Avalista não pode ter informações em branco !");
 					} else {
 						getAvalistas().add(avalistaTitulo);		
-						
+							
 						Avalista novoAvalista = new Avalista();
 						setAvalista(novoAvalista);
 						getModel().setObject(novoAvalista);
 					}
 				} catch (InfraException ex) {
-					error(ex.getMessage());
+					error("O Avalista não pode ter informações em branco !");
 				}
 			}
 		};
-		formAvalista.add(campoNome());
-		formAvalista.add(campoDocumento());
-		formAvalista.add(campoEndereco());
-		formAvalista.add(campoCidade());
-		formAvalista.add(campoCep());
-		formAvalista.add(campoUf());
-		formAvalista.add(campoBairro());
-		formAvalista.add(new Button("adicionarAvalista"));
-		add(formAvalista);
+		form.add(campoNome());
+		form.add(campoDocumento());
+		form.add(campoEndereco());
+		form.add(campoCidade());
+		form.add(campoCep());
+		form.add(campoUf());
+		form.add(campoBairro());
+		form.add(new Button("submitAvalista"));
+		add(form);
 	}
 
 	private TextField<String> campoNome() {
-		TextField<String> fieldNome = new TextField<String>("nome");
+		TextField<String> fieldNome;
+		fieldNome = new TextField<String>("nome");
 		fieldNome.setLabel(new Model<String>("Nome do Avalista"));
 		return fieldNome;
 	}
 
 	private TextField<String> campoDocumento() {
-		TextField<String> fieldDocumento = new TextField<String>("documento");
+		TextField<String> fieldDocumento;
+		fieldDocumento = new TextField<String>("documento");
 		fieldDocumento.setLabel(new Model<String>("CPF/CNPJ do Avalista"));
 		return fieldDocumento;
 	}
 
 	private DropDownChoice<String> campoUf() {
-		DropDownChoice<String> fieldUf = new DropDownChoice<String>("uf",
-				EstadoUtils.getEstadosToList());
+		DropDownChoice<String> fieldUf;
+		fieldUf = new DropDownChoice<String>("uf" ,EstadoUtils.getEstadosToList());
 		fieldUf.setLabel(new Model<String>("UF do Avalista"));
 		return fieldUf;
 	}
 
+	
 	private TextField<String> campoCep() {
-		TextField<String> fieldCep = new TextField<String>("cep");
+		TextField<String> fieldCep;
+		fieldCep = new TextField<String>("cep");
 		fieldCep.setLabel(new Model<String>("CEP do Avalista"));
 		return fieldCep;
 	}
 
 	private TextField<String> campoCidade() {
-		TextField<String> fieldCidade = new TextField<String>("cidade");
+		TextField<String> fieldCidade;
+		fieldCidade = new TextField<String>("cidade");
 		fieldCidade.setLabel(new Model<String>("Cidade do Avalista"));
 		return fieldCidade;
 	}
 
 	private TextArea<String> campoEndereco() {
-		TextArea<String> fieldEndereco = new TextArea<String>("endereco");
+		TextArea<String> fieldEndereco;
+		fieldEndereco = new TextArea<String>("endereco");
 		fieldEndereco.setLabel(new Model<String>("Endereco do Avalista"));
 		return fieldEndereco;
 	}
 	
-	private TextField<String> campoBairro() {
-		TextField<String> fieldBairro = new TextField<String>("bairro");
+	private TextField<String> campoBairro() {  
+		TextField<String> fieldBairro;
+		fieldBairro = new TextField<String>("bairro");
 		fieldBairro.setLabel(new Model<String>("Bairro do Avalista"));
 		return fieldBairro;
 	}
@@ -119,19 +131,15 @@ public class AvalistaInputPanel extends Panel {
 		return avalistas;
 	}
 
-	public void setAvalistas(List<Avalista> avalistas) {
-		this.avalistas = avalistas;
+	public TituloFiliado getTitulo() {
+		return titulo;
 	}
-
-	public Avalista getAvalista() {
-		return avalista;
-	}
-
+	
 	public void setAvalista(Avalista avalista) {
 		this.avalista = avalista;
 	}
-
-	public TituloFiliado getTitulo() {
-		return titulo;
+	
+	public Avalista getAvalista() {
+		return avalista;
 	}
 }

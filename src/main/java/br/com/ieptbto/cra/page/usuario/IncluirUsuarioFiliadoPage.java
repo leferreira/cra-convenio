@@ -4,6 +4,7 @@ package br.com.ieptbto.cra.page.usuario;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -21,10 +22,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.GrupoUsuarioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.EmailValidator;
@@ -37,15 +41,20 @@ import br.com.ieptbto.cra.util.EmailValidator;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
 public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
+	/***/
 	private static final long serialVersionUID = 1L;
-	private UsuarioFiliado usuarioFiliado;
+	private static final Logger logger = Logger.getLogger(IncluirUsuarioFiliadoPage.class);
 
 	@SpringBean
-	FiliadoMediator filiadoMediator;
+	private FiliadoMediator filiadoMediator;
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	GrupoUsuarioMediator grupoUsuarioMediator;
+	private UsuarioMediator usuarioMediator;
+	@SpringBean
+	private GrupoUsuarioMediator grupoUsuarioMediator;
+	private UsuarioFiliado usuarioFiliado;
+	private String senhaAtual;
 
 	public IncluirUsuarioFiliadoPage() {
 		this.usuarioFiliado = new UsuarioFiliado();
@@ -54,11 +63,14 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
 		this.usuarioFiliado = usuario;
+		this.senhaAtual = usuario.getUsuario().getSenha();
+		
 		carregarFormulario();
 	}
 
 	private void carregarFormulario() {
 		Form<UsuarioFiliado> form = new Form<UsuarioFiliado>("form", getModel()){
+			
 			/***/
 			private static final long serialVersionUID = 1L;
 
@@ -67,19 +79,34 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 				UsuarioFiliado usuarioFiliado = getModelObject();
 				
 				try {
-					
-					if (usuarioFiliado.getId() != 0) 
+					if (getModelObject().getId() != 0) {
+						if (usuarioFiliado.getUsuario().getSenha() != null) {
+							usuarioFiliado.getUsuario().setSenha(Usuario.cryptPass(usuarioFiliado.getUsuario().getSenha()));
+						} else {
+							usuarioFiliado.getUsuario().setSenha(getSenhaAtual());
+						}
 						usuarioFiliadoMediator.alterarUsuarioFiliado(usuarioFiliado);
-					else {
+						setResponsePage(new ListaUsuarioFiliadoPage("Os dados do usuário foram salvos com sucesso!"));
+					} else {
 						usuarioFiliado.setTermosContratoAceite(false);
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
 						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
-						usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);
+						if(usuarioMediator.isSenhasIguais(usuarioFiliado.getUsuario())){
+							if (usuarioMediator.isLoginNaoExiste(usuarioFiliado.getUsuario())) {
+								usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);
+								setResponsePage(new ListaUsuarioFiliadoPage("Os dados do usuário foram salvos com sucesso!"));
+							} else 
+								throw new InfraException("Usuário não criado. O login já existe!");
+						}else{
+							throw new InfraException("As senhas não são iguais!");
+						}
 					}
-					setResponsePage(new ListaUsuarioFiliadoPage("Os dados foram salvos com sucesso ! "));
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					error(ex.getMessage());
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					error("Não foi salvar os dados do usuário ! Entre em contato com o IEPTB !");
+					logger.error(e.getMessage(), e);
+					error("Não foi possível realizar esta operação! \n Entre em contato com a CRA ");
 				}
 			}
 		};
@@ -111,7 +138,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private TextField<String> campoSenha() {
 		PasswordTextField senha = new PasswordTextField("usuario.senha");
 		senha.setLabel(new Model<String>("Senha"));
-		senha.setVisible(verificarExistencia());
 		senha.setRequired(verificarExistencia());
 		return senha;
 	}
@@ -119,7 +145,7 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private TextField<String> campoConfirmarSenha() {
 		PasswordTextField confirmarSenha = new PasswordTextField("usuario.confirmarSenha");
 		confirmarSenha.setLabel(new Model<String>("Confirmar Senha"));
-		confirmarSenha.setVisible(verificarExistencia());
+		confirmarSenha.setRequired(false);
 		return confirmarSenha;
 	}
 
@@ -154,6 +180,10 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 			return true;
 		}
 		return false;
+	}
+	
+	public String getSenhaAtual() {
+		return senhaAtual;
 	}
 	
 	@Override

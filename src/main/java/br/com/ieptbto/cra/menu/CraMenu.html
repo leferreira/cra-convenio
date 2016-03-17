@@ -1,65 +1,47 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:panel>
-		<!-- MENU  -->
-		<div class="navbar-default sidebar" role="navigation" wicket:id="CraMenu">
-			<div class="sidebar-nav navbar-collapse" wicket:id="menuLateral">
-				<div class="nav">
-				<ul class="nav" id="side-menu">
-					<li wicket:id="titulosFiliado" class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-align-left icon-menu" ></span>
-							<br>T&iacute;tulos
-						</a>
-						<ul class="dropdown-menu">
-							<li><a wicket:id="EntradaManual" href="EntradaManual">Entrada de T&iacute;tulos</a></li>
-							<li><a wicket:id="ConsultarTitulosFiliado" href="ConsultarTitulosFiliado">Buscar T&iacute;tulos</a></li>
-							<li><a wicket:id="EnviarTitulosPendentes" href="EnviarTitulosPendentes">Enviar Pendentes</a></li>
-						</ul>
-					</li>
-					<li wicket:id="titulosConvenio" class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-align-left icon-menu" ></span>
-							<br>T&iacute;tulos
-						</a>
-						<ul class="dropdown-menu">
-							<li><a wicket:id="ConsultarTitulosConvenio" href="ConsultarTitulosConvenio">Buscar T&iacute;tulos</a></li>
-						</ul>
-					</li>
-					<li wicket:id="relatorioFiliado" class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
-							<br>Relat&oacute;rios
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="RelatorioTitulosFiliado" wicket:id="RelatorioTitulosFiliado">Anal&iacute;tico de T&iacute;tulos</a></li>
-						</ul>
-					</li>
-					<li wicket:id="relatorioConvenio" class="dropdown-submenu">
-						<a href="#" class="link-icones">
-							<span class="glyphicon glyphicon-list-alt icon-menu" ></span>
-							<br>Relat&oacute;rios
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="RelatorioTitulosConvenio" wicket:id="RelatorioTitulosConvenio">Anal&iacute;tico de T&iacute;tulos</a></li>
-							<li><a href="RelatorioSinteticoAssociadosConvenio" wicket:id="RelatorioSinteticoAssociadosConvenio">Sint&eacute;tico de Tìtulos</a></li>
-						</ul>
-					</li>
-					<li wicket:id="adminConvenio" class="dropdown-submenu">
-						<a href="#" class="link-icones"> 
-						 	<span class="fa fa-gear icon-menu" ></span>
-								<br>Administra&ccedil;&atilde;o<br> Conv&ecirc;nios
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="FiliadosPage" wicket:id="FiliadosPage">Associados</a></li>
-							<li><a href="UsuariosFiliadoPage" wicket:id="UsuariosFiliadoPage">Usu&aacute;rios</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			</div>
-			<br style="clear: both;" />
-		</div>
-	</wicket:panel>
+		<div wicket:id="CraMenu">
+			<div wicket:id="menuLateral">
+			 <ul  wicket:id="menuFiliado" class="nav navbar-nav">
+		        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
+		        <li><a wicket:id="EntradaManual" href="EntradaManual">Entrada de T&iacute;tulos</a></li>
+		        <li><a wicket:id="EnviarTitulosPendentes" href="EnviarTitulosPendentes">Enviar Pendentes</a></li>
+		        <li><a wicket:id="BuscarTitulos" href="BuscarTitulos">Buscar T&iacute;tulos</a></li>
+		        <li><a wicket:id="SolicitarDesistenciaCancelamentoEmpresa" href="SolicitarDesistenciaCancelamentoEmpresa">Desist&egrave;ncias e Cancelamentos</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+	        		<li><a href="RelatorioTitulosFiliado" wicket:id="RelatorioTitulosFiliado">Anal&iacute;tico de T&iacute;tulos</a></li>
+				  </ul>
+		        </li>
+	       	 </ul>
+	       	 <ul wicket:id="menuConvenio" class="nav navbar-nav">
+		        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Buscar Arquivos<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+	        		<li><a href="BuscarArquivoConvenio" wicket:id="BuscarArquivoConvenio">Buscar B, C e R</a></li>
+				  </ul>
+		        </li> 
+		        <li><a wicket:id="BuscarTitulos" href="BuscarTitulos">Buscar T&iacute;tulos</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+	        		<li><a href="RelatorioTitulosConvenio" wicket:id="RelatorioTitulosConvenio">Anal&iacute;tico de T&iacute;tulos</a></li>
+					<li><a href="RelatorioSinteticoEmpresasConvenio" wicket:id="RelatorioSinteticoEmpresasConvenio">Sint&eacute;tico de T&iacute;tulos</a></li>
+				  </ul>
+		        </li> 
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+	        		<li><a href="EmpresasConvenioPage" wicket:id="EmpresasConvenioPage">Empresas Associadas</a></li>
+					<li><a href="UsuariosEmpresaConvenioPage" wicket:id="UsuariosEmpresaConvenioPage">Acesso de Usu&aacute;rios</a></li>
+				  </ul>
+		        </li>
+	       	 </ul>
+        	</div>
+     	</div> 
+	</wicket:panel> 
 </body>
 </html>

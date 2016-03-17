@@ -1,97 +1,75 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">	
-<form class="form-horizontal" wicket:id="formAvalista">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title" id="myModalLabel">Adicionar Avalista</h4>
-    </div>
-    <div class="modal-body">
-    	<div class="row">
+<form wicket:id="formAvalista">
+<br style="clear: both;">
+   <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+       <h4 class="modal-title" id="myModalLabel">INCLUIR AVALISTA</h4>
+   </div>
+   <div class="modal-body form-horizontal">
+	   <br style="clear: both;">
 			<div class="col-md-6">
-				<!-- Text input-->
 				<div class="form-group">
-					<label class="col-md-4 control-label">Nome:</label>
+					<label class="col-md-4 control-label">NOME:</label>
 					<div class="col-md-8">
-						<input maxlength="45" type="text"
+						<input maxlength="45" type="text" tabindex="1"
 							onkeyup="this.value = this.value.toUpperCase()"
 							class="form-control input-md" wicket:id="nome">
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<!-- Text input-->
-				<div class="form-group">
-					<label class="col-md-4 control-label">CNPJ/CPF:</label>
-					<div class="col-md-8">
-						<input maxlength="18"
-							onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-							onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
-							class="form-control input-md" wicket:id="documento"/>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<!-- Text input-->
 				<div class="form-group">
 					<label class="col-md-4 control-label">CEP:</label>
 					<div class="col-md-8">
 						<input id="cep1" maxlength="10" class="form-control input-md"
-							wicket:id="cep">
+							wicket:id="cep" tabindex="3">
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<!-- Select Basic -->
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="ufDevedor">UF:</label>
+					<label class="col-md-4 control-label">CIDADE:</label>
 					<div class="col-md-8">
-						<select class="form-control" wicket:id="uf">
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<!-- Text input-->
-				<div class="form-group">
-					<label class="col-md-4 control-label">Cidade:</label>
-					<div class="col-md-8">
-						<input min="4" maxlength="20"
+						<input min="4" maxlength="20" tabindex="5"
 							onkeyup="this.value = this.value.toUpperCase()"
 							class="form-control input-md" wicket:id="cidade">
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6">
 				<div class="form-group">
-					<label class="col-md-4 control-label">Bairro:</label>
+					<label class="col-md-4 control-label">ENDERE&Ccedil;O:</label>
 					<div class="col-md-8">
-						<input min="4" maxlength="20"
-							onkeyup="this.value = this.value.toUpperCase()"
-							class="form-control input-md" wicket:id="bairro">
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<!-- Textarea -->
-				<div class="form-group">
-					<label class="col-md-4 control-label">Endereço:</label>
-					<div class="col-md-8">
-						<textarea class="form-control" maxlength="45"
+						<textarea class="form-control" maxlength="45" tabindex="7"
 							onkeyup="this.value = this.value.toUpperCase()"
 							wicket:id="endereco"></textarea>
 					</div>
 				</div>
 			</div>
-		</div>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" wicket:id="adicionarAvalista" class="btn btn-primary">Incluir Avalista</button>
-        <button type="button" style="margin-right: 5px;" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-    </div>
-</form>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label class="col-md-4 control-label">CNPJ/CPF:</label>
+					<div class="col-md-8">
+						<input maxlength="18" tabindex="2"
+							onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+							class="form-control input-md" wicket:id="documento"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="ufDevedor">UF:</label>
+					<div class="col-md-8">
+						<select class="form-control" wicket:id="uf" tabindex="4">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4 control-label">BAIRRO:</label>
+					<div class="col-md-8">
+						<input min="4" maxlength="20" tabindex="5"
+							onkeyup="this.value = this.value.toUpperCase()"
+							class="form-control input-md" wicket:id="bairro">
+					</div>
+				</div>
+			</div>
+	</div>
+   <div class="modal-footer">
+       <button wicket:id="submitAvalista" type="submit" class="btn btn-primary"><span class="fa fa-save"></span>&nbsp;SALVAR</button>
+       <button type="button" style="margin-right: 5px;" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
+   </div>
+  </form>
 </wicket:panel>

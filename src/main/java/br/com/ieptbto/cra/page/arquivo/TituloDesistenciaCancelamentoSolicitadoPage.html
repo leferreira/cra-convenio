@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<meta charset="UTF8">
+</head>
+<body>
+	<wicket:extend>
+		<div class="panel">
+			<div class="panel-body">
+					<form wicket:id="form">
+						<h4 class="titulo-top">
+						SOLICITAÇÃO DE DESIST&Eacute;NCIA E CANCELAMENTO DO T&Iacute;TULO
+						<span class="pull-right">
+							<button type="submit" class="btn btn-primary">
+								<span class="fa fa-send-o"></span>&nbsp;SOLICITAR <span
+									wicket:id="tipoSolicitacao"></span>
+							</button>
+						</span>
+					</h4>
+					</form>
+					<br style="clear: both;">
+					<div class="col-md-6">
+						<div class="table-responsive well well-sm">
+							<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS
+								DO T&Iacute;TULO E DEVEDOR</span>
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="col-right valor historico">N&Uacute;MERO
+											T&iacute;TULO:</td>
+										<td><span class="info-titulo" wicket:id="numeroTitulo"
+											style="font-size: 13px;"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">NOME DEVEDOR:</td>
+										<td><span wicket:id="nomeDevedor"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">CPF/CNPJ:</td>
+										<td><span wicket:id="documentoDevedor"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">ESP&Eacute;CIE:</td>
+										<td><span wicket:id="especieTitulo"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">EMISS&Atilde;O:</td>
+										<td><span wicket:id="dataEmissaoTitulo"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">VENCIMENTO:</td>
+										<td><span wicket:id="dataVencimentoTitulo"></span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="table-responsive well well-sm">
+							<span style="font-size: 16px; font-weight: bolder; float: left;">DADOS
+								DO PROTOCOLO E VALORES</span>
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="col-right valor historico">SITUA&Ccedil;&Atilde;O:</td>
+										<td><span class="info-titulo" wicket:id="situacaoTitulo"
+											style="font-size: 13px;"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">PROTOCOLO:</td>
+										<td><span wicket:id="numeroProtocoloCartorio"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">DATA PROTOCOLO:</td>
+										<td><span wicket:id="dataProtocolo"></span></td>
+									</tr>
+									<tr >
+										<td class="col-right valor historico">DATA
+											OCORR&Egrave;NCIA:</td>
+										<td><span wicket:id="dataOcorrencia"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">PRA&Ccedil;A
+											PROTESTO:</td>
+										<td><span wicket:id="pracaProtesto"></span></td>
+									</tr>
+									<tr style="display: none;">
+										<td class="col-right valor historico">VALOR DO
+											T&Iacute;TULO:</td>
+										<td><span wicket:id="valorTitulo" class="destaque"></span></td>
+									</tr>
+									<tr>
+										<td class="col-right valor historico">SALDO T&iacute;TULO:</td>
+										<td><span wicket:id="saldoTitulo" class="destaque"></span></td>
+									</tr>
+									<tr style="display: none;">
+										<td class="col-right valor historico">GRAVA&Ccedil;&Atilde;O
+											ELETR&Ograve;:</td>
+										<td><span wicket:id="valorGravacaoEletronica"
+											class="destaque"></span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+			</div>
+		</div>
+	</wicket:extend>
+</body>
+</html>
