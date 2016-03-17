@@ -54,278 +54,279 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-	
-	@SpringBean
-	private RemessaMediator remessaMediator;
-	@SpringBean
-	private TituloFiliadoMediator tituloFiliadoMediator;
-	@SpringBean
-	private MunicipioMediator municipioMediator;
-	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
-	private UsuarioFiliado usuarioFiliado;
-	private Arquivo arquivo;
-	private List<TituloFiliado> titulosFiliado;
-	
-	public HomePage() {
-		this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());;
-		
-		carregarHomeConvenioEAssociados();
-		carregarContratoEntradaDeTitulos();
-		
-		add(carregarDivHomeFiliado());
-		add(carregarDivHomeConvenio());
+    /***/
+    private static final long serialVersionUID = 1L;
+
+    @SpringBean
+    private RemessaMediator remessaMediator;
+    @SpringBean
+    private TituloFiliadoMediator tituloFiliadoMediator;
+    @SpringBean
+    private MunicipioMediator municipioMediator;
+    @SpringBean
+    private UsuarioFiliadoMediator usuarioFiliadoMediator;
+    private UsuarioFiliado usuarioFiliado;
+    private Arquivo arquivo;
+    private List<TituloFiliado> titulosFiliado;
+
+    public HomePage() {
+	this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
+	;
+
+	carregarHomeConvenioEAssociados();
+	carregarContratoEntradaDeTitulos();
+
+	add(carregarDivHomeFiliado());
+	add(carregarDivHomeConvenio());
+    }
+
+    private void carregarHomeConvenioEAssociados() {
+	if (getUsuarioFiliado() == null) {
+	    this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
+	    this.titulosFiliado = new ArrayList<TituloFiliado>();
+	} else {
+	    this.arquivo = new Arquivo();
+	    this.titulosFiliado = tituloFiliadoMediator.buscarTitulosParaEnvio(getEmpresaFiliado(), null);
 	}
-	
-	private void carregarHomeConvenioEAssociados() {
-		if (getUsuarioFiliado() == null) {
-			this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
-			this.titulosFiliado = new ArrayList<TituloFiliado>();
+    }
+
+    private WebMarkupContainer carregarDivHomeConvenio() {
+	WebMarkupContainer divConvenio = new WebMarkupContainer("divAssociado");
+	divConvenio.setOutputMarkupId(true);
+
+	if (getUsuarioFiliado() != null) {
+	    divConvenio.setVisible(false);
+	}
+	divConvenio.add(labelQuantidadeRemessasPendentes());
+	divConvenio.add(listaConfirmacoesPendentes());
+	divConvenio.add(linkConfirmacoesPendentes());
+	return divConvenio;
+    }
+
+    private WebMarkupContainer carregarDivHomeFiliado() {
+	WebMarkupContainer divFiliado = new WebMarkupContainer("divFiliado");
+
+	if (getUsuarioFiliado() == null) {
+	    divFiliado.setVisible(false);
+	}
+	divFiliado.add(labelQuantidadeTitulosPendentes());
+	divFiliado.add(listaTitulosPendentes());
+	divFiliado.add(linkTitulosPendentes());
+	return divFiliado;
+    }
+
+    private Label labelQuantidadeRemessasPendentes() {
+	int quantidade = 0;
+	if (getConfirmacoesPendentes() != null) {
+	    quantidade = getConfirmacoesPendentes().size();
+	}
+	return new Label("qtdRemessas", quantidade);
+    }
+
+    private ListView<Remessa> listaConfirmacoesPendentes() {
+	return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    protected void populateItem(ListItem<Remessa> item) {
+		final Remessa remessa = item.getModelObject();
+		Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    @Override
+		    public void onClick() {
+			setResponsePage(new TitulosArquivoConvenioPage(remessa.getArquivo()));
+		    }
+		};
+		linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
+		item.add(linkArquivo);
+
+		if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
+		    String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
+		    item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
 		} else {
-			this.arquivo = new Arquivo();
-			this.titulosFiliado = tituloFiliadoMediator.buscarTitulosParaEnvio(getEmpresaFiliado(), null);
+		    item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 		}
-	}
+		item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
+		item.add(downloadArquivoTXT(remessa));
+	    }
 
-	private WebMarkupContainer carregarDivHomeConvenio() {
-		WebMarkupContainer divConvenio = new WebMarkupContainer("divAssociado");
-		divConvenio.setOutputMarkupId(true);
-		
-		if (getUsuarioFiliado() != null) {
-			divConvenio.setVisible(false);
-		}
-		divConvenio.add(labelQuantidadeRemessasPendentes());
-		divConvenio.add(listaConfirmacoesPendentes());
-		divConvenio.add(linkConfirmacoesPendentes());
-		return divConvenio;
-	}
+	    private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
+		return new Link<Remessa>("downloadArquivo") {
 
+		    /***/
+		    private static final long serialVersionUID = 1L;
 
-	private WebMarkupContainer carregarDivHomeFiliado() {
-		WebMarkupContainer divFiliado = new WebMarkupContainer("divFiliado");
-		
-		if (getUsuarioFiliado() == null) {
-			divFiliado.setVisible(false);
-		}
-		divFiliado.add(labelQuantidadeTitulosPendentes());
-		divFiliado.add(listaTitulosPendentes());
-		divFiliado.add(linkTitulosPendentes());
-		return divFiliado;
-	}
-	
-	private Label labelQuantidadeRemessasPendentes() {
-		int quantidade = 0;
-		if (getConfirmacoesPendentes() != null) {
-			quantidade = getConfirmacoesPendentes().size();
-		}
-		return new Label("qtdRemessas", quantidade);
-	}
-	
-	private ListView<Remessa> listaConfirmacoesPendentes() {
-		return new ListView<Remessa>("listConfirmacoes", getConfirmacoesPendentes()) {
+		    @Override
+		    public void onClick() {
+			try {
+			    getApplication().getResourceSettings().getPropertiesFactory().clearCache();
 
-			/***/
-			private static final long serialVersionUID = 1L;
+			    File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+			    IResourceStream resourceStream = new FileResourceStream(file);
 
-			@Override
-			protected void populateItem(ListItem<Remessa> item) {
-				final Remessa remessa = item.getModelObject();
-				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new TitulosArquivoConvenioPage(remessa.getArquivo()));
-					}
-				};
-				linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
-				item.add(linkArquivo);
-				
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
-					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
-					item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
-				} else {
-					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
-				}
-				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
-				item.add(downloadArquivoTXT(remessa));
+			    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));
+			} catch (InfraException ex) {
+			    getFeedbackPanel().error(ex.getMessage());
+			} catch (Exception e) {
+			    getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
 			}
-			
-			private Link<Remessa> downloadArquivoTXT(final Remessa remessa) {
-				return new Link<Remessa>("downloadArquivo") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						try {
-							getApplication().getResourceSettings().getPropertiesFactory().clearCache();
-							
-							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
-							IResourceStream resourceStream = new FileResourceStream(file);
-	
-							getRequestCycle().scheduleRequestHandlerAfterCurrent(
-							        new ResourceStreamRequestHandler(resourceStream, file.getName()));
-						} catch (InfraException ex) {
-							getFeedbackPanel().error(ex.getMessage());
-						} catch (Exception e) {
-							getFeedbackPanel().error("Não foi possível baixar o arquivo ! \n Entre em contato com a CRA ");
-						}
-					}
-				};
-			}
+		    }
 		};
-	}
-	
-	private Link<Remessa> linkConfirmacoesPendentes() {
-		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
+	    }
+	};
+    }
 
-			/***/
-			private static final long serialVersionUID = 1L; 
+    private Link<Remessa> linkConfirmacoesPendentes() {
+	return new Link<Remessa>("arquivosConfirmacoesPendetes") {
 
-			@Override
-			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesConvenioPage(getUser(), getConfirmacoesPendentes()));
-			}
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public void onClick() {
+		setResponsePage(new ListaArquivosPendentesConvenioPage(getUser(), getConfirmacoesPendentes()));
+	    }
+	};
+    }
+
+    private Link<TituloFiliado> linkTitulosPendentes() {
+	return new Link<TituloFiliado>("linkTitulos") {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    public void onClick() {
+		setResponsePage(new EnviarTitulosPage());
+	    }
+	};
+    }
+
+    private ListView<TituloFiliado> listaTitulosPendentes() {
+	return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliado()) {
+
+	    /***/
+	    private static final long serialVersionUID = 1L;
+
+	    @Override
+	    protected void populateItem(ListItem<TituloFiliado> item) {
+		final TituloFiliado tituloLista = item.getModelObject();
+
+		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
+		Link<String> linkAlterar = new Link<String>("linkAlterar") {
+
+		    /***/
+		    private static final long serialVersionUID = 1L;
+
+		    @Override
+		    public void onClick() {
+			setResponsePage(new EntradaManualPage(tituloLista));
+		    }
 		};
-	}
-	
-	private Link<TituloFiliado> linkTitulosPendentes() {
-		return new Link<TituloFiliado>("linkTitulos") {
-			
-			/***/
-			private static final long serialVersionUID = 1L;
+		linkAlterar.add(new Label("devedor", tituloLista.getNomeDevedor()));
+		item.add(linkAlterar);
+		item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(tituloLista.getDataEntrada(), new Date())));
+	    }
+	};
+    }
 
-			@Override
-			public void onClick() {
-				setResponsePage(new EnviarTitulosPage());
-			}
-		};
+    private Label labelQuantidadeTitulosPendentes() {
+	int quantidade = 0;
+	if (getTitulosFiliado() != null) {
+	    quantidade = getTitulosFiliado().size();
 	}
+	return new Label("qtdTitulos", quantidade);
+    }
 
-	private ListView<TituloFiliado> listaTitulosPendentes() {
-		return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliado()) {
+    private void carregarContratoEntradaDeTitulos() {
 
-			/***/
-			private static final long serialVersionUID = 1L;
+	final ModalWindow modalContrato = new ModalWindow("modalContrato");
+	modalContrato.setPageCreator(new ModalWindow.PageCreator() {
 
-			@Override
-			protected void populateItem(ListItem<TituloFiliado> item) {
-				final TituloFiliado tituloLista = item.getModelObject();
-				
-				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				Link<String> linkAlterar = new Link<String>("linkAlterar") {
-					
-					/***/
-					private static final long serialVersionUID = 1L;
+	    /***/
+	    private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick() {
-						setResponsePage(new EntradaManualPage(tituloLista));
-					}
-				}; 
-				linkAlterar.add(new Label("devedor", tituloLista.getNomeDevedor()));
-				item.add(linkAlterar);
-				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(tituloLista.getDataEntrada(), new Date())));
-			}
-		};
-	}
+	    @Override
+	    public Page createPage() {
+		return new ContratoModal(HomePage.this.getPageReference(), modalContrato, getUser());
+	    }
+	});
+	modalContrato.setTitle(new Model<String>("Termos e Condições para Entrada de Títulos"));
+	modalContrato.setResizable(false);
+	modalContrato.setAutoSize(false);
+	modalContrato.setInitialWidth(80);
+	modalContrato.setInitialHeight(30);
+	modalContrato.setMinimalWidth(80);
+	modalContrato.setMinimalHeight(30);
+	modalContrato.setWidthUnit("em");
+	modalContrato.setHeightUnit("em");
+	add(modalContrato);
 
-	private Label labelQuantidadeTitulosPendentes() {
-		int quantidade = 0;
-		if (getTitulosFiliado() != null) {
-			quantidade = getTitulosFiliado().size();
-		}
-		return new Label("qtdTitulos", quantidade);
-	}
+	AjaxLink<?> openModal = new AjaxLink<Void>("showModal") {
 
-	private void carregarContratoEntradaDeTitulos() {
+	    /***/
+	    private static final long serialVersionUID = 1L;
 
-		final ModalWindow modalContrato = new ModalWindow("modalContrato");
-		modalContrato.setPageCreator(new ModalWindow.PageCreator() {
-            /***/
-			private static final long serialVersionUID = 1L;
+	    @Override
+	    public void onClick(AjaxRequestTarget target) {
+		modalContrato.show(target);
+	    }
+	};
+	if (!verificarAceiteUsuarioContrato()) {
+	    openModal.setMarkupId("showModal");
+	}
+	add(openModal);
+    }
 
-			@Override
-            public Page createPage() {
-                return new ContratoModal(HomePage.this.getPageReference(), modalContrato, getUser());
-            }
-	    });
-		modalContrato.setTitle(new Model<String>("Termos e Condições para Entrada de Títulos"));
-		modalContrato.setResizable(false);
-		modalContrato.setAutoSize(false);
-		modalContrato.setInitialWidth(80);
-		modalContrato.setInitialHeight(30);
-		modalContrato.setMinimalWidth(80);
-		modalContrato.setMinimalHeight(30);
-        modalContrato.setWidthUnit("em");
-        modalContrato.setHeightUnit("em");
-        add(modalContrato);
-		
-		AjaxLink<?> openModal = new AjaxLink<Void>("showModal"){
-            /***/
-			private static final long serialVersionUID = 1L;
+    private boolean verificarAceiteUsuarioContrato() {
+	UsuarioFiliado usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
+	if (usuarioFiliado != null) {
+	    return usuarioFiliado.isTermosContratoAceite();
+	}
+	return true;
+    }
 
-			@Override
-            public void onClick(AjaxRequestTarget target){
-            	modalContrato.show(target);
-            }
-		};
-		if (!verificarAceiteUsuarioContrato()) {
-			openModal.setMarkupId("showModal");
-		}
-		add(openModal);
-	}
-	
-	private boolean verificarAceiteUsuarioContrato(){
-		UsuarioFiliado usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
-		if (usuarioFiliado != null) {
-			return usuarioFiliado.isTermosContratoAceite();
-		} 
-		return true;
-	}
-	
-	public Arquivo getArquivo() {
-		return arquivo;
-	}
-	
-	private List<Remessa> getConfirmacoesPendentes() {
-		return arquivo.getRemessas();
-	}
-	
-	public HomePage(PageParameters parameters) {
-		error(parameters.get("error"));
-	}
-	
-	public UsuarioFiliado getUsuarioFiliado() {
-		return usuarioFiliado;
-	}
-	
-	private Filiado getEmpresaFiliado(){
-		return usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
-	}
-	
-	public List<TituloFiliado> getTitulosFiliado() {
-		if (titulosFiliado == null) {
-			titulosFiliado = new ArrayList<TituloFiliado>();
-		}
-		return titulosFiliado;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getTitulo() {
-		return "CRA - Central de Remessa de Arquivos";
-	}
+    public Arquivo getArquivo() {
+	return arquivo;
+    }
 
-	@Override
-	protected IModel<T> getModel() {
-		return null;
+    private List<Remessa> getConfirmacoesPendentes() {
+	return arquivo.getRemessas();
+    }
+
+    public HomePage(PageParameters parameters) {
+	error(parameters.get("error"));
+    }
+
+    public UsuarioFiliado getUsuarioFiliado() {
+	return usuarioFiliado;
+    }
+
+    private Filiado getEmpresaFiliado() {
+	return usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
+    }
+
+    public List<TituloFiliado> getTitulosFiliado() {
+	if (titulosFiliado == null) {
+	    titulosFiliado = new ArrayList<TituloFiliado>();
 	}
+	return titulosFiliado;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTitulo() {
+	return "CRA - Central de Remessa de Arquivos";
+    }
+
+    @Override
+    protected IModel<T> getModel() {
+	return null;
+    }
 }

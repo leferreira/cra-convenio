@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.arquivo;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +31,9 @@ import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.DesistenciaProtestoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * @author Thasso Araújo
@@ -58,8 +52,6 @@ public class ListaArquivosPendentesConvenioPage extends BasePage<Arquivo> {
     private CancelamentoProtestoMediator cancelamentoMediator;
     @SpringBean
     private AutorizacaoCancelamentoMediator autorizacaoMediator;
-    @SpringBean
-    private RelatorioMediator relatorioMediator;
     @SpringBean
     private InstituicaoMediator instituicaoMediator;
     private Arquivo arquivo;
@@ -148,26 +140,9 @@ public class ListaArquivosPendentesConvenioPage extends BasePage<Arquivo> {
 
 		    @Override
 		    public void onClick() {
-			TipoArquivoEnum tipoArquivo = remessa.getArquivo().getTipoArquivo().getTipoArquivo();
-			JasperPrint jasperPrint = null;
-
+			error("Não foi possível gerar o relatório ! Por favor entre com contato com o IEPTB-TO !");
 			try {
-			    if (tipoArquivo.equals(TipoArquivoEnum.REMESSA)) {
-				JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRemessa.jrxml"));
-				jasperPrint = relatorioMediator.relatorioRemessa(jasperReport, remessa, getUser().getInstituicao());
-			    } else if (tipoArquivo.equals(TipoArquivoEnum.CONFIRMACAO)) {
-				JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioConfirmação.jrxml"));
-				jasperPrint = relatorioMediator.relatorioConfirmacao(jasperReport, remessa, getUser().getInstituicao());
-			    } else if (tipoArquivo.equals(TipoArquivoEnum.RETORNO)) {
-				JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("../../relatorio/RelatorioRetorno.jrxml"));
-				jasperPrint = relatorioMediator.relatorioRetorno(jasperReport, remessa, getUser().getInstituicao());
-			    }
 
-			    File pdf = File.createTempFile("report", ".pdf");
-			    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-			    IResourceStream resourceStream = new FileResourceStream(pdf);
-			    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-				    + remessa.getArquivo().getNomeArquivo().replace(".", "_") + ".pdf"));
 			} catch (InfraException ex) {
 			    error(ex.getMessage());
 			} catch (Exception e) {
