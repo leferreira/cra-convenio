@@ -17,28 +17,35 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER, CraRoles.ADMIN })
-public class BuscarTitulosPage extends BasePage<TituloFiliado>{
+public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
+
 	private TituloFiliado tituloFiliado;
 	private UsuarioFiliado usuarioFiliado;
-	
+
 	public BuscarTitulosPage() {
 		this.tituloFiliado = new TituloFiliado();
 		this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
-		
-		carregarPanels();
+
+		adicionarComponentes();
 	}
-	
+
+	@Override
+	protected void adicionarComponentes() {
+		carregarPanels();
+
+	}
+
 	private void carregarPanels() {
-		
-		if (getUsuarioFiliado() == null){
+
+		if (getUsuarioFiliado() == null) {
 			add(new BuscarTitulosConvenioPanel("buscarTitulosPanel", getModel(), getUser().getInstituicao()));
-		} else if (getUsuarioFiliado() != null){
+		} else if (getUsuarioFiliado() != null) {
 			add(new BuscarTitulosFiliadoPanel("buscarTitulosPanel", getModel(), getUsuarioFiliado().getFiliado()));
 		}
 	}
@@ -46,7 +53,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado>{
 	public UsuarioFiliado getUsuarioFiliado() {
 		return usuarioFiliado;
 	}
-	
+
 	@Override
 	protected IModel<TituloFiliado> getModel() {
 		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);

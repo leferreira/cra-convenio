@@ -1,0 +1,208 @@
+package br.com.ieptbto.cra.page.desistenciaCancelamento;
+
+import java.util.Arrays;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import br.com.ieptbto.cra.component.label.DataUtil;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
+import br.com.ieptbto.cra.enumeration.TipoMotivoCancelamento;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+
+/**
+ * @author Thasso Araújo
+ *
+ */
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
+public class TituloSolicitacaoCancelamentoPage extends BasePage<TituloRemessa> {
+
+	/***/
+	private static final long serialVersionUID = 1L;
+
+	@SpringBean
+	TituloMediator tituloMediator;
+	@SpringBean
+	CancelamentoProtestoMediator cancelamentoProtestoMediator;
+
+	private TituloRemessa tituloRemessa;
+
+	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento;
+
+	public TituloSolicitacaoCancelamentoPage(TituloRemessa titulo) {
+		this.tituloRemessa = titulo;
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
+		informacoesTitulo();
+		formEnviarSolicitacao();
+
+	}
+
+	private void formEnviarSolicitacao() {
+		Form<TituloRemessa> form = new Form<TituloRemessa>("form", getModel()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit() {
+				TituloRemessa titulo = getModelObject();
+
+				try {
+					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_IRREGULARIDADE)) {
+						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
+					}
+					if (dropDownMotivoCancelamento.getModelObject().equals(TipoMotivoCancelamento.CANCELAMENTO_POR_PAGAMENTO)) {
+						titulo.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
+					}
+					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(titulo);
+					success("Solicitação de cancelamento efetuada com sucesso!");
+
+				} catch (InfraException ex) {
+					logger.error(ex.getMessage());
+					getFeedbackPanel().error(ex.getMessage());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					error("Não foi possível enviar a solicitação de cancelamento ! \n Entre em contato com o IEPTB ! ");
+				}
+			}
+		};
+		form.add(dropDownMotivoCancelamento());
+		form.add(numeroTituloModal());
+		form.add(nomeDevedorModal());
+		form.add(saldoTituloModal());
+		add(form);
+	}
+
+	private void informacoesTitulo() {
+		add(pracaProtesto());
+		add(status());
+		add(nomeSacadorVendedor());
+		add(documentoSacador());
+		add(nomeDevedor());
+		add(documentoDevedor());
+		add(numeroTitulo());
+		add(especieTitulo());
+		add(dataEmissaoTitulo());
+		add(dataVencimentoTitulo());
+		add(valorTitulo());
+		add(saldoTitulo());
+		add(numeroProtocoloCartorio());
+
+	}
+
+	private DropDownChoice<TipoMotivoCancelamento> dropDownMotivoCancelamento() {
+		IChoiceRenderer<TipoMotivoCancelamento> renderer = new ChoiceRenderer<TipoMotivoCancelamento>("label");
+		dropDownMotivoCancelamento = new DropDownChoice<TipoMotivoCancelamento>("tipoMotivo", new Model<TipoMotivoCancelamento>(),
+				Arrays.asList(TipoMotivoCancelamento.values()), renderer);
+		dropDownMotivoCancelamento.setLabel(new Model<String>("Motivo do Cancelameto"));
+		dropDownMotivoCancelamento.setOutputMarkupId(true);
+		dropDownMotivoCancelamento.setRequired(true);
+		return dropDownMotivoCancelamento;
+	}
+
+	private Label pracaProtesto() {
+		return new Label("pracaProtesto", new Model<String>(getTituloRemessa().getPracaProtesto()));
+	}
+
+	private Label status() {
+		return new Label("situacaoTitulo", new Model<String>(getTituloRemessa().getSituacaoTitulo()));
+	}
+
+	private Label numeroTitulo() {
+		return new Label("numeroTitulo", new Model<String>(getTituloRemessa().getNumeroTitulo()));
+	}
+
+	private Label numeroTituloModal() {
+		return new Label("numeroTituloModal", new Model<String>(getTituloRemessa().getNumeroTitulo()));
+	}
+
+	public Label saldoTituloModal() {
+		Label textField = new Label("saldoTituloModal", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
+		return textField;
+	}
+
+	private Label nomeDevedorModal() {
+		Label textField = new Label("nomeDevedorModal", new Model<String>(getTituloRemessa().getNomeDevedor()));
+		return textField;
+	}
+
+	private Label especieTitulo() {
+		return new Label("especieTitulo", new Model<String>(getTituloRemessa().getEspecieTitulo()));
+	}
+
+	private Label dataEmissaoTitulo() {
+		return new Label("dataEmissaoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataEmissaoTitulo())));
+	}
+
+	private Label dataVencimentoTitulo() {
+		return new Label("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
+	}
+
+	public Label valorTitulo() {
+		Label textField = new Label("valorTitulo", new Model<String>("R$ " + getTituloRemessa().getValorTitulo().toString()));
+		return textField;
+	}
+
+	public Label saldoTitulo() {
+		Label textField = new Label("saldoTitulo", new Model<String>("R$ " + getTituloRemessa().getSaldoTitulo().toString()));
+		return textField;
+	}
+
+	private Label numeroProtocoloCartorio() {
+		String numeroProtocolo = StringUtils.EMPTY;
+		if (getTituloRemessa().getConfirmacao() != null) {
+			numeroProtocolo = getTituloRemessa().getConfirmacao().getNumeroProtocoloCartorio();
+		}
+		return new Label("numeroProtocoloCartorio", new Model<String>(numeroProtocolo));
+	}
+
+	private Label nomeSacadorVendedor() {
+		Label textField = new Label("nomeSacadorVendedor", new Model<String>(getTituloRemessa().getNomeSacadorVendedor()));
+		return textField;
+	}
+
+	private Label documentoSacador() {
+		Label textField = new Label("documentoSacador", new Model<String>(getTituloRemessa().getDocumentoSacador()));
+		return textField;
+	}
+
+	private Label nomeDevedor() {
+		Label textField = new Label("nomeDevedor", new Model<String>(getTituloRemessa().getNomeDevedor()));
+		return textField;
+	}
+
+	private Label documentoDevedor() {
+		Label textField = new Label("documentoDevedor", new Model<String>(getTituloRemessa().getNumeroIdentificacaoDevedor()));
+		return textField;
+	}
+
+	private TituloRemessa getTituloRemessa() {
+		return tituloRemessa;
+	}
+
+	@Override
+	protected IModel<TituloRemessa> getModel() {
+		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
+	}
+}

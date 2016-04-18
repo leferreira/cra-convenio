@@ -49,114 +49,122 @@ import net.sf.jasperreports.engine.JasperPrint;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private UsuarioFiliadoMediator usuarioFiliadoMediator;
-    @SpringBean
-    private FiliadoMediator filiadoMediator;
-    @SpringBean
-    private InstituicaoMediator instituicaoMediator;
-    @SpringBean
-    private MunicipioMediator municipioMediator;
-    @SpringBean
-    private RemessaMediator remessaMediator;
-    private TituloFiliado titulo;
-    private Filiado filiado;
-    private TextField<LocalDate> dataEnvioInicio;
-    private TextField<LocalDate> dataEnvioFinal;
-    private RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo;
+	@SpringBean
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	@SpringBean
+	FiliadoMediator filiadoMediator;
+	@SpringBean
+	InstituicaoMediator instituicaoMediator;
+	@SpringBean
+	MunicipioMediator municipioMediator;
+	@SpringBean
+	RemessaMediator remessaMediator;
 
-    public RelatorioTitulosFiliadoPage() {
-	this.titulo = new TituloFiliado();
-	this.filiado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
+	private TituloFiliado titulo;
+	private Filiado filiado;
+	private TextField<LocalDate> dataEnvioInicio;
+	private TextField<LocalDate> dataEnvioFinal;
+	private RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo;
 
-	carregarFormulario();
-    }
+	public RelatorioTitulosFiliadoPage() {
+		this.titulo = new TituloFiliado();
+		this.filiado = usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser());
 
-    private void carregarFormulario() {
-	Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+		adicionarComponentes();
+	}
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+	@Override
+	protected void adicionarComponentes() {
+		carregarFormulario();
 
-	    @Override
-	    public void onSubmit() {
-		TituloFiliado titulo = getModelObject();
-		Filiado filiado = getFiliado();
-		Municipio municipio = titulo.getPracaProtesto();
-		SituacaoTituloRelatorio situacaoTipoRelatorio = radioSituacaoTitulo.getModelObject();
-		LocalDate dataInicio = null;
-		LocalDate dataFim = null;
+	}
 
-		if (dataEnvioInicio.getDefaultModelObject() != null) {
-		    if (dataEnvioFinal.getDefaultModelObject() != null) {
-			dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
-			dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
-			if (!dataInicio.isBefore(dataFim))
-			    if (!dataInicio.isEqual(dataFim))
-				error("A data de início deve ser antes da data fim.");
-		    } else
-			error("As duas datas devem ser preenchidas.");
-		}
+	private void carregarFormulario() {
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
 
-		try {
-		    JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosPorSituacaoFiliado(situacaoTipoRelatorio, filiado, municipio, dataInicio, dataFim);
-		    File pdf = File.createTempFile("report", ".pdf");
-		    JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
-		    IResourceStream resourceStream = new FileResourceStream(pdf);
-		    getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, "CRA_RELATORIO_"
-			    + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
+			/***/
+			private static final long serialVersionUID = 1L;
 
-		} catch (InfraException ex) {
-		    error(ex.getMessage());
-		} catch (Exception e) {
-		    error("Não foi possível gerar o relatório ! Entre em contato com o IEPTB-TO !");
-		    e.printStackTrace();
-		}
-	    }
-	};
-	form.add(dataEnvioInicio());
-	form.add(dataEnvioFinal());
-	form.add(pracaProtesto());
-	form.add(tipoRelatorio());
-	add(form);
-    }
+			@Override
+			public void onSubmit() {
+				TituloFiliado titulo = getModelObject();
+				Filiado filiado = getFiliado();
+				Municipio municipio = titulo.getPracaProtesto();
+				SituacaoTituloRelatorio situacaoTipoRelatorio = radioSituacaoTitulo.getModelObject();
+				LocalDate dataInicio = null;
+				LocalDate dataFim = null;
 
-    private TextField<LocalDate> dataEnvioInicio() {
-	dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
-	dataEnvioInicio.setLabel(new Model<String>("Período de Datas"));
-	dataEnvioInicio.setRequired(true);
-	return dataEnvioInicio;
-    }
+				if (dataEnvioInicio.getDefaultModelObject() != null) {
+					if (dataEnvioFinal.getDefaultModelObject() != null) {
+						dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
+						dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
+						if (!dataInicio.isBefore(dataFim))
+							if (!dataInicio.isEqual(dataFim))
+								error("A data de início deve ser antes da data fim.");
+					} else
+						error("As duas datas devem ser preenchidas.");
+				}
 
-    private TextField<LocalDate> dataEnvioFinal() {
-	return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
-    }
+				try {
+					JasperPrint jasperPrint =
+							new RelatorioUtil().gerarRelatorioTitulosPorSituacaoFiliado(situacaoTipoRelatorio, filiado, municipio, dataInicio, dataFim);
+					File pdf = File.createTempFile("report", ".pdf");
+					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));
+					IResourceStream resourceStream = new FileResourceStream(pdf);
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream,
+							"CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
 
-    private Component pracaProtesto() {
-	IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-	DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
-	return comboMunicipio;
-    }
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível gerar o relatório ! Entre em contato com o IEPTB-TO !");
+					e.printStackTrace();
+				}
+			}
+		};
+		form.add(dataEnvioInicio());
+		form.add(dataEnvioFinal());
+		form.add(pracaProtesto());
+		form.add(tipoRelatorio());
+		add(form);
+	}
 
-    private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio() {
-	IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
-	List<SituacaoTituloRelatorio> situacoes = new ArrayList<SituacaoTituloRelatorio>();
-	situacoes.add(SituacaoTituloRelatorio.GERAL);
-	radioSituacaoTitulo = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(), situacoes, renderer);
-	radioSituacaoTitulo.setRequired(true);
-	radioSituacaoTitulo.setLabel(new Model<String>("Situação dos Títulos"));
-	return radioSituacaoTitulo;
-    }
+	private TextField<LocalDate> dataEnvioInicio() {
+		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
+		dataEnvioInicio.setLabel(new Model<String>("Período de Datas"));
+		dataEnvioInicio.setRequired(true);
+		return dataEnvioInicio;
+	}
 
-    public Filiado getFiliado() {
-	return filiado;
-    }
+	private TextField<LocalDate> dataEnvioFinal() {
+		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+	}
 
-    @Override
-    protected IModel<TituloFiliado> getModel() {
-	return new CompoundPropertyModel<TituloFiliado>(titulo);
-    }
+	private Component pracaProtesto() {
+		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
+		return comboMunicipio;
+	}
+
+	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio() {
+		IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
+		List<SituacaoTituloRelatorio> situacoes = new ArrayList<SituacaoTituloRelatorio>();
+		situacoes.add(SituacaoTituloRelatorio.GERAL);
+		radioSituacaoTitulo = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(), situacoes, renderer);
+		radioSituacaoTitulo.setRequired(true);
+		radioSituacaoTitulo.setLabel(new Model<String>("Situação dos Títulos"));
+		return radioSituacaoTitulo;
+	}
+
+	public Filiado getFiliado() {
+		return filiado;
+	}
+
+	@Override
+	protected IModel<TituloFiliado> getModel() {
+		return new CompoundPropertyModel<TituloFiliado>(titulo);
+	}
 }

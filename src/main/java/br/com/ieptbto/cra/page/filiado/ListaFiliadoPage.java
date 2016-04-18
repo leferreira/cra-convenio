@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -20,66 +21,88 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@SuppressWarnings({ "rawtypes", "serial" })
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class ListaFiliadoPage extends BasePage<Filiado>{
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+public class ListaFiliadoPage extends BasePage<Filiado> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Filiado filiado;
-	
+
 	@SpringBean
 	FiliadoMediator filiadoMediator;
-	
+
 	public ListaFiliadoPage() {
-		carregarListaFiliadoPage();
+		adicionarComponentes();
 	}
-	
+
 	public ListaFiliadoPage(String mensagem) {
-		carregarListaFiliadoPage();
-		info(mensagem);
+		adicionarComponentes();
+		success(mensagem);
 	}
-	
-	private void carregarListaFiliadoPage(){
+
+	@Override
+	protected void adicionarComponentes() {
 		this.filiado = new Filiado();
-		add(new Link("botaoNovo") {
+		add(new Link<IncluirFiliadoPage>("botaoNovo") {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
 				setResponsePage(new IncluirFiliadoPage());
-            }
-        });
+			}
+		});
 		add(carregarListaFiliados());
+		// TODO Auto-generated method stub
+
 	}
-	
-	private ListView<Filiado> carregarListaFiliados(){
+
+	private ListView<Filiado> carregarListaFiliados() {
 		return new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Filiado> item) {
 				final Filiado filiado = item.getModelObject();
-				
-				Link linkAlterar = new Link("linkAlterar") {
+
+				Link<UsuarioFiliado> linkAlterar = new Link<UsuarioFiliado>("linkAlterar") {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
 						setResponsePage(new IncluirFiliadoPage(filiado));
-		            }
-				}; 
+					}
+				};
 				linkAlterar.add(new Label("nome", filiado.getRazaoSocial()));
 				item.add(linkAlterar);
-				
+
 				item.add(new Label("documento", filiado.getCnpjCpf()));
 				item.add(new Label("cidade", filiado.getMunicipio().getNomeMunicipio()));
 				item.add(new Label("uf", filiado.getUf()));
-				item.add(new Label("ativo", verificarSituacao(filiado.isAtivo()) ));
+				item.add(new Label("ativo", verificarSituacao(filiado.isAtivo())));
 			}
 		};
 	}
-	
-	private String verificarSituacao(Boolean ativo){ 
+
+	private String verificarSituacao(Boolean ativo) {
 		if (ativo.equals(true))
 			return "Sim";
 		return "Não";
 	}
-	
+
 	@Override
 	protected IModel<Filiado> getModel() {
 		return new CompoundPropertyModel<Filiado>(filiado);

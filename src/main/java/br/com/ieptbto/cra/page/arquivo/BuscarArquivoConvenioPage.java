@@ -29,10 +29,15 @@ public class BuscarArquivoConvenioPage extends BasePage<Arquivo> {
 	public BuscarArquivoConvenioPage() {
 		this.arquivo = new Arquivo();
 		this.instituicao = getUser().getInstituicao();
-		
-		adicionarFormulario();
+		adicionarComponentes();
 	}
-	
+
+	@Override
+	protected void adicionarComponentes() {
+		adicionarFormulario();
+
+	}
+
 	private void adicionarFormulario() {
 		Form<Arquivo> form = new Form<Arquivo>("form", getModel());
 		form.add(new BuscarArquivoConvenioPanel("buscarArquivoInputPanel", getModel(), getInstituicao()));

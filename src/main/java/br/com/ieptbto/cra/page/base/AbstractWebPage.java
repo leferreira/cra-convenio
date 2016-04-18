@@ -20,65 +20,60 @@ import br.com.ieptbto.cra.security.UserSession;
  */
 public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends WebPage implements IHeaderContributor {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    /** * Wicket-ID do feedback panel. */
-    protected static final String WID_FEEDBACK = "feedback";
-    @SpringBean
-    private UsuarioMediator usuarioMediator;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** * Wicket-ID do feedback panel. */
+	protected static final String WID_FEEDBACK = "feedback";
+	@SpringBean
+	private UsuarioMediator usuarioMediator;
 
-    /**
-     * Construtor padrao.
-     */
-    public AbstractWebPage() {
-	super();
-	adicionarComponentes();
-    }
+	/**
+	 * Construtor padrao.
+	 */
+	public AbstractWebPage() {
+		super();
+	}
 
-    /**
-     * Constructor.
-     * 
-     * @param model
-     *            See Component
-     * @see Component#Component(String, IModel)
-     */
-    public AbstractWebPage(IModel<?> model) {
-	super(model);
-	adicionarComponentes();
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param model
+	 *            See Component
+	 * @see Component#Component(String, IModel)
+	 */
+	public AbstractWebPage(IModel<?> model) {
+		super(model);
+	}
 
-    @Override
-    protected void onInitialize() {
-	super.onInitialize();
-    }
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+	}
 
-    protected void adicionarComponentes() {
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public UserSession<Usuario> getSession() {
+		return (UserSession<Usuario>) super.getSession();
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public UserSession<Usuario> getSession() {
-	return (UserSession<Usuario>) super.getSession();
-    }
+	/**
+	 * Retorna o usuario corrente.
+	 * 
+	 * @return {@link Colaborador}
+	 */
+	public Usuario getUser() {
+		return usuarioMediator.buscarUsuarioPorPK(getSession().getUser());
+	}
 
-    /**
-     * Retorna o usuario corrente.
-     * 
-     * @return {@link Colaborador}
-     */
-    public Usuario getUser() {
-	return usuarioMediator.buscarUsuarioPorPK(getSession().getUser());
-    }
-
-    /**
-     * Recupera o {@link FeedbackPanel} da pagina.
-     * 
-     * @return {@link FeedbackPanel}
-     */
-    public FeedbackPanel getFeedbackPanel() {
-	return (FeedbackPanel) get(WID_FEEDBACK);
-    }
+	/**
+	 * Recupera o {@link FeedbackPanel} da pagina.
+	 * 
+	 * @return {@link FeedbackPanel}
+	 */
+	public FeedbackPanel getFeedbackPanel() {
+		return (FeedbackPanel) get(WID_FEEDBACK);
+	}
 
 }

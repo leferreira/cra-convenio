@@ -38,7 +38,7 @@ import br.com.ieptbto.cra.util.EmailValidator;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	/***/
@@ -46,38 +46,44 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private static final Logger logger = Logger.getLogger(IncluirUsuarioFiliadoPage.class);
 
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
+	FiliadoMediator filiadoMediator;
 	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	private UsuarioMediator usuarioMediator;
+	UsuarioMediator usuarioMediator;
 	@SpringBean
-	private GrupoUsuarioMediator grupoUsuarioMediator;
+	GrupoUsuarioMediator grupoUsuarioMediator;
+
 	private UsuarioFiliado usuarioFiliado;
 	private String senhaAtual;
 
 	public IncluirUsuarioFiliadoPage() {
 		this.usuarioFiliado = new UsuarioFiliado();
-		carregarFormulario();
+		adicionarComponentes();
 	}
 
 	public IncluirUsuarioFiliadoPage(UsuarioFiliado usuario) {
 		this.usuarioFiliado = usuario;
 		this.senhaAtual = usuario.getUsuario().getSenha();
-		
+		adicionarComponentes();
+	}
+
+	@Override
+	protected void adicionarComponentes() {
 		carregarFormulario();
+
 	}
 
 	private void carregarFormulario() {
-		Form<UsuarioFiliado> form = new Form<UsuarioFiliado>("form", getModel()){
-			
+		Form<UsuarioFiliado> form = new Form<UsuarioFiliado>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 				UsuarioFiliado usuarioFiliado = getModelObject();
-				
+
 				try {
 					if (getModelObject().getId() != 0) {
 						if (usuarioFiliado.getUsuario().getSenha() != null) {
@@ -91,13 +97,13 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 						usuarioFiliado.setTermosContratoAceite(false);
 						usuarioFiliado.getUsuario().setInstituicao(getUser().getInstituicao());
 						usuarioFiliado.getUsuario().setGrupoUsuario(grupoUsuarioMediator.buscarGrupo("Usuário"));
-						if(usuarioMediator.isSenhasIguais(usuarioFiliado.getUsuario())){
+						if (usuarioMediator.isSenhasIguais(usuarioFiliado.getUsuario())) {
 							if (usuarioMediator.isLoginNaoExiste(usuarioFiliado.getUsuario())) {
 								usuarioFiliadoMediator.salvarUsuarioFiliado(usuarioFiliado);
 								setResponsePage(new ListaUsuarioFiliadoPage("Os dados do usuário foram salvos com sucesso!"));
-							} else 
+							} else
 								throw new InfraException("Usuário não criado. O login já existe!");
-						}else{
+						} else {
 							throw new InfraException("As senhas não são iguais!");
 						}
 					}
@@ -169,23 +175,24 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		DropDownChoice<Filiado> comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		DropDownChoice<Filiado> comboFiliado =
+				new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
 		comboFiliado.setLabel(new Model<String>("Filiado"));
 		comboFiliado.setRequired(true);
-		return comboFiliado;		
+		return comboFiliado;
 	}
-	
+
 	private boolean verificarExistencia() {
 		if (usuarioFiliado.getId() == 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public String getSenhaAtual() {
 		return senhaAtual;
 	}
-	
+
 	@Override
 	protected IModel<UsuarioFiliado> getModel() {
 		return new CompoundPropertyModel<UsuarioFiliado>(usuarioFiliado);

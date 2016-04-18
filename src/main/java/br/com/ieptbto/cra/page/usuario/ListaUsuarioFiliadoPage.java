@@ -22,7 +22,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	@SpringBean
@@ -31,24 +31,25 @@ public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 	private UsuarioFiliado usuario;
 
 	public ListaUsuarioFiliadoPage() {
-		carregarCampos();
+		adicionarComponentes();
 	}
 
 	public ListaUsuarioFiliadoPage(String mensagem) {
-		carregarCampos();
-		info(mensagem);
+		adicionarComponentes();
+		success(mensagem);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void carregarCampos() {
+	@Override
+	protected void adicionarComponentes() {
 		usuario = new UsuarioFiliado();
-		add(new Link("botaoNovo") {
+		add(new Link<UsuarioFiliado>("botaoNovo") {
 
 			public void onClick() {
 				setResponsePage(new IncluirUsuarioFiliadoPage());
 			}
 		});
 		add(carregarListaUsuario());
+
 	}
 
 	@SuppressWarnings("rawtypes")

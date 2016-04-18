@@ -6,26 +6,26 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.app.IWebApplication;
+import br.com.ieptbto.cra.component.label.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.page.login.LoginPage;
 import br.com.ieptbto.cra.page.login.TrocaSenhaPanel;
-import br.com.ieptbto.cra.processador.ProcessadorArquivo;
 
 /**
  * 
  * @author Leandro
  * 
- * @param <T extends AbstractEntidade<T>>
+ * @param <T
+ *            extends AbstractEntidade<T>>
  */
 public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWebPage<T> {
 
 	/****/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ProcessadorArquivo.class);
+	protected static final Logger logger = Logger.getLogger(BasePage.class);
 	protected static final String WID_MENU = "menu";
 	private static final String SAUDACAO = "userGreeting";
 	private static final String URL_LOGOUT = "url_logout";
@@ -33,7 +33,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	public BasePage(IModel<?> model) {
 		super(model);
 		addComponentesBase();
-
+		adicionarComponentes();
 	}
 
 	public BasePage() {
@@ -46,10 +46,10 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		if (StringUtils.isNotBlank(getUser().getNome())) {
 			if (getUser().getNome().length() > 15) {
 				nome = getUser().getNome().substring(0, 15);
-			} else 
+			} else
 				nome = getUser().getNome();
 		}
-		
+
 		add(new Label(SAUDACAO, nome));
 
 		addFeedbackPanel();
@@ -77,7 +77,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	}
 
 	private void addFeedbackPanel() {
-		FeedbackPanel feedBackPanel = new FeedbackPanel(WID_FEEDBACK);
+		CustomFeedbackPanel feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
 		add(feedBackPanel);
 	}
@@ -105,6 +105,8 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	public String getTitulo() {
 		return "CRA - Central de Remessa de Arquivos";
 	}
+
+	protected abstract void adicionarComponentes();
 
 	protected abstract IModel<T> getModel();
 

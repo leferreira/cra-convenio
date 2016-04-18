@@ -3,8 +3,8 @@
 	<property name="ireport.zoom" value="3.138428376721022"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="DATA_INICIO" class="java.util.Date"/>
-	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="DATA_INICIO" class="java.sql.Date"/>
+	<parameter name="DATA_FIM" class="java.sql.Date"/>
 	<parameter name="TOTAL_TITULOS" class="java.lang.Long"/>
 	<parameter name="AGENCIA_CODIGO_CEDENTE" class="java.lang.String"/>
 	<parameter name="PRACA_PROTESTO" class="java.lang.String"/>

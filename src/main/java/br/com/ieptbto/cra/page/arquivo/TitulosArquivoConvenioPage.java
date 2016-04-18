@@ -32,136 +32,139 @@ import br.com.ieptbto.cra.util.DataUtil;
  */
 public class TitulosArquivoConvenioPage extends BasePage<Arquivo> {
 
-    /***/
-    private static final long serialVersionUID = 1L;
+	/***/
+	private static final long serialVersionUID = 1L;
 
-    @SpringBean
-    private TituloMediator tituloMediator;
-    @SpringBean
-    private ArquivoMediator arquivoMediator;
-    private Arquivo arquivo;
-    private List<TituloRemessa> titulos;
+	@SpringBean
+	TituloMediator tituloMediator;
+	@SpringBean
+	ArquivoMediator arquivoMediator;
 
-    public TitulosArquivoConvenioPage(Arquivo arquivo) {
-	this.titulos = new ArrayList<TituloRemessa>();
-	this.arquivo = arquivo;
+	private Arquivo arquivo;
+	private List<TituloRemessa> titulos;
 
-	carregarInformacoes();
-    }
+	public TitulosArquivoConvenioPage(Arquivo arquivo) {
+		this.titulos = new ArrayList<TituloRemessa>();
+		this.arquivo = arquivo;
 
-    private void carregarInformacoes() {
-	add(nomeArquivo());
-	add(tipoArquivo());
-	add(instituicaoEnvio());
-	add(instituicaoDestino());
-	add(dataEnvio());
-	add(usuarioEnvio());
-	add(carregarListaTitulos());
-	add(botaoGerarRelatorio());
-	add(downloadArquivoTXT(getArquivo()));
-    }
+		adicionarComponentes();
+	}
 
-    private ListView<TituloRemessa> carregarListaTitulos() {
-	return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
+	@Override
+	protected void adicionarComponentes() {
+		add(nomeArquivo());
+		add(tipoArquivo());
+		add(instituicaoEnvio());
+		add(instituicaoDestino());
+		add(dataEnvio());
+		add(usuarioEnvio());
+		add(carregarListaTitulos());
+		add(botaoGerarRelatorio());
+		add(downloadArquivoTXT(getArquivo()));
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+	}
 
-	    @Override
-	    protected void populateItem(ListItem<TituloRemessa> item) {
-		final TituloRemessa tituloLista = item.getModelObject();
-		item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-		item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
-		if (tituloLista.getConfirmacao() != null) {
-		    item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
-		} else if (tituloLista.getRetorno() != null) {
-		    item.add(new Label("protocolo", tituloLista.getRetorno().getNumeroProtocoloCartorio()));
-		} else {
-		    item.add(new Label("protocolo", StringUtils.EMPTY));
-		}
-		item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
-		item.add(new Label("praca", tituloLista.getPracaProtesto()));
-		item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
-		item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
-	    }
-	};
-    }
+	private ListView<TituloRemessa> carregarListaTitulos() {
+		return new ListView<TituloRemessa>("listViewTituloArquivo", getTitulos()) {
 
-    private Link<Arquivo> botaoGerarRelatorio() {
-	return new Link<Arquivo>("gerarRelatorio") {
+			/***/
+			private static final long serialVersionUID = 1L;
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+			@Override
+			protected void populateItem(ListItem<TituloRemessa> item) {
+				final TituloRemessa tituloLista = item.getModelObject();
+				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
+				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
+				if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				} else if (tituloLista.getRetorno() != null) {
+					item.add(new Label("protocolo", tituloLista.getRetorno().getNumeroProtocoloCartorio()));
+				} else {
+					item.add(new Label("protocolo", StringUtils.EMPTY));
+				}
+				item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+				item.add(new Label("praca", tituloLista.getPracaProtesto()));
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getValorTitulo()));
+				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
+			}
+		};
+	}
 
-	    @Override
-	    public void onClick() {
-		error("Não foi possível gerar o relatório ! Por favor entre com contato com o IEPTB-TO !");
-		try {
+	private Link<Arquivo> botaoGerarRelatorio() {
+		return new Link<Arquivo>("gerarRelatorio") {
 
-		} catch (InfraException ex) {
-		    error(ex.getMessage());
-		} catch (Exception e) {
-		    error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
-		    e.printStackTrace();
-		}
-	    }
-	};
-    }
+			/***/
+			private static final long serialVersionUID = 1L;
 
-    private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
-	return new Link<Arquivo>("downloadArquivo") {
+			@Override
+			public void onClick() {
+				error("Não foi possível gerar o relatório ! Por favor entre com contato com o IEPTB-TO !");
+				try {
 
-	    /***/
-	    private static final long serialVersionUID = 1L;
+				} catch (InfraException ex) {
+					error(ex.getMessage());
+				} catch (Exception e) {
+					error("Não foi possível gerar o relatório do arquivo ! Entre em contato com a CRA !");
+					e.printStackTrace();
+				}
+			}
+		};
+	}
 
-	    @Override
-	    public void onClick() {
-		File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
-		IResourceStream resourceStream = new FileResourceStream(file);
+	private Link<Arquivo> downloadArquivoTXT(final Arquivo arquivo) {
+		return new Link<Arquivo>("downloadArquivo") {
 
-		getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
-	    }
-	};
-    }
+			/***/
+			private static final long serialVersionUID = 1L;
 
-    private Label nomeArquivo() {
-	return new Label("nomeArquivo", getArquivo().getNomeArquivo());
-    }
+			@Override
+			public void onClick() {
+				File file = arquivoMediator.baixarArquivoTXT(getUser().getInstituicao(), arquivo);
+				IResourceStream resourceStream = new FileResourceStream(file);
 
-    private Label tipoArquivo() {
-	return new Label("tipo", getArquivo().getTipoArquivo().getTipoArquivo().getLabel());
-    }
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, arquivo.getNomeArquivo()));
+			}
+		};
+	}
 
-    private Label instituicaoEnvio() {
-	return new Label("instituicaoEnvio", getArquivo().getInstituicaoEnvio().getNomeFantasia());
-    }
+	private Label nomeArquivo() {
+		return new Label("nomeArquivo", getArquivo().getNomeArquivo());
+	}
 
-    private Label instituicaoDestino() {
-	return new Label("instituicaoDestino", getArquivo().getInstituicaoRecebe().getNomeFantasia());
-    }
+	private Label tipoArquivo() {
+		return new Label("tipo", getArquivo().getTipoArquivo().getTipoArquivo().getLabel());
+	}
 
-    private Label usuarioEnvio() {
-	return new Label("usuario", getArquivo().getUsuarioEnvio().getNome());
-    }
+	private Label instituicaoEnvio() {
+		return new Label("instituicaoEnvio", getArquivo().getInstituicaoEnvio().getNomeFantasia());
+	}
 
-    private Label dataEnvio() {
-	return new Label("dataEnvio", DataUtil.localDateToString(getArquivo().getDataEnvio()));
-    }
+	private Label instituicaoDestino() {
+		return new Label("instituicaoDestino", getArquivo().getInstituicaoRecebe().getNomeFantasia());
+	}
 
-    public Arquivo getArquivo() {
-	return arquivo;
-    }
+	private Label usuarioEnvio() {
+		return new Label("usuario", getArquivo().getUsuarioEnvio().getNome());
+	}
 
-    public void setArquivo(Arquivo arquivo) {
-	this.arquivo = arquivo;
-    }
+	private Label dataEnvio() {
+		return new Label("dataEnvio", DataUtil.localDateToString(getArquivo().getDataEnvio()));
+	}
 
-    private List<TituloRemessa> getTitulos() {
-	return titulos;
-    }
+	public Arquivo getArquivo() {
+		return arquivo;
+	}
 
-    @Override
-    protected IModel<Arquivo> getModel() {
-	return new CompoundPropertyModel<Arquivo>(arquivo);
-    }
+	public void setArquivo(Arquivo arquivo) {
+		this.arquivo = arquivo;
+	}
+
+	private List<TituloRemessa> getTitulos() {
+		return titulos;
+	}
+
+	@Override
+	protected IModel<Arquivo> getModel() {
+		return new CompoundPropertyModel<Arquivo>(arquivo);
+	}
 }

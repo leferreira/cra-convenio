@@ -19,7 +19,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
@@ -36,55 +35,59 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER})
-public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	
+
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
+	FiliadoMediator filiadoMediator;
 	@SpringBean
-	private InstituicaoMediator instituicaoMediator;
+	InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	@SpringBean
-	private RemessaMediator remessaMediator;
+	RemessaMediator remessaMediator;
+
 	private TituloFiliado titulo;
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private SituacaoTituloRelatorio tipoRelatorio;
-	
+
 	public RelatorioTitulosConvenioPage() {
 		this.titulo = new TituloFiliado();
-		
-		carregarFormulario();
+
+		adicionarComponentes();
 	}
-	
+
+	@Override
+	protected void adicionarComponentes() {
+		carregarFormulario();
+
+	}
+
 	private void carregarFormulario() {
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()){
-			
+		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void onSubmit() {
-				TituloFiliado titulo = getModelObject();
-				SituacaoTituloRelatorio tipoRelatorio = getTipoRelatorio();
-				Instituicao instituicao = getUser().getInstituicao();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
-				
-				if (dataEnvioInicio.getDefaultModelObject() != null){
-					if (dataEnvioFinal.getDefaultModelObject() != null){
+
+				if (dataEnvioInicio.getDefaultModelObject() != null) {
+					if (dataEnvioFinal.getDefaultModelObject() != null) {
 						dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
 						dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
 						if (!dataInicio.isBefore(dataFim))
 							if (!dataInicio.isEqual(dataFim))
 								error("A data de início deve ser antes da data fim.");
-					}else
+					} else
 						error("As duas datas devem ser preenchidas.");
-				} 
+				}
 
 			}
 		};
@@ -102,30 +105,33 @@ public class RelatorioTitulosConvenioPage extends BasePage<TituloFiliado>  {
 		dataEnvioInicio.setRequired(true);
 		return dataEnvioInicio;
 	}
-	
-	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio(){
+
+	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio() {
 		IChoiceRenderer<SituacaoTituloRelatorio> renderer = new ChoiceRenderer<SituacaoTituloRelatorio>("label");
-		RadioChoice<SituacaoTituloRelatorio> radio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(tipoRelatorio), Arrays.asList(SituacaoTituloRelatorio.values()), renderer);
+		RadioChoice<SituacaoTituloRelatorio> radio = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio",
+				new Model<SituacaoTituloRelatorio>(tipoRelatorio), Arrays.asList(SituacaoTituloRelatorio.values()), renderer);
 		radio.setRequired(true);
 		radio.setLabel(new Model<String>("Situação dos Títulos"));
 		return radio;
 	}
-	
+
 	private TextField<LocalDate> dataEnvioFinal() {
 		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
 	}
 
 	private DropDownChoice<Filiado> comboFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		DropDownChoice<Filiado> comboFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
-		return comboFiliado;		
+		DropDownChoice<Filiado> comboFiliado =
+				new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		return comboFiliado;
 	}
+
 	private Component pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto" ,municipioMediator.getMunicipiosTocantins(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
 	}
-	
+
 	public SituacaoTituloRelatorio getTipoRelatorio() {
 		return tipoRelatorio;
 	}

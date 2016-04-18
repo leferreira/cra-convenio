@@ -7,10 +7,10 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
-	<parameter name="DATA_INICIO" class="java.util.Date">
+	<parameter name="DATA_INICIO" class="java.sql.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="DATA_FIM" class="java.util.Date">
+	<parameter name="DATA_FIM" class="java.sql.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="AGENCIA_CODIGO_CEDENTE" class="java.lang.String">

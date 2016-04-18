@@ -38,6 +38,7 @@ import br.com.ieptbto.cra.entidade.GrupoUsuario;
 import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
+import br.com.ieptbto.cra.entidade.LogCra;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
@@ -54,14 +55,12 @@ import br.com.ieptbto.cra.entidade.RodapeArquivo;
 import br.com.ieptbto.cra.entidade.RodapeCartorio;
 import br.com.ieptbto.cra.entidade.RodapeCnp;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamentoConvenio;
 import br.com.ieptbto.cra.entidade.StatusArquivo;
 import br.com.ieptbto.cra.entidade.TipoArquivo;
 import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloCnp;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.TituloSemTaxaCRA;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
@@ -87,6 +86,7 @@ public class AnnotatedClassesFactory {
 	 * Metodo responsavel por mapear classes Hibernate.
 	 */
 	private static void adicionarClassesHibernate() {
+		classesHibernate.add(LogCra.class);
 		classesHibernate.add(Usuario.class);
 		classesHibernate.add(GrupoUsuario.class);
 		classesHibernate.add(Instituicao.class);
@@ -122,7 +122,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(DesistenciaProtesto.class);
 		classesHibernate.add(PedidoDesistencia.class);
 		classesHibernate.add(LayoutFiliado.class);
-		classesHibernate.add(TituloSemTaxaCRA.class);
 		classesHibernate.add(Anexo.class);
 		classesHibernate.add(RemessaCancelamentoProtesto.class);
 		classesHibernate.add(RemessaAutorizacaoCancelamento.class);
@@ -130,13 +129,11 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(PedidoCancelamento.class);
 		classesHibernate.add(AutorizacaoCancelamento.class);
 		classesHibernate.add(PedidoAutorizacaoCancelamento.class);
-		classesHibernate.add(SolicitacaoDesistenciaCancelamentoConvenio.class);
 		classesHibernate.add(ArquivoCnp.class);
 		classesHibernate.add(RemessaCnp.class);
 		classesHibernate.add(CabecalhoCnp.class);
 		classesHibernate.add(TituloCnp.class);
-		classesHibernate.add(RodapeCnp.class); 
-
+		classesHibernate.add(RodapeCnp.class);
 		classesHibernate.add(Deposito.class);
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);
