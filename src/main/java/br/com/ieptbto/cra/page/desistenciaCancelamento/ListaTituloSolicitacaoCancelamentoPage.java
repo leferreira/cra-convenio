@@ -25,6 +25,7 @@ import br.com.ieptbto.cra.entidade.Retorno;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
@@ -42,6 +43,8 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 
 	@SpringBean
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	@SpringBean
+	TituloMediator tituloMediator;
 
 	private TituloRemessa tituloRemessa;
 	private Instituicao bancoConvenio;
@@ -68,6 +71,7 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 			@Override
 			protected void populateItem(ListItem<TituloRemessa> item) {
 				final TituloRemessa titulo = item.getModelObject();
+				titulo.setConfirmacao(tituloMediator.buscarConfirmacao(titulo));
 
 				item.add(new Label("numeroTitulo", titulo.getNumeroTitulo()));
 				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
