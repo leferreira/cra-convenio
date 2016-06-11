@@ -1,5 +1,5 @@
 @charset 'UTF-8';
- #3B7B3C #3B7B3C
+
 @import url("../font-awesome/css/font-awesome.min.css");
 /* Global Styles */
 
@@ -408,7 +408,7 @@ table.dataTable thead .sorting:after {
 	padding: 6px 12px;
 	margin-left: -1px;
 	line-height: 1.42857143;
-	color: #3B7B3C;
+	color: #337ab7;
 	text-decoration: none;
 	background-color: #fff;
 	border: 1px solid #ddd;
@@ -421,7 +421,7 @@ table.dataTable thead .sorting:after {
 	padding: 6px 12px;
 	margin-left: -1px;
 	line-height: 1.42857143;
-	color: #3B7B3C;
+	color: #337ab7;
 	text-decoration: none;
 	background-color: #fff;
 	border: 1px solid #ddd;
@@ -442,7 +442,7 @@ span.goto {
 	padding: 6px 12px;
 	margin-left: -1px;
 	line-height: 1.42857143;
-	color: #3B7B3C;
+	color: #337ab7;
 	text-decoration: none;
 	background-color: #fff;
 	border: 1px solid #ddd;

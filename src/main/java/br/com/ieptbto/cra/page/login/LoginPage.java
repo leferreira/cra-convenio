@@ -4,10 +4,10 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
+import br.com.ieptbto.cra.component.label.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 
@@ -20,7 +20,7 @@ import br.com.ieptbto.cra.page.base.AbstractWebPage;
 public class LoginPage extends AbstractWebPage<Usuario> {
 
 	private Usuario usuario;
-	private FeedbackPanel feedBackPanel;
+	private CustomFeedbackPanel feedBackPanel;
 
 	public LoginPage() {
 		inicializarObjetos();
@@ -32,7 +32,7 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 	}
 
 	private void adicionarCampos() {
-		feedBackPanel = new FeedbackPanel(WID_FEEDBACK);
+		feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
 
 		LoginForm loginForm = new LoginForm("loginForm", getModel());

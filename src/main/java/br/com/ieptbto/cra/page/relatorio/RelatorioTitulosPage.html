@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<div class="col-lg-12">
+			<h4 class="titulo-top">RELAT&Oacute;RIO DE T&Iacute;TULOS</h4>
+			<div class="col-md-12">
+				<div class="row">
+					<div class="alert alert-warning alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<span class="alert-link">OBS:</span> Os relatórios são de títulos já em processo para os
+						cartórios, portanto, não será incluso títulos com situação <span class="alert-link">AGUARDANDO
+							ENVIO</span> ou <span class="alert-link">ENVIADO</span>.
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8 col-md-offset-2">
+				<form wicket:id="form">
+					<div class="form-group">
+						<label>Período </label>
+						<div class="row">
+							<div class="col-xs-6">
+								<input id="date" name="date" maxlength="10" placeholder="__/__/____"
+									wicket:id="dataEnvioInicio" class="form-control">
+							</div>
+							<div class="col-xs-6">
+								<input id="date1" name="date1" maxlength="10" placeholder="__/__/____"
+									wicket:id="dataEnvioFinal" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Empresa Associada</label> <select wicket:id="filiado" class="form-control"></select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Município <small>(OPCIONAL)</small></label> <select wicket:id="pracaProtesto"
+										class="form-control"></select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Situação dos Títulos</label><br> <span wicket:id="tipoRelatorio"></span>
+					</div>
+					<div class="form-group">
+						<label>&nbsp;</label><br>
+						<button type="submit" class="btn btn-primary pull-right">
+							<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+						</button>
+					</div>
+					<br class="clear" />
+				</form>
+				<br class="clear" />
+			</div>
+			<br class="clear" />
+		</div>
+	</wicket:extend>
+</body>
+</html>

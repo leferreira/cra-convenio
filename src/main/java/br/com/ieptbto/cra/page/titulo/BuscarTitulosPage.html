@@ -2,16 +2,14 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 	<wicket:extend>
-		<div class="col-lg-12 col-md-6">
-			<div class="panel">
-				 <div class="panel-body">
-					<h4 class="titulo-top">BUSCAR T&Iacute;TULOS</h4>
-					<br style="clear: both;"/>
-						<div wicket:id="buscarTitulosPanel" id="buscarTitulosPanel"></div>
-						<wicket:child></wicket:child>
-				 </div>
-			 </div>
-	 	</div>
-	</wicket:extend> 
+		<div class="col-lg-12">
+			<h4 class="titulo-top">BUSCAR T&Iacute;TULOS</h4>
+			<form wicket:id="form">
+				<div wicket:id="buscarTitulosPanel" id="buscarTitulosPanel"></div>
+				<wicket:child></wicket:child>
+				<br class="clear" />
+			</form>
+		</div>
+	</wicket:extend>
 </body>
 </html>

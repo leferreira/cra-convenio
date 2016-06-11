@@ -6,7 +6,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -17,7 +17,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER, CraRoles.ADMIN })
-public class BuscarTitulosPage extends BasePage<TituloFiliado> {
+public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -25,11 +25,11 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
 
-	private TituloFiliado tituloFiliado;
+	private TituloRemessa tituloRemessa;
 	private UsuarioFiliado usuarioFiliado;
 
 	public BuscarTitulosPage() {
-		this.tituloFiliado = new TituloFiliado();
+		this.tituloRemessa = new TituloRemessa();
 		this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
 
 		adicionarComponentes();
@@ -37,25 +37,27 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 
 	@Override
 	protected void adicionarComponentes() {
-		carregarPanels();
+		formularioBuscarTitulo();
 
 	}
 
-	private void carregarPanels() {
+	private void formularioBuscarTitulo() {
+		BuscarTitulosFormBean bean = new BuscarTitulosFormBean();
+		BuscarTitulosForm form = new BuscarTitulosForm("form", new CompoundPropertyModel<BuscarTitulosFormBean>(bean), getCodigoFiliado());
+		form.add(new BuscarTitulosConvenioPanel("buscarTitulosPanel", new CompoundPropertyModel<BuscarTitulosFormBean>(bean),
+				getUser().getInstituicao(), getCodigoFiliado()));
+		add(form);
+	}
 
-		if (getUsuarioFiliado() == null) {
-			add(new BuscarTitulosConvenioPanel("buscarTitulosPanel", getModel(), getUser().getInstituicao()));
-		} else if (getUsuarioFiliado() != null) {
-			add(new BuscarTitulosFiliadoPanel("buscarTitulosPanel", getModel(), getUsuarioFiliado().getFiliado()));
+	public String getCodigoFiliado() {
+		if (usuarioFiliado != null) {
+			return usuarioFiliado.getFiliado().getCodigoFiliado();
 		}
-	}
-
-	public UsuarioFiliado getUsuarioFiliado() {
-		return usuarioFiliado;
+		return null;
 	}
 
 	@Override
-	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);
+	protected IModel<TituloRemessa> getModel() {
+		return new CompoundPropertyModel<TituloRemessa>(tituloRemessa);
 	}
 }

@@ -100,6 +100,10 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 
 				try {
 					List<TituloFiliado> titulos = (List<TituloFiliado>) titulosSelecionados.getModelObject();
+					if (titulos.isEmpty()) {
+						throw new InfraException(
+								"Não foi encontrado títulos selecionados para envio. Por favor, verifique se os selecionou corretamente!");
+					}
 					tituloFiliadoMediator.enviarTitulosPendentes(titulos);
 
 					setResponsePage(new RelatorioEnvioTituloFiliadoPage(getFiliado(), "Os títulos foram enviados para o IEPTB-TO com sucesso!"));
@@ -154,10 +158,11 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	private DropDownChoice<SetorFiliado> comboSetorFiliado() {
 		IChoiceRenderer<SetorFiliado> renderer = new ChoiceRenderer<SetorFiliado>("descricao");
 		Filiado filiado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado();
-		selectSetorFiliado = new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(), filiadoMediator.buscarSetoresFiliado(filiado), renderer);
+		selectSetorFiliado =
+				new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(), filiadoMediator.buscarSetoresFiliado(filiado), renderer);
 		if (this.setorFiliado != null) {
-			selectSetorFiliado =
-					new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(setorFiliado), filiadoMediator.buscarSetoresFiliado(filiado), renderer);
+			selectSetorFiliado = new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(setorFiliado),
+					filiadoMediator.buscarSetoresFiliado(filiado), renderer);
 		}
 		selectSetorFiliado.setRequired(true);
 		selectSetorFiliado.setLabel(new Model<String>("Setor"));

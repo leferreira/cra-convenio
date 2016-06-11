@@ -75,16 +75,24 @@ public class RelatorioEnvioTituloFiliadoPage extends BasePage<Filiado> {
 				try {
 					Class.forName("org.postgresql.Driver");
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
+					// connection =
+					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
+					// "postgres", "1234");
 
-					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_PATH);
-					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_PATH + "ieptb.gif")));
+					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_CONVENIO_PATH);
+					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_CONVENIO_PATH + "ieptb.gif")));
 					parametros.put("DATA_ENVIO", new LocalDate().toDate());
 					parametros.put("RAZAO_SOCIAL_FILIADO", getFiliado().getRazaoSocial());
 					parametros.put("FILIADO_ID", getFiliado().getId());
 
-					String urlJasper = "../../relatorio/RelatorioTituloFiliadoEnviado.jrxml";
-					JasperReport jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream(urlJasper));
+					JasperReport jasperReport = JasperCompileManager.compileReport(
+							getClass().getResourceAsStream(ConfiguracaoBase.RELATORIOS_CONVENIO_PATH + "RelatorioTituloFiliadoEnviado.jrxml"));
 					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
+
+					if (jasperPrint.getPages().isEmpty()) {
+						throw new InfraException(
+								"Não foram encontrados títulos enviados na data de hoje. Verifique se ao enviar, os títulos foram selecionados corretamente...");
+					}
 
 					File pdf = File.createTempFile("report", ".pdf");
 					JasperExportManager.exportReportToPdfStream(jasperPrint, new FileOutputStream(pdf));

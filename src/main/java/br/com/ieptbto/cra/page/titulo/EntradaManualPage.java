@@ -84,10 +84,10 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	public EntradaManualPage(String message) {
-		info(message);
 		this.tituloFiliado = new TituloFiliado();
 		this.avalistas = tituloFiliado.getAvalistas();
 
+		success(message);
 		adicionarComponentes();
 	}
 
@@ -141,7 +141,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 						setResponsePage(new EntradaManualPage("Os dados do título foram alterados com sucesso !"));
 					} else {
 						if (titulo.getSetor() == null) {
-							titulo.setSetor(filiadoMediator.buscarSetorPadraoFiliado(usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado()));
+							titulo.setSetor(
+									filiadoMediator.buscarSetorPadraoFiliado(usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado()));
 						}
 						titulo.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 						titulo.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
@@ -232,8 +233,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private TextField<String> dataEmissao() {
 		dataEmissaoField = new TextField<String>("dataEmissao", new Model<String>());
 		if (tituloFiliado.getDataEmissao() != null) {
-			dataEmissaoField =
-					new TextField<String>("dataEmissao", new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataEmissao()))));
+			dataEmissaoField = new TextField<String>("dataEmissao",
+					new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataEmissao()))));
 		}
 		dataEmissaoField.setLabel(new Model<String>("Data Emissão"));
 		dataEmissaoField.setRequired(true);
@@ -243,8 +244,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private TextField<String> dataVencimento() {
 		dataVencimentoField = new TextField<String>("dataVencimento", new Model<String>());
 		if (tituloFiliado.getDataVencimento() != null) {
-			dataVencimentoField =
-					new TextField<String>("dataVencimento", new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataVencimento()))));
+			dataVencimentoField = new TextField<String>("dataVencimento",
+					new Model<String>(DataUtil.localDateToString(new LocalDate(tituloFiliado.getDataVencimento()))));
 		}
 		dataVencimentoField.setLabel(new Model<String>("Data de Vencimento"));
 		dataVencimentoField.setRequired(true);
@@ -253,7 +254,8 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
+		DropDownChoice<Municipio> comboMunicipio =
+				new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
 		comboMunicipio.setLabel(new Model<String>("Município"));
 		comboMunicipio.setRequired(true);
 		return comboMunicipio;

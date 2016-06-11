@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -7,19 +8,15 @@ import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.Municipio;
-import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -31,102 +28,100 @@ import br.com.ieptbto.cra.util.DataUtil;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
-public class ListaTitulosPage extends BasePage<TituloFiliado> {
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
+public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 
-	private TituloFiliado tituloFiliado;
-	private List<TituloFiliado> titulos;
+	private TituloRemessa titulo;
+	private BuscarTitulosFormBean bean;
+	private String codigoFiliado;
 
-	public ListaTitulosPage(Filiado filiado, LocalDate dataInicio, LocalDate dataFim, Municipio pracaProtesto, TituloFiliado titulo) {
-		this.tituloFiliado = new TituloFiliado();
-		this.titulos = tituloFiliadoMediator.consultarTitulosFiliado(filiado, dataInicio, dataFim, pracaProtesto, titulo, null);
-
-		adicionarComponentes();
-	}
-
-	public ListaTitulosPage(Instituicao convenio, LocalDate dataInicio, LocalDate dataFim, Filiado filiado, Municipio pracaProtesto,
-			TituloFiliado tituloBuscado) {
-		this.tituloFiliado = new TituloFiliado();
-		this.titulos = tituloFiliadoMediator.consultarTitulosConvenio(convenio, dataInicio, dataFim, filiado, pracaProtesto, tituloBuscado);
+	public ListaTitulosPage(BuscarTitulosFormBean bean, String codigoFiliado) {
+		this.bean = bean;
+		this.codigoFiliado = codigoFiliado;
 
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
-		add(carregarListaTitulos());
+		add(listaTitulos());
+
 	}
 
-	private ListView<TituloFiliado> carregarListaTitulos() {
-		return new ListView<TituloFiliado>("listViewTitulos", getTitulosFiliados()) {
+	private ListView<TituloRemessa> listaTitulos() {
+		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<TituloFiliado> item) {
-				final TituloFiliado tituloLista = item.getModelObject();
-				TituloRemessa tituloRemessa = tituloFiliadoMediator.buscarTituloDoConvenioNaCra(tituloLista);
-
+			protected void populateItem(ListItem<TituloRemessa> item) {
+				final TituloRemessa tituloLista = item.getModelObject();
 				item.add(new Label("numeroTitulo", tituloLista.getNumeroTitulo()));
-				item.add(new Label("emissao", DataUtil.localDateToString(new LocalDate(tituloLista.getDataEmissao()))));
-				item.add(new Label("pracaProtesto", tituloLista.getPracaProtesto().getNomeMunicipio()));
-				item.add(new LabelValorMonetario<String>("valor", tituloLista.getValorTitulo()));
-				item.add(new Label("nomeDevedor", tituloLista.getNomeDevedor()));
+				item.add(new Label("nossoNumero", tituloLista.getNossoNumero()));
 
-				if (tituloRemessa == null) {
-					item.add(new Label("protocolo", StringUtils.EMPTY));
-					item.add(new Label("dataSituacao", StringUtils.EMPTY));
-					item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTituloConvenio().getSituacao().toUpperCase()));
-				} else {
-					if (tituloRemessa.getConfirmacao() != null) {
-						item.add(new Label("protocolo", tituloRemessa.getConfirmacao().getNumeroProtocoloCartorio()));
-					} else {
-						item.add(new Label("protocolo", StringUtils.EMPTY));
-					}
-
-					if (tituloRemessa.getRetorno() != null) {
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getRetorno().getDataOcorrencia())));
-					} else {
-						item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloRemessa.getDataOcorrencia())));
-					}
-					item.add(new Label("situacaoTitulo", tituloRemessa.getSituacaoTitulo().toUpperCase()));
+				String municipio = tituloLista.getRemessa().getInstituicaoDestino().getMunicipio().getNomeMunicipio();
+				if (municipio.length() > 20) {
+					municipio = municipio.substring(0, 19);
 				}
+				item.add(new Label("municipio", municipio.toUpperCase()));
+				if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("dataProtocolo", DataUtil.localDateToString(tituloLista.getConfirmacao().getDataProtocolo())));
+					item.add(new Label("protocolo", tituloLista.getConfirmacao().getNumeroProtocoloCartorio()));
+				} else {
+					item.add(new Label("dataProtocolo", StringUtils.EMPTY));
+					item.add(new Label("protocolo", StringUtils.EMPTY));
+				}
+				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getSaldoTitulo()));
+				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
+
+					/***/
+					private static final long serialVersionUID = 1L;
+
+					public void onClick() {
+						setResponsePage(new HistoricoPage(tituloLista));
+					}
+				};
+				if (tituloLista.getNomeDevedor().length() > 25) {
+					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().substring(0, 24).toUpperCase()));
+				} else {
+					linkHistorico.add(new Label("nomeDevedor", tituloLista.getNomeDevedor().toUpperCase()));
+				}
+				item.add(linkHistorico);
+				if (tituloLista.getRetorno() != null) {
+					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getRetorno().getDataOcorrencia())));
+				} else if (tituloLista.getConfirmacao() != null) {
+					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getConfirmacao().getDataOcorrencia())));
+				} else {
+					item.add(new Label("dataSituacao", DataUtil.localDateToString(tituloLista.getDataOcorrencia())));
+				}
+				item.add(new Label("situacaoTitulo", tituloLista.getSituacaoTitulo()));
 			}
 		};
 	}
 
-	private IModel<List<TituloFiliado>> getTitulosFiliados() {
-		return new LoadableDetachableModel<List<TituloFiliado>>() {
+	public IModel<List<TituloRemessa>> buscarTitulos() {
+		return new LoadableDetachableModel<List<TituloRemessa>>() {
 
-			/**
-			 * 
-			 */
+			/**/
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected List<TituloFiliado> load() {
-				return titulos;
+			protected List<TituloRemessa> load() {
+				return tituloFiliadoMediator.buscarListaTitulos(getUser(), bean.getDataInicio(), bean.getInstiuicaoCartorio(), bean.getNumeroTitulo(),
+						bean.getNomeDevedor(), bean.getDocumentoDevedor(), codigoFiliado);
 			}
 		};
-	}
-
-	public TituloFiliado getTituloFiliado() {
-		return tituloFiliado;
 	}
 
 	@Override
-	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);
+	protected IModel<TituloRemessa> getModel() {
+		return new CompoundPropertyModel<TituloRemessa>(titulo);
 	}
 }

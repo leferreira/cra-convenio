@@ -37,8 +37,6 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosPendentesConvenioPage;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoConvenioPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -87,7 +85,10 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void carregarHomeConvenioEAssociados() {
 		if (getUsuarioFiliado() == null) {
-			this.arquivo = remessaMediator.arquivosPendentes(getUser().getInstituicao());
+			// this.arquivo =
+			// remessaMediator.arquivosPendentes(getUser().getInstituicao());
+			this.arquivo = new Arquivo();
+			this.arquivo.setRemessas(new ArrayList<Remessa>());
 			this.titulosFiliado = new ArrayList<TituloFiliado>();
 		} else {
 			this.arquivo = new Arquivo();
@@ -104,7 +105,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		}
 		divConvenio.add(labelQuantidadeRemessasPendentes());
 		divConvenio.add(listaConfirmacoesPendentes());
-		divConvenio.add(linkConfirmacoesPendentes());
 		return divConvenio;
 	}
 
@@ -137,25 +137,13 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			@Override
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
-				Link<Arquivo> linkArquivo = new Link<Arquivo>("linkArquivo") {
-
-					/***/
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new TitulosArquivoConvenioPage(remessa.getArquivo()));
-					}
-				};
-				linkArquivo.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
-				item.add(linkArquivo);
-
+				item.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
 				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
 				} else {
-					item.add(new Label("instituicao",
-							municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
+					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio())
+							.getNomeMunicipio().toUpperCase()));
 				}
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
@@ -183,19 +171,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						}
 					}
 				};
-			}
-		};
-	}
-
-	private Link<Remessa> linkConfirmacoesPendentes() {
-		return new Link<Remessa>("arquivosConfirmacoesPendetes") {
-
-			/***/
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(new ListaArquivosPendentesConvenioPage(getUser(), getConfirmacoesPendentes()));
 			}
 		};
 	}
@@ -250,7 +225,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	}
 
 	private void carregarContratoEntradaDeTitulos() {
-
 		final ModalWindow modalContrato = new ModalWindow("modalContrato");
 		modalContrato.setPageCreator(new ModalWindow.PageCreator() {
 

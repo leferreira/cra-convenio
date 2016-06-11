@@ -1,73 +1,47 @@
 <wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR" charset="utf8">
-	<form class="form-horizontal" wicket:id="form">
-		<div class="row">
-			<div class="col-md-6" style="text-align: left;">
-				<fieldset>
-					<legend>DADOS DO T&iacute;TULO</legend>
+	<div class="col-lg-8 col-md-offset-2">
+		<fieldset>
+			<legend>DADOS DO TÍTULO</legend>
+			<div class="row">
+				<div class="col-lg-6">
 					<div class="form-group">
-					  <label class="col-md-4 control-label">N&Uacute;MERO DO T&Iacute;TULO:</label>  
-					  <div class="col-md-6">
-					  <input wicket:id="numeroTitulo" class="form-control input-md">
-					  </div>
-					</div>
-				</fieldset>
-			</div>
-			<div class="col-md-6" style="text-align: left;">
-				<fieldset>
-					<legend>ENTRADA DO T&Iacute;TULO/MUNIC&Iacute;PIO</legend>
-					<div class="form-group">
-					  <label class="col-md-4 control-label">DATA ENTRADA CRA:</label>  
-					  <div class="col-md-4">
-					  <input id="date" name="data" type="text" wicket:id="dataEntradaInicio" placeholder="__/__/____" class="form-control input-md">
-					    
-					  </div>
-					  <div class="col-md-4">
-					  <input id="date1" name="data" type="text" wicket:id="dataEntradaFinal" placeholder="__/__/____" class="form-control input-md">
-					    
-					  </div>
+						<label>Número do Título</label> <input wicket:id="numeroTitulo" class="form-control">
 					</div>
 					<div class="form-group">
-					  <label class="col-md-4 control-label">MUNIC&Iacute;PIO:</label>  
-					  <div class="col-md-6">
-					  	<select wicket:id="pracaProtesto"  class="form-control"></select>
-					  </div>
+						<label>Município</label> <select wicket:id="instiuicaoCartorio" class="form-control"></select>
 					</div>
-				</fieldset>
-			</div>
-			<div class="col-md-6" style="text-align: left;">
-				<fieldset>
-					<legend>DADOS DO DEVEDOR</legend>
+				</div>
+				<div class="col-lg-6">
 					<div class="form-group">
-					  <label class="col-md-4 control-label">NOME DEVEDOR:</label>  
-					  <div class="col-md-6">
-					  <input wicket:id="nomeDevedor" class="form-control input-md">
-					  </div>
+						<label>Data de Envio</label> <input id="date" name="date" maxlength="10"
+							placeholder="__/__/____" wicket:id="dataInicio" class="form-control">
 					</div>
 					<div class="form-group">
-					  <label class="col-md-4 control-label">DOCUMENTO DEVEDOR:</label>  
-					  <div class="col-md-6">
-					  <input wicket:id="documentoDevedor" class="form-control input-md">
-					  </div>
+						<label>Empresa Associada</label> <select wicket:id="filiado" class="form-control"></select>
 					</div>
-				</fieldset>
-			</div>
-			<div class="col-md-6" style="text-align: left;">
-				<div class="form-group">
-					<fieldset>
-						<legend>DADOS DO SACADO<small>&nbsp;(CREDOR)</small></legend>
-						<div class="form-group">
-						  <label class="col-md-4 control-label">EMPRESA ASSOCIADA:</label>  
-						  <div class="col-md-6">
-						  <select wicket:id="filiado" class="form-control input-md"></select>
-						  </div>
-						</div>
-					</fieldset>
-					<label class="col-md-4 control-label"></label>
-				  	<div class="col-md-6">
-				    	<button type="submit" id="buscar" name="buscar" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-search"></span>&nbsp;BUSCAR</button>
-				  	</div>
 				</div>
 			</div>
+		</fieldset>
+		<fieldset>
+			<legend>DADOS DO DEVEDOR</legend>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label>Nome Devedor</label> <input wicket:id="nomeDevedor" class="form-control">
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label>Documento Devedor</label> <input wicket:id="documentoDevedor" class="form-control">
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<div class="form-group">
+			<label>&nbsp;</label><br>
+			<button type="submit" class="btn btn-primary pull-right">
+				<span class="glyphicon glyphicon-search"></span>&nbsp;Buscar
+			</button>
 		</div>
-	</form>						
+	</div>
 </wicket:panel>

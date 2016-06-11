@@ -20,7 +20,7 @@ public class CraMenu extends Panel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
-	
+
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliado;
 
@@ -45,26 +45,24 @@ public class CraMenu extends Panel {
 		menuFiliado.setVisible(verificaPermissao(user, "filiado"));
 		menuFiliado.addItem("EntradaManual", rolesUser);
 		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
-		menuFiliado.addItem("RelatorioTitulosFiliado", rolesUser);
+		menuFiliado.addItem("RelatorioTitulos", rolesUser);
 		menuFiliado.addItem("BuscarTitulos", rolesUser);
 		menuFiliado.addItem("SolicitarDesistenciaCancelamentoEmpresa", rolesUser);
 
 		/** Menus Titulos Convenio */
 		MenuItem menuConvenio = menuLateral.addItem("menuConvenio", rolesAdmin);
 		menuConvenio.setVisible(verificaPermissao(user, "convenio"));
-		menuConvenio.addItem("BuscarArquivoConvenio", rolesAdmin);
-		menuConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
-		menuConvenio.addItem("RelatorioSinteticoEmpresasConvenio", rolesAdmin);
+		menuConvenio.addItem("BuscarTitulos", rolesAdmin);
+		menuConvenio.addItem("RelatorioTitulos", rolesAdmin);
 		menuConvenio.addItem("EmpresasConvenioPage", rolesAdmin);
 		menuConvenio.addItem("UsuariosEmpresaConvenioPage", rolesAdmin);
-		menuConvenio.addItem("BuscarTitulos", rolesAdmin);
 	}
 
 	private boolean verificaPermissao(UsuarioFiliado user, String chave) {
-		
+
 		if (user == null && chave.equals("convenio")) {
 			return true;
-		} else if (user != null && chave.equals("filiado")){
+		} else if (user != null && chave.equals("filiado")) {
 			return true;
 		}
 		return false;

@@ -158,11 +158,12 @@ public class ListaTituloSolicitacaoCancelamentoPage extends BasePage<TituloRemes
 						linkSolicitarCancelamento.setEnabled(true);
 					}
 					if (titulo.getStatusSolicitacaoCancelamento() == StatusSolicitacaoCancelamento.NAO_SOLICITADO) {
-						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar Cancelamento".toUpperCase()));
+						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitar"));
 					} else {
-						linkSolicitarCancelamento.add(new Label("nomeAcao", "Solicitação já Enviada".toUpperCase()));
+						linkSolicitarCancelamento.add(new Label("nomeAcao", "Enviado"));
 					}
-					item.add(new Label("dataConfirmacao", DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
+					item.add(new Label("dataConfirmacao",
+							DataUtil.localDateToString(titulo.getConfirmacao().getRemessa().getArquivo().getDataEnvio())));
 					item.add(new Label("protocolo", titulo.getConfirmacao().getNumeroProtocoloCartorio()));
 				} else {
 					linkSolicitarCancelamento.add(new Label("nomeAcao", "Aguardando o protocolo".toUpperCase()));

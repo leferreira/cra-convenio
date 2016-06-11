@@ -21,9 +21,6 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
-import br.com.ieptbto.cra.page.arquivo.BuscarArquivoConvenioPage;
-import br.com.ieptbto.cra.page.arquivo.ListaArquivosConvenioPage;
-import br.com.ieptbto.cra.page.arquivo.TitulosArquivoConvenioPage;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
@@ -33,9 +30,7 @@ import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelam
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioSinteticoEmpresasConvenioPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosConvenioPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosFiliadoPage;
+import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosPage;
 import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
@@ -120,11 +115,6 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("CargaInicial", CargaInicialPage.class);
 
 		/* CONVENIO */
-		mountPage("BuscarArquivoConvenio", BuscarArquivoConvenioPage.class);
-		mountPage("ListaArquivoConvenio", ListaArquivosConvenioPage.class);
-		mountPage("TitulosArquivoConvenio", TitulosArquivoConvenioPage.class);
-		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
-		mountPage("RelatorioSinteticoEmpresasConvenio", RelatorioSinteticoEmpresasConvenioPage.class);
 		mountPage("EmpresasConvenioPage", ListaFiliadoPage.class);
 		mountPage("IncluirEmpresaConvenioPage", IncluirFiliadoPage.class);
 		mountPage("UsuariosEmpresaConvenioPage", ListaUsuarioFiliadoPage.class);
@@ -132,6 +122,7 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 
 		/* AMBOS */
 		mountPage("BuscarTitulos", BuscarTitulosPage.class);
+		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
 
 		/* EMPRESA CONVENIO */
 		mountPage("EntradaManual", EntradaManualPage.class);
@@ -139,7 +130,6 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("SolicitarDesistenciaCancelamentoEmpresa", BuscarTituloSolicitacaoCancelamentoPage.class);
 		mountPage("ListaTitulosDesistenciaCancelamento", ListaTituloSolicitacaoCancelamentoPage.class);
 		mountPage("TituloDesistenciaCancelamentoSolicitado", TituloSolicitacaoCancelamentoPage.class);
-		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
 	}
 
 	/**

@@ -80,7 +80,6 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 	@Override
 	protected void adicionarComponentes() {
 		carregarCampos();
-
 	}
 
 	private void carregarCampos() {

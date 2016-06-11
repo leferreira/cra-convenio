@@ -25,9 +25,7 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
 public class ListaFiliadoPage extends BasePage<Filiado> {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 
 	private Filiado filiado;
@@ -49,9 +47,7 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 		this.filiado = new Filiado();
 		add(new Link<IncluirFiliadoPage>("botaoNovo") {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			public void onClick() {
@@ -59,16 +55,12 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 			}
 		});
 		add(carregarListaFiliados());
-		// TODO Auto-generated method stub
-
 	}
 
 	private ListView<Filiado> carregarListaFiliados() {
 		return new ListView<Filiado>("listViewFiliado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao())) {
 
-			/**
-			 * 
-			 */
+			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -77,9 +69,7 @@ public class ListaFiliadoPage extends BasePage<Filiado> {
 
 				Link<UsuarioFiliado> linkAlterar = new Link<UsuarioFiliado>("linkAlterar") {
 
-					/**
-					 * 
-					 */
+					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
