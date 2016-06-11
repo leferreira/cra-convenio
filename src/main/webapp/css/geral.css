@@ -31,7 +31,7 @@ body {
 .navbar {
 	margin-bottom: 0px;
 }
-
+ 
 .navbar-nav {
 	font-size: 14px;
 }
@@ -69,7 +69,7 @@ body {
 }
 
 legend {
-	font-size: 14px !important;
+	font-size: 13px !important;
 }
 
 .navbar-nav>li>.dropdown-menu {
@@ -97,7 +97,7 @@ legend {
 }
 
 .link-pendentes {
-	font-size: 14px;
+	font-size: 13px;
 	color: #fff;
 	font-weight: bolder;
 }
@@ -107,7 +107,7 @@ legend {
 }
 
 .link-voltar {
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: bold;
 }
 
@@ -134,12 +134,12 @@ legend {
 .link {
 	color: rgba(0, 150, 136, 0.8);
 	font-weight: bolder;
-	font-size: 14px;
+	font-size: 13px;
 }
 
 .link-ver-todos {
 	color: #fff;
-	font-size: 14spx;
+	font-size: 13spx;
 	font-weight: bold;
 }
 
