@@ -37,6 +37,7 @@ import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.relatorioConvenio.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
+import br.com.ieptbto.cra.util.PeriodoDataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -94,18 +95,22 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
-				if (dataEnvioInicio.getDefaultModelObject() != null) {
-					if (dataEnvioFinal.getDefaultModelObject() != null) {
-						dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
-						dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
-						if (!dataInicio.isBefore(dataFim))
-							if (!dataInicio.isEqual(dataFim))
-								error("A data de início deve ser antes da data fim.");
-					} else
-						error("As duas datas devem ser preenchidas.");
-				}
-
 				try {
+					if (dataEnvioInicio.getDefaultModelObject() != null) {
+						if (dataEnvioFinal.getDefaultModelObject() != null) {
+							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
+							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
+							if (!dataInicio.isBefore(dataFim))
+								if (!dataInicio.isEqual(dataFim))
+									throw new InfraException("A data de início deve ser antes da data fim.");
+						} else {
+							throw new InfraException("As duas datas devem ser preenchidas.");
+						}
+						if (PeriodoDataUtil.diferencaDeDiasEntreData(dataInicio.toDate(), dataFim.toDate()) > 30) {
+							throw new InfraException("Limite máximo do período para o relatório é de 30 dias entre a data inicial e a final.");
+						}
+					}
+
 					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosConvenioPorSituacao(getUser(), situacaoTipoRelatorio, filiado,
 							municipio, dataInicio, dataFim);
 					if (jasperPrint.getPages().isEmpty()) {

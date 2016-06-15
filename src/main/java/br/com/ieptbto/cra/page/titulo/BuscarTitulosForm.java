@@ -26,6 +26,14 @@ public class BuscarTitulosForm extends BaseForm<BuscarTitulosFormBean> {
 		BuscarTitulosFormBean bean = getModelObject();
 
 		try {
+			if (bean.getNumeroTitulo() == null && bean.getDocumentoDevedor() == null && bean.getNomeDevedor() == null && bean.getDataInicio() == null
+					&& bean.getFiliado() == null) {
+				if (bean.getInstiuicaoCartorio() != null) {
+					throw new InfraException("Por favor informe mais um parâmetro, além do município selecionado...");
+				} else {
+					throw new InfraException("Os campos não podem ser nulos! Por favor informe ao menos um parâmetro...");
+				}
+			}
 			setResponsePage(new ListaTitulosPage(bean, codigoFiliado));
 		} catch (InfraException ex) {
 			logger.error(ex.getMessage());
