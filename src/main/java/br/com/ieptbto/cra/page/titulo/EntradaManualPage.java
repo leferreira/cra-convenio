@@ -43,6 +43,7 @@ import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.CpfCnpjUtil;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.EstadoUtils;
 
@@ -132,6 +133,18 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 						throw new InfraException("A Data de Vencimento do título deve ser antes da data atual!");
 					} else if (new LocalDate(titulo.getDataEmissao()).isAfter(new LocalDate())) {
 						throw new InfraException("A Data de Emissão do título deve ser antes da data atual!");
+					}
+					if (titulo.getCpfCnpj() != null) {
+						String documentoDevedor = titulo.getCpfCnpj().replace(".", "").replace("-", "").replace("/", "");
+						if (documentoDevedor.length() > 11) {
+							if (!CpfCnpjUtil.isValidCNPJ(documentoDevedor)) {
+								throw new InfraException("CNPJ do devedor inválido! Por favor verifique se o documento foi digitado corretamente...");
+							}
+						} else {
+							if (!CpfCnpjUtil.isValidCPF(documentoDevedor)) {
+								throw new InfraException("CPF do devedor inválido! Por favor verifique se o documento foi digitado corretamente...");
+							}
+						}
 					}
 
 					if (titulo.getId() != 0) {

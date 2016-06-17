@@ -28,35 +28,31 @@ public class AvalistaInputPanel extends Panel {
 	private Avalista avalista;
 	private TituloFiliado titulo;
 	private List<Avalista> avalistas;
-	
+
 	public AvalistaInputPanel(String id, IModel<TituloFiliado> model, List<Avalista> avalistas) {
 		super(id, model);
 		this.avalista = new Avalista();
 		this.avalistas = avalistas;
 		this.titulo = model.getObject();
-		
+
 		carregarComponentes();
 	}
 
 	private void carregarComponentes() {
-		Form<Avalista> form = new Form<Avalista>("formAvalista", new CompoundPropertyModel<Avalista>(avalista)){
-			
+		Form<Avalista> form = new Form<Avalista>("formAvalista", new CompoundPropertyModel<Avalista>(avalista)) {
+
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				super.onSubmit();
 				Avalista avalistaTitulo = getModelObject();
-				
+
 				try {
-					if (avalistaTitulo.getNome() == null || avalistaTitulo.getEndereco() == null ||
-							avalistaTitulo.getCidade() == null || avalistaTitulo.getUf() == null ||
-							avalistaTitulo.getDocumento() == null || avalistaTitulo.getCep() == null ) {
-						throw new InfraException("O Avalista não pode ter informações em branco !");
-					} else {
-						getAvalistas().add(avalistaTitulo);		
-							
+					if (avalistaTitulo.getNome() != null || avalistaTitulo.getEndereco() != null || avalistaTitulo.getCidade() != null
+							|| avalistaTitulo.getUf() != null || avalistaTitulo.getDocumento() != null || avalistaTitulo.getCep() != null) {
+						getAvalistas().add(avalistaTitulo);
+
 						Avalista novoAvalista = new Avalista();
 						setAvalista(novoAvalista);
 						getModel().setObject(novoAvalista);
@@ -93,12 +89,11 @@ public class AvalistaInputPanel extends Panel {
 
 	private DropDownChoice<String> campoUf() {
 		DropDownChoice<String> fieldUf;
-		fieldUf = new DropDownChoice<String>("uf" ,EstadoUtils.getEstadosToList());
+		fieldUf = new DropDownChoice<String>("uf", EstadoUtils.getEstadosToList());
 		fieldUf.setLabel(new Model<String>("UF do Avalista"));
 		return fieldUf;
 	}
 
-	
 	private TextField<String> campoCep() {
 		TextField<String> fieldCep;
 		fieldCep = new TextField<String>("cep");
@@ -119,8 +114,8 @@ public class AvalistaInputPanel extends Panel {
 		fieldEndereco.setLabel(new Model<String>("Endereco do Avalista"));
 		return fieldEndereco;
 	}
-	
-	private TextField<String> campoBairro() {  
+
+	private TextField<String> campoBairro() {
 		TextField<String> fieldBairro;
 		fieldBairro = new TextField<String>("bairro");
 		fieldBairro.setLabel(new Model<String>("Bairro do Avalista"));
@@ -134,11 +129,11 @@ public class AvalistaInputPanel extends Panel {
 	public TituloFiliado getTitulo() {
 		return titulo;
 	}
-	
+
 	public void setAvalista(Avalista avalista) {
 		this.avalista = avalista;
 	}
-	
+
 	public Avalista getAvalista() {
 		return avalista;
 	}
