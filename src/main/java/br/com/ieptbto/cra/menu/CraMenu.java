@@ -46,6 +46,7 @@ public class CraMenu extends Panel {
 		menuFiliado.addItem("EntradaManual", rolesUser);
 		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
 		menuFiliado.addItem("RelatorioTitulos", rolesUser);
+		menuFiliado.addItem("RelatorioTItulosEnviados", rolesUser);
 		menuFiliado.addItem("BuscarTitulos", rolesUser);
 		menuFiliado.addItem("SolicitarDesistenciaCancelamentoEmpresa", rolesUser);
 
