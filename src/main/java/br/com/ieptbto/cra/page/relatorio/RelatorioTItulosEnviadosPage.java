@@ -82,10 +82,10 @@ public class RelatorioTItulosEnviadosPage extends BasePage<TituloFiliado> {
 						throw new InfraException("A data do relatório não pode ser superior a data atual!");
 					}
 					Class.forName("org.postgresql.Driver");
-					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-					// connection =
-					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
-					// "postgres", "1234");
+					 connection =
+					 DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
+					 "postgres", "@dminB3g1n");
+//					connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_CONVENIO_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_CONVENIO_PATH + "ieptb.gif")));

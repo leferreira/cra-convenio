@@ -66,6 +66,7 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 	private TextField<LocalDate> dataEnvioInicio;
 	private TextField<LocalDate> dataEnvioFinal;
 	private RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo;
+	private DropDownChoice<Filiado> dropDownFiliado;
 
 	public RelatorioTitulosPage() {
 		this.titulo = new TituloFiliado();
@@ -89,7 +90,7 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 			@Override
 			public void onSubmit() {
 				TituloFiliado titulo = getModelObject();
-				Filiado filiado = titulo.getFiliado();
+				Filiado filiado = dropDownFiliado.getModelObject();
 				Municipio municipio = titulo.getPracaProtesto();
 				SituacaoTituloRelatorio situacaoTipoRelatorio = radioSituacaoTitulo.getModelObject();
 				LocalDate dataInicio = null;
@@ -158,7 +159,6 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 
 	private DropDownChoice<Filiado> dropDownFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		DropDownChoice<Filiado> dropDownFiliado;
 		if (usuarioFiliado != null) {
 			dropDownFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(usuarioFiliado.getFiliado()),
 					filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
