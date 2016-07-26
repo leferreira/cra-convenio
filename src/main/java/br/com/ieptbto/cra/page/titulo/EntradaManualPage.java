@@ -136,14 +136,9 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 					}
 					if (titulo.getCpfCnpj() != null) {
 						String documentoDevedor = titulo.getCpfCnpj().replace(".", "").replace("-", "").replace("/", "");
-						if (documentoDevedor.length() > 11) {
-							if (!CpfCnpjUtil.isValidCNPJ(documentoDevedor)) {
-								throw new InfraException("CNPJ do devedor inválido! Por favor verifique se o documento foi digitado corretamente...");
-							}
-						} else {
-							if (!CpfCnpjUtil.isValidCPF(documentoDevedor)) {
-								throw new InfraException("CPF do devedor inválido! Por favor verifique se o documento foi digitado corretamente...");
-							}
+						if (!CpfCnpjUtil.isValidCNPJ(documentoDevedor) && !CpfCnpjUtil.isValidCPF(documentoDevedor)) {
+							throw new InfraException(
+									"O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
 						}
 					}
 
