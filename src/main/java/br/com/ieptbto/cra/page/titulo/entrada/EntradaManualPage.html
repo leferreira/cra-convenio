@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:wicket="http://wicket.apache.org/">
+<body>
+	<wicket:extend>
+		<div class="col-md-12" style="margin-top: 10px;">
+			<div class="alert alert-warning alert-dismissable"
+				style="font-size: 14px;">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">×</button>
+				<span class="alert-link">ATENÇÃO:</span> Antes de enviar os arquivos
+				com as informações do título a ser protestado, os documentos deverão
+				estar compactados no formato "<span class="alert-link">ZIP</span>".
+			</div>
+		</div>
+		<div class="col-md-12">
+			<form wicket:id="form">
+				<h4 class="titulo-top">
+					ENTRADA DE TÍTULO
+					<button type="submit" class="btn btn-primary pull-right">
+						<span class="fa fa-save"></span>&nbsp;Salvar
+					</button>
+				</h4>
+				<br class="clear">
+				<div class="row" wicket:id="divSetoresFiliados">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Setor</label> <select class="form-control"
+								wicket:id="setor">
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label>&nbsp;</label><br> <label>(Para mais
+							informações sobre a identificação do setor, entre em contato com
+							o IEPTB-TO)</label>
+					</div>
+				</div>
+				<div wicket:id="entradaManualInputPanel"></div>
+				<h4 class="titulo-top">OUTROS DEVEDORES</h4>
+				<div class="well well-sm">
+					<div class="col-md-12">
+						<a href="#" class="link" data-toggle="modal"
+							data-target="#myModal" style="float: right;"> <span
+							class="fa fa-plus"></span>&nbsp;ADICIONAR
+						</a> <br style="clear: both;">
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel" aria-hidden="true"
+							style="display: none;">
+							<div class="modal-dialog" style="width: 60%;">
+								<div class="modal-content">
+									<div wicket:id="avalistaPanel"></div>
+								</div>
+							</div>
+						</div>
+						<br style="clear: both;" />
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="col-center">#</th>
+										<th>NOME</th>
+										<th>DOCUMENTO</th>
+										<th>CIDADE</th>
+										<th class="col-center">UF</th>
+										<th class="col-center" style="width: 30px;">REMOVER</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr wicket:id="listaAvalistas">
+										<td class="col-center" wicket:id="contador"
+											style="font-weight: bold;"></td>
+										<td wicket:id="nomeAvalista"></td>
+										<td wicket:id="documentoAvalista"></td>
+										<td wicket:id="cidadeAvalista"></td>
+										<td class="col-center" wicket:id="ufAvalista"></td>
+										<td class="col-center">
+											<button type="button" wicket:id="remover"
+												style="float: inherit;">
+												<span class="fa fa-trash-o"></span>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br style="clear: both;">
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript" src="js/bootstrap-filestyle.min.js"
+			charset="utf-8"></script>
+		<script>
+			$( document ).ready(function() {
+				$(":file").filestyle({buttonText: "Procurar"});
+			});	
+		</script>
+	</wicket:extend>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.titulo;
+package br.com.ieptbto.cra.page.titulo.entrada;
 
 import java.util.List;
 

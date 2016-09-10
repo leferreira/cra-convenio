@@ -33,12 +33,12 @@ import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
-import br.com.ieptbto.cra.mediator.RemessaMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
-import br.com.ieptbto.cra.page.titulo.EntradaManualPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
+import br.com.ieptbto.cra.page.titulo.entrada.EntradaManualPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 
@@ -56,7 +56,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	DownloadMediator downloadMediator;
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
@@ -142,8 +142,8 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
 				} else {
-					item.add(new Label("instituicao", municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio())
-							.getNomeMunicipio().toUpperCase()));
+					item.add(new Label("instituicao",
+							municipioMediator.buscaMunicipioPorCodigoIBGE(remessa.getCabecalho().getCodigoMunicipio()).getNomeMunicipio().toUpperCase()));
 				}
 				item.add(new Label("pendente", PeriodoDataUtil.diferencaDeDiasEntreData(remessa.getDataRecebimento().toDate(), new Date())));
 				item.add(downloadArquivoTXT(remessa));
@@ -160,7 +160,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 						try {
 							getApplication().getResourceSettings().getPropertiesFactory().clearCache();
 
-							File file = remessaMediator.baixarRemessaTXT(getUser(), remessa);
+							File file = downloadMediator.baixarRemessaTXT(getUser(), remessa);
 							IResourceStream resourceStream = new FileResourceStream(file);
 
 							getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, file.getName()));

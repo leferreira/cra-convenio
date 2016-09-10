@@ -1,0 +1,147 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org/" lang="pt-BR"
+	charset="utf8">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Número do Título/Documento</label> <input maxlength="11"
+					onkeyup="this.value = this.value.toUpperCase()"
+					class="form-control input-md" wicket:id="numeroTitulo"
+					autofocus="autofocus">
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Praça de Protesto</label> <select class="form-control"
+					wicket:id="pracaProtesto">
+				</select>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>*OBS</label> <small>A praça de protesto é o município
+					qual o cartório receberá o título. O destino do título deverá ser
+					de acordo com o convênio firmado com o <b>IEPTB-TO</b>, caso não, o
+					título poderá ser devolvido.
+				</small>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Tipo do Documento</label> <select class="form-control"
+					wicket:id="especieTitulo">
+				</select>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<label wicket:id="labelContemAnexo" style="color: red;"></label>  
+			<div class="form-group">
+				<label>Anexar Documento: (somente ZIP)</label> <input
+					wicket:id="anexo" type="file" class="filestyle"
+					data-buttonText="Procurar">
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Motivo do Protesto (Cheque)</label> <select
+					class="form-control" wicket:id="alinea">
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Data de Emissão</label> <input id="data"
+					placeholder="__/__/____" onblur="fctValidaData(this);"
+					class="form-control input-md" wicket:id="dataEmissao">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Data de Vencimento</label> <input id="data1"
+					placeholder="__/__/____" onblur="fctValidaData(this);"
+					class="form-control input-md" wicket:id="dataVencimento">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Valor do Documento</label>
+				<div class="input-group">
+					<span class="input-group-addon">R$</span> <input maxlength="15"
+						onkeypress="FormataValor(this.id, 12, event);"
+						class="form-control input-md" wicket:id="valorTitulo">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Valor à Protestar</label>
+				<div class="input-group">
+					<span class="input-group-addon">R$</span> <input maxlength="15"
+						onkeypress="FormataValor(this.id, 12, event);"
+						class="form-control input-md" wicket:id="valorSaldoTitulo">
+				</div>
+			</div>
+		</div>
+	</div>
+	<h4 class="titulo-top">INFORMAÇÕES DO DEVEDOR PRINCIPAL</h4>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Nome</label> <input maxlength="45" type="text"
+					onkeyup="this.value = this.value.toUpperCase()"
+					class="form-control input-md" wicket:id="nomeDevedor">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>CNPJ/CPF</label> <input maxlength="18"
+					onkeydown="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+					onkeyup="javascript:return aplica_mascara_cpfcnpj(this,18,event)"
+					class="form-control input-md" wicket:id="CpfCnpj"
+					placeholder="___.___.___-__" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Município</label> <input min="4" maxlength="20"
+					onkeyup="this.value = this.value.toUpperCase()"
+					class="form-control input-md" wicket:id="cidadeDevedor">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Bairro</label> <input maxlength="20"
+					onkeyup="this.value = this.value.toUpperCase()"
+					class="form-control input-md" wicket:id="bairroDevedor">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>UF</label> <select class="form-control" wicket:id="ufDevedor">
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Endereço</label>
+				<textarea class="form-control" maxlength="45"
+					onkeyup="this.value = this.value.toUpperCase()"
+					wicket:id="enderecoDevedor"></textarea>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>CEP</label> <input id="cep" maxlength="10"
+					class="form-control input-md" wicket:id="cepDevedor"
+					placeholder="__.___-___">
+			</div>
+		</div>
+	</div>
+</wicket:panel>

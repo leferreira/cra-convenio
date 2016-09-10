@@ -27,6 +27,8 @@ import br.com.ieptbto.cra.entidade.CabecalhoCartorio;
 import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.CraServiceConfig;
+import br.com.ieptbto.cra.entidade.DadosArquivoRecebido;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -37,11 +39,13 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.InstrumentoProtesto;
 import br.com.ieptbto.cra.entidade.LayoutFiliado;
 import br.com.ieptbto.cra.entidade.LogCra;
+import br.com.ieptbto.cra.entidade.LoteCnp;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoDesistencia;
 import br.com.ieptbto.cra.entidade.PermissaoEnvio;
+import br.com.ieptbto.cra.entidade.RegistroCnp;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.RemessaAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.RemessaCancelamentoProtesto;
@@ -58,6 +62,7 @@ import br.com.ieptbto.cra.entidade.TipoInstituicao;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
 import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
@@ -82,7 +87,9 @@ public class AnnotatedClassesFactory {
 	 * Metodo responsavel por mapear classes Hibernate.
 	 */
 	private static void adicionarClassesHibernate() {
+		classesHibernate.add(UsuarioAnonimo.class);
 		classesHibernate.add(LogCra.class);
+		classesHibernate.add(CraServiceConfig.class);
 		classesHibernate.add(Usuario.class);
 		classesHibernate.add(GrupoUsuario.class);
 		classesHibernate.add(Instituicao.class);
@@ -128,7 +135,11 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Deposito.class);
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);
+
+		classesHibernate.add(LoteCnp.class);
+		classesHibernate.add(RegistroCnp.class);
 		classesHibernate.add(TaxaCra.class);
+		classesHibernate.add(DadosArquivoRecebido.class);
 	}
 
 	/**

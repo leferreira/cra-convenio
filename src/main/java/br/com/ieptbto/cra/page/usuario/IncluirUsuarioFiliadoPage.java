@@ -4,7 +4,6 @@ package br.com.ieptbto.cra.page.usuario;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -31,7 +30,7 @@ import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.EmailValidator;
+import br.com.ieptbto.cra.validador.EmailValidator;
 
 /**
  * @author Thasso Araújo
@@ -43,7 +42,6 @@ public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(IncluirUsuarioFiliadoPage.class);
 
 	@SpringBean
 	FiliadoMediator filiadoMediator;
