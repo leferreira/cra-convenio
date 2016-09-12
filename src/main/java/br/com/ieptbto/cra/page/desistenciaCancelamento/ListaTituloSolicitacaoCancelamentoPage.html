@@ -40,17 +40,15 @@
 						<td><a href="#" target="_blank" wicket:id="linkHistorico"><span class="link"
 								style="font-weight: bold;" wicket:id="nomeDevedor"></span></a></td>
 						<td class="text-right valor" wicket:id="valorTitulo"></td>
-						<td class="text-center"><a href="#" target="_blank" wicket:id="linkArquivo"><span
-								class="link" style="font-weight: bold;" wicket:id="nomeRemessa"></span></a></td>
+						<td class="text-center link" style="font-weight: bold;" wicket:id="nomeRemessa"></td>
 						<td class="text-center" wicket:id="dataConfirmacao"></td>
-						<td class="text-center"><a href="#" target="_blank" wicket:id="linkRetorno"><span
-								class="link" style="font-weight: bold;" wicket:id="retorno"></span></a></td>
+						<td class="text-center" wicket:id="retorno"></td> 
 						<td class="text-center" wicket:id="dataSituacao"></td>
 						<td class="text-center"><span class="info-titulo" wicket:id="situacaoTitulo"></span></td>
-						<td class="text-center">
-							<button type="button" wicket:id="linkSolicitarCancelamento">
+						<td class="text-center"> 
+							<a wicket:id="linkSolicitarCancelamento" class="btn btn-warning btn-sm">   
 								<span class="glyphicon glyphicon-remove"></span>&nbsp;<span wicket:id="nomeAcao"></span>
-							</button>
+							</a>
 						</td>
 					</tr>
 				</tbody>
