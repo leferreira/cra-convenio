@@ -22,7 +22,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @SuppressWarnings("serial")
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class ListaUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	@SpringBean

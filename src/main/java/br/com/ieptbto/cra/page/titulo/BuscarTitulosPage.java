@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -16,7 +17,8 @@ import br.com.ieptbto.cra.security.CraRoles;
  * @author Thasso Araújo
  *
  */
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER, CraRoles.ADMIN })
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 
 	/***/
@@ -44,8 +46,8 @@ public class BuscarTitulosPage extends BasePage<TituloRemessa> {
 	private void formularioBuscarTitulo() {
 		BuscarTitulosFormBean bean = new BuscarTitulosFormBean();
 		BuscarTitulosForm form = new BuscarTitulosForm("form", new CompoundPropertyModel<BuscarTitulosFormBean>(bean), getCodigoFiliado());
-		form.add(new BuscarTitulosConvenioPanel("buscarTitulosPanel", new CompoundPropertyModel<BuscarTitulosFormBean>(bean),
-				getUser().getInstituicao(), getCodigoFiliado()));
+		form.add(new BuscarTitulosConvenioPanel("buscarTitulosPanel", new CompoundPropertyModel<BuscarTitulosFormBean>(bean), getUser().getInstituicao(),
+				getCodigoFiliado()));
 		add(form);
 	}
 

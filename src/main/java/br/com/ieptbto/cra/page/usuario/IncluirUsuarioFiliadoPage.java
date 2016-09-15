@@ -37,7 +37,7 @@ import br.com.ieptbto.cra.validador.EmailValidator;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class IncluirUsuarioFiliadoPage extends BasePage<UsuarioFiliado> {
 
 	/***/

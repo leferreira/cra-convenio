@@ -22,7 +22,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class ListaFiliadoPage extends BasePage<Filiado> {
 
 	/***/

@@ -43,7 +43,7 @@ import br.com.ieptbto.cra.util.EstadoUtils;
  *
  */
 @AuthorizeInstantiation(value = "USER")
-@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER })
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class IncluirFiliadoPage extends BasePage<Filiado> {
 
 	/**/

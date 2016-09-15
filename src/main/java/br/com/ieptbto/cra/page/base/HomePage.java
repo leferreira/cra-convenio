@@ -85,8 +85,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
 	private void carregarHomeConvenioEAssociados() {
 		if (getUsuarioFiliado() == null) {
-			// this.arquivo =
-			// remessaMediator.arquivosPendentes(getUser().getInstituicao());
 			this.arquivo = new Arquivo();
 			this.arquivo.setRemessas(new ArrayList<Remessa>());
 			this.titulosFiliado = new ArrayList<TituloFiliado>();
@@ -302,7 +300,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 	 * {@inheritDoc}
 	 */
 	public String getTitulo() {
-		return "CRA - Central de Remessa de Arquivos";
+		return "IEPTB-Convênios";
 	}
 
 	@Override

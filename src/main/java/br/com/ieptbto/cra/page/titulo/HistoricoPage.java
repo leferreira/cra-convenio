@@ -1,24 +1,44 @@
 package br.com.ieptbto.cra.page.titulo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.bean.ArquivoOcorrenciaBean;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Arquivo;
+import br.com.ieptbto.cra.entidade.Confirmacao;
+import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
+import br.com.ieptbto.cra.entidade.PedidoCancelamento;
+import br.com.ieptbto.cra.entidade.Remessa;
+import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.TipoOcorrencia;
+import br.com.ieptbto.cra.mediator.AutorizacaoCancelamentoMediator;
+import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.RemessaMediator;
+import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -35,11 +55,18 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	RemessaMediator remessaMediator;
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
-	TituloMediator tituloMediator;
+	private RemessaMediator remessaMediator;
+	@SpringBean
+	private TituloMediator tituloMediator;
+	@SpringBean
+	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	@SpringBean
+	private AutorizacaoCancelamentoMediator autorizacaoCancelamentoMediator;
 
 	private TituloRemessa tituloRemessa;
+	private List<ArquivoOcorrenciaBean> arquivosOcorrencias;
 
 	public HistoricoPage(TituloRemessa titulo) {
 		this.tituloRemessa = titulo;
@@ -48,23 +75,203 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	@Override
 	protected void adicionarComponentes() {
-		carregarInformacoes();
+		carregarArquivosOcorrencias();
 		carregarCampos();
 
 	}
 
-	private void carregarInformacoes() {
+	private void carregarArquivosOcorrencias() {
 		TituloRemessa titulo = getTituloRemessa();
+		ArquivoOcorrenciaBean novaOcorrencia = null;
 
+		TituloFiliado tituloFiliado = tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
+		if (tituloFiliado != null) {
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToTituloFiliado(tituloFiliado);
+			getArquivosOcorrencias().add(novaOcorrencia);
+		}
+
+		novaOcorrencia = new ArquivoOcorrenciaBean();
 		if (titulo.getRemessa() != null) {
-			titulo.setRemessa(remessaMediator.carregarRemessaPorId(titulo.getRemessa()));
+			Remessa remessa = remessaMediator.carregarRemessaPorId(titulo.getRemessa());
+			titulo.setRemessa(remessa);
 		}
+		novaOcorrencia.parseToRemessa(titulo.getRemessa());
+		getArquivosOcorrencias().add(novaOcorrencia);
+
 		if (titulo.getConfirmacao() != null) {
-			getTituloRemessa().setConfirmacao(tituloMediator.carregarTituloConfirmacao(titulo.getConfirmacao()));
+			Confirmacao confirmacao = tituloMediator.carregarTituloConfirmacao(titulo.getConfirmacao());
+			getTituloRemessa().setConfirmacao(confirmacao);
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToRemessa(confirmacao.getRemessa());
+			getArquivosOcorrencias().add(novaOcorrencia);
 		}
+
 		if (titulo.getRetorno() != null) {
-			getTituloRemessa().setRetorno(tituloMediator.carregarTituloRetorno(titulo.getRetorno()));
+			Retorno retorno = tituloMediator.carregarTituloRetorno(titulo.getRetorno());
+			getTituloRemessa().setRetorno(retorno);
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToRemessa(retorno.getRemessa());
+			getArquivosOcorrencias().add(novaOcorrencia);
 		}
+
+		if (titulo.getPedidosCancelamento() != null) {
+			List<PedidoCancelamento> pedidoCancelamento = cancelamentoProtestoMediator.buscarPedidosCancelamentoProtestoPorTitulo(titulo);
+			for (PedidoCancelamento pedido : pedidoCancelamento) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToCancelamentoProtesto(pedido.getCancelamentoProtesto());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
+
+		if (titulo.getPedidosAutorizacaoCancelamento() != null) {
+			List<PedidoAutorizacaoCancelamento> pedidosAC = autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
+			for (PedidoAutorizacaoCancelamento pedido : pedidosAC) {
+				novaOcorrencia = new ArquivoOcorrenciaBean();
+				novaOcorrencia.parseToAutorizacaoCanlamento(pedido.getAutorizacaoCancelamento());
+				getArquivosOcorrencias().add(novaOcorrencia);
+			}
+		}
+
+		SolicitacaoCancelamento solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
+		if (solicitacaoCancelamento != null) {
+			novaOcorrencia = new ArquivoOcorrenciaBean();
+			novaOcorrencia.parseToSolicitacaoCancelamento(solicitacaoCancelamento);
+			getArquivosOcorrencias().add(novaOcorrencia);
+		}
+
+		Collections.sort(getArquivosOcorrencias());
+		add(listaArquivoOcorrenciaBean());
+	}
+
+	private ListView<ArquivoOcorrenciaBean> listaArquivoOcorrenciaBean() {
+		return new ListView<ArquivoOcorrenciaBean>("divListaHistorico", getArquivosOcorrencias()) {
+
+			/***/
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<ArquivoOcorrenciaBean> item) {
+				final ArquivoOcorrenciaBean arquivoOcorrenciaBean = item.getModelObject();
+
+				if (arquivoOcorrenciaBean.getTituloFiliado() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-success"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-edit")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink", ""));
+					link.setOutputMarkupId(true);
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
+
+				if (arquivoOcorrenciaBean.getRemessa() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+					Link<Remessa> link = new Link<Remessa>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.setEnabled(false);
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getRemessa().getArquivo().getNomeArquivo()));
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
+
+				if (arquivoOcorrenciaBean.getCancelamentoProtesto() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink",
+							arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
+
+				if (arquivoOcorrenciaBean.getAutorizacaoCancelamento() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-primary"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-check")));
+					item.add(divIcon);
+
+					Link<Arquivo> link = new Link<Arquivo>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink",
+							arquivoOcorrenciaBean.getAutorizacaoCancelamento().getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
+
+				if (arquivoOcorrenciaBean.getSolicitacaoCancelamento() != null) {
+					WebMarkupContainer divIcon = new WebMarkupContainer("div-icon");
+					divIcon.add(new AttributeAppender("class", "timeline-icon bg-danger"));
+					divIcon.add(new Label("icon").add(new AttributeAppender("class", "fa fa-times")));
+					item.add(divIcon);
+
+					Link<Remessa> link = new Link<Remessa>("link") {
+
+						/***/
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick() {
+						}
+					};
+					link.add(new Label("conteudoLink", ""));
+					link.setOutputMarkupId(true);
+					link.setEnabled(false);
+					item.add(link);
+					item.add(new Label("acao", arquivoOcorrenciaBean.getMensagem()));
+					item.add(new Label("mensagem", "").setVisible(false));
+				}
+
+				item.add(new Label("data", DataUtil.localDateToString(arquivoOcorrenciaBean.getData())));
+				item.add(new Label("hora", DataUtil.localTimeToString("HH:mm:ss", arquivoOcorrenciaBean.getHora())));
+				item.add(new Label("usuarioAcao", arquivoOcorrenciaBean.getNomeUsuario()));
+			}
+		};
 	}
 
 	private void carregarCampos() {
@@ -76,7 +283,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(irregularidade());
 		add(codigoMunicipio());
 		add(pracaProtesto());
-		add(cartorio());
 		add(status());
 		add(nomeSacadorVendedor());
 		add(documentoSacador());
@@ -100,9 +306,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		add(valorTitulo());
 		add(saldoTitulo());
 		add(valorCustaCartorio());
-		add(valorCustasCartorioDistribuidor());
 		add(valorDemaisDespesas());
-		add(valorGravacaoEletronica());
 	}
 
 	private Label codigoCartorio() {
@@ -150,20 +354,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		return new Label("codigoMunicipio", new Model<String>(getTituloRemessa().getRemessa().getCabecalho().getCodigoMunicipio()));
 	}
 
-	private Label valorGravacaoEletronica() {
-		BigDecimal valorGravacao = BigDecimal.ZERO;
-		if (getTituloRemessa().getConfirmacao() != null) {
-			if (getTituloRemessa().getConfirmacao().getTipoOcorrencia() != null) {
-				String tipoOcorrencia = getTituloRemessa().getConfirmacao().getTipoOcorrencia().trim();
-				if (!tipoOcorrencia.equals(StringUtils.EMPTY)
-						|| tipoOcorrencia.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
-					valorGravacao = getTituloRemessa().getRemessa().getInstituicaoOrigem().getValorConfirmacao();
-				}
-			}
-		}
-		return new LabelValorMonetario<BigDecimal>("valorGravacaoEletronica", valorGravacao);
-	}
-
 	private Label numeroProtocoloCartorio() {
 		String numeroProtocolo = StringUtils.EMPTY;
 		if (getTituloRemessa().getConfirmacao() != null) {
@@ -178,10 +368,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			dataProtocolo = DataUtil.localDateToString(getTituloRemessa().getConfirmacao().getDataProtocolo());
 		}
 		return new Label("dataProtocolo", new Model<String>(dataProtocolo));
-	}
-
-	private Label cartorio() {
-		return new Label("cartorio", new Model<String>(getTituloRemessa().getRemessa().getInstituicaoDestino().getNomeFantasia().toUpperCase()));
 	}
 
 	private Label pracaProtesto() {
@@ -243,17 +429,6 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			valorCustaCartorio = getTituloRemessa().getRetorno().getValorCustaCartorio();
 		}
 		return new LabelValorMonetario<BigDecimal>("valorCustaCartorio", valorCustaCartorio);
-	}
-
-	public Label valorCustasCartorioDistribuidor() {
-		BigDecimal valorCustasCartorioDistribuidor = BigDecimal.ZERO;
-		if (getTituloRemessa().getConfirmacao() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getConfirmacao().getValorCustasCartorioDistribuidor();
-		}
-		if (getTituloRemessa().getRetorno() != null) {
-			valorCustasCartorioDistribuidor = getTituloRemessa().getRetorno().getValorCustasCartorioDistribuidor();
-		}
-		return new LabelValorMonetario<BigDecimal>("valorCustasCartorioDistribuidor", valorCustasCartorioDistribuidor);
 	}
 
 	public Label valorDemaisDespesas() {
@@ -329,6 +504,13 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 	private TituloRemessa getTituloRemessa() {
 		return tituloRemessa;
+	}
+
+	public List<ArquivoOcorrenciaBean> getArquivosOcorrencias() {
+		if (arquivosOcorrencias == null) {
+			arquivosOcorrencias = new ArrayList<ArquivoOcorrenciaBean>();
+		}
+		return arquivosOcorrencias;
 	}
 
 	@Override
