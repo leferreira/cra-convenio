@@ -22,7 +22,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
-import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
+import br.com.ieptbto.cra.enumeration.EspecieTituloEntradaManual;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
@@ -183,10 +183,10 @@ public class EntradaManualInputPanel extends Panel {
 		return textField;
 	}
 
-	private DropDownChoice<TipoEspecieTitulo> textFieldEspecieTitulo() {
-		IChoiceRenderer<TipoEspecieTitulo> renderer = new ChoiceRenderer<TipoEspecieTitulo>("label");
-		final DropDownChoice<TipoEspecieTitulo> dropDownEspecie =
-				new DropDownChoice<TipoEspecieTitulo>("especieTitulo", Arrays.asList(TipoEspecieTitulo.values()), renderer);
+	private DropDownChoice<EspecieTituloEntradaManual> textFieldEspecieTitulo() {
+		IChoiceRenderer<EspecieTituloEntradaManual> renderer = new ChoiceRenderer<EspecieTituloEntradaManual>("label");
+		final DropDownChoice<EspecieTituloEntradaManual> dropDownEspecie =
+				new DropDownChoice<EspecieTituloEntradaManual>("especieTitulo", Arrays.asList(EspecieTituloEntradaManual.values()), renderer);
 		dropDownEspecie.add(new OnChangeAjaxBehavior() {
 
 			/***/
@@ -195,9 +195,9 @@ public class EntradaManualInputPanel extends Panel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 
-				TipoEspecieTitulo tipoEspecie = dropDownEspecie.getModelObject();
+				EspecieTituloEntradaManual tipoEspecie = dropDownEspecie.getModelObject();
 				if (tipoEspecie != null) {
-					if (tipoEspecie.equals(TipoEspecieTitulo.CH)) {
+					if (tipoEspecie.equals(EspecieTituloEntradaManual.CH)) {
 						comboAlinea.setEnabled(true);
 						comboAlinea.setRequired(true);
 					} else {

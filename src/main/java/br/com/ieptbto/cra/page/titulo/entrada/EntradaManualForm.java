@@ -8,7 +8,7 @@ import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.enumeration.TipoEspecieTitulo;
+import br.com.ieptbto.cra.enumeration.EspecieTituloEntradaManual;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
@@ -48,8 +48,8 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
 		try {
 			if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
-				if (!titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CH) && !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.CDA)
-						&& !titulo.getEspecieTitulo().equals(TipoEspecieTitulo.ATC)) {
+				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH) && !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
+						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC)) {
 					throw new InfraException("A Data de Vencimento do título não pode ser igual a data atual!");
 				}
 			}
