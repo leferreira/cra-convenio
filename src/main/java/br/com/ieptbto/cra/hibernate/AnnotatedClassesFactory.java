@@ -28,7 +28,6 @@ import br.com.ieptbto.cra.entidade.CabecalhoRemessa;
 import br.com.ieptbto.cra.entidade.CancelamentoProtesto;
 import br.com.ieptbto.cra.entidade.Confirmacao;
 import br.com.ieptbto.cra.entidade.CraServiceConfig;
-import br.com.ieptbto.cra.entidade.DadosArquivoRecebido;
 import br.com.ieptbto.cra.entidade.Deposito;
 import br.com.ieptbto.cra.entidade.DesistenciaProtesto;
 import br.com.ieptbto.cra.entidade.EnvelopeSLIP;
@@ -141,7 +140,6 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(LoteCnp.class);
 		classesHibernate.add(RegistroCnp.class);
 		classesHibernate.add(TaxaCra.class);
-		classesHibernate.add(DadosArquivoRecebido.class);
 	}
 
 	/**

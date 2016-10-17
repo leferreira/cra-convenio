@@ -95,12 +95,12 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		EntradaManualForm form = new EntradaManualForm("form", getModel(), getUser(), fileUploadField);
 		form.add(divSetorFiliado());
 		form.add(new EntradaManualInputPanel("entradaManualInputPanel", getModel(), fileUploadField));
-		form.add(new AvalistaInputPanel("avalistaPanel", getModel(), tituloFiliado.getAvalistas()));
-		form.add(listaAvalistas());
-
 		form.setMultiPart(true);
-		form.setMaxSize(Bytes.megabytes(15));
+		form.setMaxSize(Bytes.megabytes(5));
 		add(form);
+
+		add(new AvalistaInputPanel("avalistaPanel", getModel(), tituloFiliado.getAvalistas()));
+		add(listaAvalistas());
 	}
 
 	private void criarCampoAnexo() {

@@ -2,6 +2,7 @@ package br.com.ieptbto.cra.page.titulo.entrada;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -14,7 +15,6 @@ import org.apache.wicket.model.Model;
 
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.util.EstadoUtils;
 
 /**
@@ -48,17 +48,20 @@ public class AvalistaInputPanel extends Panel {
 			protected void onSubmit() {
 				Avalista avalistaTitulo = getModelObject();
 
-				try {
-					if (avalistaTitulo.getNome() != null || avalistaTitulo.getEndereco() != null || avalistaTitulo.getCidade() != null
-							|| avalistaTitulo.getUf() != null || avalistaTitulo.getDocumento() != null || avalistaTitulo.getCep() != null) {
-						getAvalistas().add(avalistaTitulo);
+				if (!StringUtils.isBlank(avalistaTitulo.getNome()) && !StringUtils.isBlank(avalistaTitulo.getEndereco())
+						&& !StringUtils.isBlank(avalistaTitulo.getCidade()) && !StringUtils.isBlank(avalistaTitulo.getUf())
+						&& !StringUtils.isBlank(avalistaTitulo.getBairro()) && !StringUtils.isBlank(avalistaTitulo.getDocumento())
+						&& !StringUtils.isBlank(avalistaTitulo.getCep())) {
+					getAvalistas().add(avalistaTitulo);
 
-						Avalista novoAvalista = new Avalista();
-						setAvalista(novoAvalista);
-						getModel().setObject(novoAvalista);
-					}
-				} catch (InfraException ex) {
-					error("O Avalista não pode ter informações em branco !");
+					Avalista novoAvalista = new Avalista();
+					setAvalista(novoAvalista);
+					getModel().setObject(novoAvalista);
+				} else if (StringUtils.isBlank(avalistaTitulo.getNome()) || StringUtils.isBlank(avalistaTitulo.getEndereco())
+						|| StringUtils.isBlank(avalistaTitulo.getCidade()) || StringUtils.isBlank(avalistaTitulo.getUf())
+						|| StringUtils.isBlank(avalistaTitulo.getBairro()) || StringUtils.isBlank(avalistaTitulo.getDocumento())
+						|| StringUtils.isBlank(avalistaTitulo.getCep())) {
+					error("O outro devedor incluído não pode ter informações em branco...");
 				}
 			}
 		};

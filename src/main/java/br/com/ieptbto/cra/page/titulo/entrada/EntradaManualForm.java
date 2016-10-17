@@ -50,7 +50,7 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 			if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
 				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH) && !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
 						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC)) {
-					throw new InfraException("A Data de Vencimento do título não pode ser igual a data atual!");
+					throw new InfraException("A Data de Vencimento do título não pode ser igual a data de emissão!");
 				}
 			}
 			if (new LocalDate(titulo.getDataEmissao()).isAfter(new LocalDate(titulo.getDataVencimento()))) {
@@ -71,8 +71,15 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 				if (!fileUploadField.getFileUpload().getClientFileName().toUpperCase().contains(".ZIP")) {
 					throw new InfraException("O anexo do documento devem estar compactados em formato ZIP.");
 				}
-				if (!Bytes.megabytes(15).greaterThan(fileUploadField.getFileUpload().getSize())) {
-					throw new InfraException("Tamanho do arquivo anexo excedido. Limite máximo de 15 MB.");
+				if (!Bytes.megabytes(5).greaterThan(fileUploadField.getFileUpload().getSize())) {
+					throw new InfraException("Tamanho do arquivo anexo excedido. Limite máximo de 5 MB.");
+				}
+			}
+
+			if (TituloFiliado.isEspecieNaoContemOutrosDevedores(titulo.getEspecieTitulo())) {
+				if (!titulo.getAvalistas().isEmpty()) {
+					throw new InfraException(
+							"O tipo de documento informado não poderá conter outros devedores. Remova-os e em seguida salve o título novamente...");
 				}
 			}
 
