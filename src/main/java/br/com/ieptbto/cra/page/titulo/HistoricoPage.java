@@ -30,7 +30,6 @@ import br.com.ieptbto.cra.entidade.PedidoAutorizacaoCancelamento;
 import br.com.ieptbto.cra.entidade.PedidoCancelamento;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
@@ -84,7 +83,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		TituloRemessa titulo = getTituloRemessa();
 		ArquivoOcorrenciaBean novaOcorrencia = null;
 
-		TituloFiliado tituloFiliado = tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
+		TituloFiliado tituloFiliado =
+				tituloFiliadoMediator.buscarTituloFiliadoProcessadoNaCra(titulo.getNossoNumero(), titulo.getNumeroTitulo());
 		if (tituloFiliado != null) {
 			novaOcorrencia = new ArquivoOcorrenciaBean();
 			novaOcorrencia.parseToTituloFiliado(tituloFiliado);
@@ -125,19 +125,13 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 		}
 
 		if (titulo.getPedidosAutorizacaoCancelamento() != null) {
-			List<PedidoAutorizacaoCancelamento> pedidosAC = autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
+			List<PedidoAutorizacaoCancelamento> pedidosAC =
+					autorizacaoCancelamentoMediator.buscarPedidosAutorizacaoCancelamentoPorTitulo(titulo);
 			for (PedidoAutorizacaoCancelamento pedido : pedidosAC) {
 				novaOcorrencia = new ArquivoOcorrenciaBean();
 				novaOcorrencia.parseToAutorizacaoCanlamento(pedido.getAutorizacaoCancelamento());
 				getArquivosOcorrencias().add(novaOcorrencia);
 			}
-		}
-
-		SolicitacaoCancelamento solicitacaoCancelamento = cancelamentoProtestoMediator.buscarSolicitacaoCancelamentoPorTitulo(titulo);
-		if (solicitacaoCancelamento != null) {
-			novaOcorrencia = new ArquivoOcorrenciaBean();
-			novaOcorrencia.parseToSolicitacaoCancelamento(solicitacaoCancelamento);
-			getArquivosOcorrencias().add(novaOcorrencia);
 		}
 
 		Collections.sort(getArquivosOcorrencias());
@@ -213,8 +207,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					link.add(new Label("conteudoLink",
-							arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto().getArquivo().getNomeArquivo()));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getCancelamentoProtesto().getRemessaCancelamentoProtesto()
+							.getArquivo().getNomeArquivo()));
 					link.setEnabled(false);
 					item.add(link);
 					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
@@ -236,8 +230,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 						public void onClick() {
 						}
 					};
-					link.add(new Label("conteudoLink",
-							arquivoOcorrenciaBean.getAutorizacaoCancelamento().getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
+					link.add(new Label("conteudoLink", arquivoOcorrenciaBean.getAutorizacaoCancelamento()
+							.getRemessaAutorizacaoCancelamento().getArquivo().getNomeArquivo()));
 					link.setEnabled(false);
 					item.add(link);
 					item.add(new Label("acao", " Arquivo postado na CRA-TO."));
@@ -340,7 +334,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 			irregularidade = getTituloRemessa().getConfirmacao().getCodigoIrregularidade();
 		}
 		if (getTituloRemessa().getRetorno() != null) {
-			if (getTituloRemessa().getRetorno().getTipoOcorrencia().equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
+			if (getTituloRemessa().getRetorno().getTipoOcorrencia()
+					.equals(TipoOcorrencia.DEVOLVIDO_POR_IRREGULARIDADE_SEM_CUSTAS.getConstante())) {
 				irregularidade = getTituloRemessa().getRetorno().getCodigoIrregularidade();
 			}
 		}
@@ -408,7 +403,8 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 	}
 
 	private Label dataVencimentoTitulo() {
-		return new Label("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
+		return new Label("dataVencimentoTitulo",
+				new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
 	}
 
 	public Label valorTitulo() {

@@ -1,6 +1,5 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -19,7 +18,6 @@ import br.com.ieptbto.cra.entidade.Instituicao;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
@@ -64,31 +62,7 @@ public class BuscarTituloSolicitacaoCancelamentoPage extends BasePage<TituloReme
 
 			@Override
 			protected void onSubmit() {
-				TituloRemessa tituloRemessa = getModelObject();
-				Instituicao bancoConvenio = null;
-				Municipio municipio = null;
-
-				try {
-					if (StringUtils.isBlank(tituloRemessa.getNumeroTitulo()) && StringUtils.isBlank(tituloRemessa.getNumeroTitulo())
-							&& StringUtils.isBlank(tituloRemessa.getNumeroTitulo()) && StringUtils.isBlank(tituloRemessa.getNumeroTitulo())
-							&& dropDownMunicipio.getModelObject() == null) {
-						throw new InfraException("Campos em branco! Por favor preencha ao menos um dos campos!");
-					}
-					if (dropDownMunicipio.getModelObject() != null) {
-						municipio = dropDownMunicipio.getModelObject();
-					}
-					if (dropDownBancosConvenios.getModelObject() != null) {
-						bancoConvenio = dropDownBancosConvenios.getModelObject();
-					}
-
-					setResponsePage(new ListaTituloSolicitacaoCancelamentoPage(tituloRemessa, bancoConvenio, municipio));
-				} catch (InfraException ex) {
-					System.out.println(ex.getMessage());
-					error(ex.getMessage());
-				} catch (Exception e) {
-					System.out.println(e.getMessage() + e);
-					error("Não foi possível realizar a busca de títulos para cancelamento ! \n Entre em contato com a CRA ");
-				}
+				error("O serviço de cancelamento está temporáriamente indisponível!");
 			}
 		};
 		form.add(textFieldNomeDevedor());
@@ -128,7 +102,8 @@ public class BuscarTituloSolicitacaoCancelamentoPage extends BasePage<TituloReme
 
 	private DropDownChoice<Municipio> dropDownMunicipio() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		dropDownMunicipio = new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
+		dropDownMunicipio =
+				new DropDownChoice<Municipio>("municipio", new Model<Municipio>(), municipioMediator.getMunicipiosTocantins(), renderer);
 		dropDownMunicipio.setLabel(new Model<String>("Município"));
 		return dropDownMunicipio;
 	}

@@ -1,7 +1,6 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
@@ -16,13 +15,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalTime;
 
 import br.com.ieptbto.cra.component.label.DataUtil;
-import br.com.ieptbto.cra.entidade.SolicitacaoCancelamento;
+import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
-import br.com.ieptbto.cra.enumeration.StatusSolicitacaoCancelamento;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
@@ -35,7 +32,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
-public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCancelamento> {
+public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -45,11 +42,11 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 	@SpringBean
 	CancelamentoProtestoMediator cancelamentoProtestoMediator;
 
-	private SolicitacaoCancelamento solicitacaoCancelamento;
+	private SolicitacaoDesistenciaCancelamento solicitacaoCancelamento;
 	private DropDownChoice<CodigoIrregularidade> dropDownMotivoCancelamento;
 
 	public TituloSolicitacaoCancelamentoPage(TituloRemessa titulo) {
-		this.solicitacaoCancelamento = new SolicitacaoCancelamento();
+		this.solicitacaoCancelamento = new SolicitacaoDesistenciaCancelamento();
 		this.solicitacaoCancelamento.setTituloRemessa(titulo);
 
 		adicionarComponentes();
@@ -62,37 +59,15 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 	}
 
 	private void formEnviarSolicitacao() {
-		Form<SolicitacaoCancelamento> form = new Form<SolicitacaoCancelamento>("form", getModel()) {
+		Form<SolicitacaoDesistenciaCancelamento> form = new Form<SolicitacaoDesistenciaCancelamento>("form", getModel()) {
 
 			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				SolicitacaoCancelamento solicitacaoCancelamento = getModelObject();
-				solicitacaoCancelamento.setDataSolicitacao(new Date());
-				solicitacaoCancelamento.setHoraSolicitacao(new LocalTime());
-				solicitacaoCancelamento.setUsuario(getUser());
-
-				boolean cancelamentoPorIrregularidade = false;
+				error("O serviço de cancelamento está temporáriamente indisponível!");
 				try {
-					if (dropDownMotivoCancelamento.getModelObject() == null) {
-						solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
-					} else {
-						CodigoIrregularidade codigoIrregularidade = dropDownMotivoCancelamento.getModelObject();
-						cancelamentoPorIrregularidade = true;
-						if (codigoIrregularidade == CodigoIrregularidade.IRREGULARIDADE_0) {
-							solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_AUTORIZACAO_CANCELAMENTO);
-						} else {
-							solicitacaoCancelamento.setCodigoIrregularidadeCancelamento(codigoIrregularidade);
-							solicitacaoCancelamento.setStatusSolicitacaoCancelamento(StatusSolicitacaoCancelamento.SOLICITACAO_CANCELAMENTO_PROTESTO);
-						}
-					}
-					cancelamentoProtestoMediator.salvarSolicitacaoCancelamento(solicitacaoCancelamento);
-					success("A solicitação de cancelamento foi enviada com sucesso! O IEPTB-TO pede um prazo de até <span class=\"alert-link\">48 horas</span> para ser processado em cartório.");
-					if (!cancelamentoPorIrregularidade) {
-						info("O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span>. Somente após o pagamento, o título será cancelado!");
-					}
 
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage(), ex);
@@ -168,7 +143,8 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 	}
 
 	private Label dataVencimentoTitulo() {
-		return new Label("dataVencimentoTitulo", new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
+		return new Label("dataVencimentoTitulo",
+				new Model<String>(DataUtil.localDateToString(getTituloRemessa().getDataVencimentoTitulo())));
 	}
 
 	public Label valorTitulo() {
@@ -208,7 +184,7 @@ public class TituloSolicitacaoCancelamentoPage extends BasePage<SolicitacaoCance
 	}
 
 	@Override
-	protected IModel<SolicitacaoCancelamento> getModel() {
-		return new CompoundPropertyModel<SolicitacaoCancelamento>(solicitacaoCancelamento);
+	protected IModel<SolicitacaoDesistenciaCancelamento> getModel() {
+		return new CompoundPropertyModel<SolicitacaoDesistenciaCancelamento>(solicitacaoCancelamento);
 	}
 }
