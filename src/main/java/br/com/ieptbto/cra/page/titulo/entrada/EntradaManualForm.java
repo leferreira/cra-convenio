@@ -48,8 +48,10 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
 		try {
 			if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
-				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH) && !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
-						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC)) {
+				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH)
+						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
+						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC)
+						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.NP)) {
 					throw new InfraException("A Data de Vencimento do título não pode ser igual a data de emissão!");
 				}
 			}
@@ -63,7 +65,8 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 			if (titulo.getCpfCnpj() != null) {
 				String documentoDevedor = titulo.getCpfCnpj().replace(".", "").replace("-", "").replace("/", "");
 				if (!CpfCnpjUtil.isValidCNPJ(documentoDevedor) && !CpfCnpjUtil.isValidCPF(documentoDevedor)) {
-					throw new InfraException("O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
+					throw new InfraException(
+							"O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
 				}
 			}
 
