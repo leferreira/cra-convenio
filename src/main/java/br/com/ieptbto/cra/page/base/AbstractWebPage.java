@@ -8,8 +8,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
+import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
+import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.security.UserSession;
 
 /**
@@ -20,14 +22,13 @@ import br.com.ieptbto.cra.security.UserSession;
  */
 public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends WebPage implements IHeaderContributor {
 
-	/**
-	 * 
-	 */
+	/***/
 	private static final long serialVersionUID = 1L;
 	/** * Wicket-ID do feedback panel. */
 	protected static final String WID_FEEDBACK = "feedback";
+	
 	@SpringBean
-	private UsuarioMediator usuarioMediator;
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 
 	/**
 	 * Construtor padrao.
@@ -64,9 +65,18 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	 * @return {@link Colaborador}
 	 */
 	public Usuario getUser() {
-		return usuarioMediator.buscarUsuarioPorPK(getSession().getUser());
+		return getSession().getUser();
 	}
 
+	
+	public Filiado getFiliadoPorUsuarioCorrente() {
+		UsuarioFiliado usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
+		if (usuarioFiliado != null) {
+			return usuarioFiliado.getFiliado();
+		}
+		return null;
+	}
+	
 	/**
 	 * Recupera o {@link FeedbackPanel} da pagina.
 	 * 

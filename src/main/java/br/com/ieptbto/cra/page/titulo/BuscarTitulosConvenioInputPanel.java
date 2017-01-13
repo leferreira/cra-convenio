@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.bean.TituloConvenioBean;
 import br.com.ieptbto.cra.component.label.LocalDateTextField;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Instituicao;
@@ -19,7 +20,7 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
  * @author Thasso Araújo
  * 
  */
-public class BuscarTitulosConvenioPanel extends Panel {
+public class BuscarTitulosConvenioInputPanel extends Panel {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -30,17 +31,13 @@ public class BuscarTitulosConvenioPanel extends Panel {
 	FiliadoMediator filiadoMediator;
 
 	private Instituicao instituicao;
-	private String codigoFiliado;
+	private Filiado filiado;
 
-	public BuscarTitulosConvenioPanel(String id, IModel<BuscarTitulosFormBean> model, Instituicao instituicao, String codigoFiliado) {
+	public BuscarTitulosConvenioInputPanel(String id, IModel<TituloConvenioBean> model, Instituicao instituicao, Filiado filiado) {
 		super(id, model);
 		this.instituicao = instituicao;
-		this.codigoFiliado = codigoFiliado;
+		this.filiado = filiado;
 
-		carregarCampos();
-	}
-
-	private void carregarCampos() {
 		add(textFieldNumeroTitulo());
 		add(textFieldNomeDevedor());
 		add(textFieldDocumentoDevedor());
@@ -62,14 +59,12 @@ public class BuscarTitulosConvenioPanel extends Panel {
 	}
 
 	private LocalDateTextField textFieldDataInicio() {
-		LocalDateTextField dataEntradaInicio = new LocalDateTextField("dataInicio");
-		return dataEntradaInicio;
+		return new LocalDateTextField("dataInicio");
 	}
 
 	private DropDownChoice<Instituicao> dropDownCartorioProtesto() {
 		IChoiceRenderer<Instituicao> renderer = new ChoiceRenderer<Instituicao>("municipio.nomeMunicipio");
-		DropDownChoice<Instituicao> campoPracaProtesto =
-				new DropDownChoice<Instituicao>("instiuicaoCartorio", instituicaoMediator.getCartorios(), renderer);
+		DropDownChoice<Instituicao> campoPracaProtesto = new DropDownChoice<Instituicao>("instiuicaoCartorio", instituicaoMediator.getCartorios(), renderer);
 		return campoPracaProtesto;
 	}
 
@@ -79,10 +74,10 @@ public class BuscarTitulosConvenioPanel extends Panel {
 		campoFiliado.setLabel(new Model<String>("Filiado"));
 		campoFiliado.setOutputMarkupId(true);
 
-		if (codigoFiliado != null) {
-			if (!codigoFiliado.trim().isEmpty()) {
-				campoFiliado.setEnabled(false);
-			}
+		if (filiado != null) {
+			campoFiliado.setEnabled(false);
+			campoFiliado.setModel(new Model<Filiado>());
+			campoFiliado.setDefaultModelObject(filiado);
 		}
 		return campoFiliado;
 	}

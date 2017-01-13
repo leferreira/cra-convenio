@@ -11,15 +11,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import br.com.ieptbto.cra.bean.TituloConvenioBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
@@ -37,13 +39,12 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 
-	private TituloRemessa titulo;
-	private BuscarTitulosFormBean bean;
-	private String codigoFiliado;
+	private TituloConvenioBean tituloBean;
+	private Filiado filiado;
 
-	public ListaTitulosPage(BuscarTitulosFormBean bean, String codigoFiliado) {
-		this.bean = bean;
-		this.codigoFiliado = codigoFiliado;
+	public ListaTitulosPage(TituloConvenioBean tituloBean, Filiado filiado) {
+		this.tituloBean = tituloBean;
+		this.filiado = filiado;
 
 		adicionarComponentes();
 	}
@@ -114,14 +115,18 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 			@Override
 			protected List<TituloRemessa> load() {
-				return tituloFiliadoMediator.buscarListaTitulos(getUser(), bean.getDataInicio(), bean.getInstiuicaoCartorio(), bean.getNumeroTitulo(),
-						bean.getNomeDevedor(), bean.getDocumentoDevedor(), codigoFiliado);
+				String codigoFiliado = null;
+				if (filiado != null) {
+					codigoFiliado = filiado.getCodigoFiliado();
+				}
+				return tituloFiliadoMediator.buscarListaTitulos(getUser(), tituloBean.getDataInicio(), tituloBean.getInstiuicaoCartorio(), tituloBean.getNumeroTitulo(),
+						tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
 			}
 		};
 	}
 
 	@Override
 	protected IModel<TituloRemessa> getModel() {
-		return new CompoundPropertyModel<TituloRemessa>(titulo);
+		return null;
 	}
 }

@@ -24,9 +24,9 @@ import br.com.ieptbto.cra.menu.CraMenu;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.BuscarTituloSolicitacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.ListaTituloSolicitacaoCancelamentoPage;
-import br.com.ieptbto.cra.page.desistenciaCancelamento.TituloSolicitacaoCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.ListaTitulosDesistenciaCancelamentoPage;
+import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.SolicitarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
@@ -128,9 +128,9 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		/* EMPRESA CONVENIO */
 		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
-		mountPage("SolicitarDesistenciaCancelamentoEmpresa", BuscarTituloSolicitacaoCancelamentoPage.class);
-		mountPage("ListaTitulosDesistenciaCancelamento", ListaTituloSolicitacaoCancelamentoPage.class);
-		mountPage("TituloDesistenciaCancelamentoSolicitado", TituloSolicitacaoCancelamentoPage.class);
+		mountPage("SolicitarDesistenciaCancelamentoEmpresa", SolicitarDesistenciaCancelamentoPage.class);
+		mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
+		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamentoPage.class);
 		mountPage("RelatorioTItulosEnviados", RelatorioTItulosEnviadosPage.class);
 	}
 
