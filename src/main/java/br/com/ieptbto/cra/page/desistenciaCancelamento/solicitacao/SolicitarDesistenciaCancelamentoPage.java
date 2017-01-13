@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.titulo;
+package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -13,6 +13,7 @@ import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.BuscarTitulosConvenioInputPanel;
 import br.com.ieptbto.cra.security.CraRoles;
 
 /**
@@ -21,7 +22,7 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
-public class BuscarTitulosPage extends BasePage<TituloFiliado> {
+public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloFiliado> {
 
 	/***/
 	private static final long serialVersionUID = 1L;
@@ -31,7 +32,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 	private Filiado filiado;
 	private Usuario usuario;
 
-	public BuscarTitulosPage() {
+	public SolicitarDesistenciaCancelamentoPage() {
 		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();
 		this.usuario = getUser();
@@ -64,7 +65,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 							throw new InfraException("Os campos não podem ser nulos! Por favor informe ao menos um parâmetro...");
 						}
 					}
-					setResponsePage(new ListaTitulosPage(tituloConvenioBean, filiado));
+					setResponsePage(new ListaTitulosDesistenciaCancelamentoPage(tituloConvenioBean, filiado));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());
 					error(ex.getMessage());
