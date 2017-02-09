@@ -45,12 +45,11 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	private AvalistaMediator avalistaMediator;
+	AvalistaMediator avalistaMediator;
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
-
+	FiliadoMediator filiadoMediator;
 	private TituloFiliado tituloFiliado;
 	private FileUploadField fileUploadField;
 

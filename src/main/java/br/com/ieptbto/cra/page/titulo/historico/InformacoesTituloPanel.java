@@ -261,8 +261,7 @@ public class InformacoesTituloPanel extends Panel {
 	}
 
 	private Label valorTitulo() {
-		Label textField = new Label("valorTitulo", new Model<String>("R$ " + tituloRemessa.getValorTitulo().toString()));
-		return textField;
+		return new Label("valorTitulo", new Model<String>("R$ " + tituloRemessa.getValorTitulo().toString()));
 	}
 
 	private Label saldoTitulo() {

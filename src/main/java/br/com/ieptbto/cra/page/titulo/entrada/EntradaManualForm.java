@@ -26,12 +26,11 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	private TituloFiliadoMediator tituloFiliadoMediator;
+	TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
-
+	FiliadoMediator filiadoMediator;
 	private FileUploadField fileUploadField;
 	private Usuario usuario;
 
@@ -48,10 +47,8 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
 		try {
 			if (titulo.getDataEmissao().equals(titulo.getDataVencimento())) {
-				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH)
-						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
-						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC)
-						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.NP)) {
+				if (!titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CH) && !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.CDA)
+						&& !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.ATC) && !titulo.getEspecieTitulo().equals(EspecieTituloEntradaManual.NP)) {
 					throw new InfraException("A Data de Vencimento do título não pode ser igual a data de emissão!");
 				}
 			}
@@ -65,8 +62,7 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 			if (titulo.getCpfCnpj() != null) {
 				String documentoDevedor = titulo.getCpfCnpj().replace(".", "").replace("-", "").replace("/", "");
 				if (!CpfCnpjUtil.isValidCNPJ(documentoDevedor) && !CpfCnpjUtil.isValidCPF(documentoDevedor)) {
-					throw new InfraException(
-							"O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
+					throw new InfraException("O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
 				}
 			}
 
@@ -81,11 +77,10 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
 			if (TituloFiliado.isEspecieNaoContemOutrosDevedores(titulo.getEspecieTitulo())) {
 				if (!titulo.getAvalistas().isEmpty()) {
-					throw new InfraException(
-							"O tipo de documento informado não poderá conter outros devedores. Remova-os e em seguida salve o título novamente...");
+					throw new InfraException("O tipo de documento informado não poderá conter outros devedores. "
+							+ "Remova-os e em seguida salve o título novamente...");
 				}
 			}
-
 			tituloFiliadoMediator.salvarTituloConvenio(usuario, titulo, fileUploadField.getFileUpload());
 			setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso e está pendente de envio para protesto!"));
 		} catch (InfraException e) {

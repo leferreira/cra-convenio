@@ -2,7 +2,6 @@ package br.com.ieptbto.cra.page.titulo.entrada;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -21,8 +20,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
 import br.com.ieptbto.cra.enumeration.EspecieTituloEntradaManual;
+import br.com.ieptbto.cra.enumeration.TipoAlineaCheque;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
@@ -34,23 +33,17 @@ public class EntradaManualInputPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private MunicipioMediator municipioMediator;
+	MunicipioMediator municipioMediator;
 	@SpringBean
-	private FiliadoMediator filiadoMediator;
+	FiliadoMediator filiadoMediator;
 	@SpringBean
-	private UsuarioFiliadoMediator usuarioFiliadoMediator;
-
+	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	private DropDownChoice<TipoAlineaCheque> comboAlinea;
 	private FileUploadField fileUploadField;
 
 	public EntradaManualInputPanel(String id, IModel<TituloFiliado> model, FileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
-
-		adicionarCampos();
-	}
-
-	private void adicionarCampos() {
 		add(fileUploadAnexo());
 		add(labelContemAnexo());
 		add(textFieldNumeroTitulo());
@@ -91,9 +84,6 @@ public class EntradaManualInputPanel extends Panel {
 
 	private DateTextField dateFieldDataEmissao() {
 		DateTextField dateField = new DateTextField("dataEmissao", "dd/MM/yyyy");
-		if (TituloFiliado.class.cast(getDefaultModelObject()).getDataEmissao() != null) {
-			dateField = new DateTextField("dataEmissao", new Model<Date>(TituloFiliado.class.cast(getDefaultModelObject()).getDataEmissao()), "dd/MM/yyyy");
-		}
 		dateField.setLabel(new Model<String>("Data Emissão"));
 		dateField.setRequired(true);
 		return dateField;
@@ -101,10 +91,6 @@ public class EntradaManualInputPanel extends Panel {
 
 	private DateTextField dateFieldDataVencimento() {
 		DateTextField dateField = new DateTextField("dataVencimento", "dd/MM/yyyy");
-		if (TituloFiliado.class.cast(getDefaultModelObject()).getDataVencimento() != null) {
-			dateField =
-					new DateTextField("dataVencimento", new Model<Date>(TituloFiliado.class.cast(getDefaultModelObject()).getDataVencimento()), "dd/MM/yyyy");
-		}
 		dateField.setLabel(new Model<String>("Data de Vencimento"));
 		dateField.setRequired(true);
 		return dateField;
