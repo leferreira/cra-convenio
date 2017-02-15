@@ -25,7 +25,6 @@ import org.apache.wicket.util.lang.Bytes;
 import br.com.ieptbto.cra.entidade.Avalista;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
 import br.com.ieptbto.cra.mediator.AvalistaMediator;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
@@ -110,9 +109,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private WebMarkupContainer divSetorFiliado() {
 		WebMarkupContainer divSetores = new WebMarkupContainer("divSetoresFiliados");
 		divSetores.add(campoSetorTitulo());
-		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
-			divSetores.setVisible(false);
-		}
+		divSetores.setVisible(getUser().getInstituicao().getSetoresConvenio());
 		return divSetores;
 	}
 

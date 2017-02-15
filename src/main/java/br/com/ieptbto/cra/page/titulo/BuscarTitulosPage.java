@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-import br.com.ieptbto.cra.bean.TituloConvenioBean;
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.Usuario;

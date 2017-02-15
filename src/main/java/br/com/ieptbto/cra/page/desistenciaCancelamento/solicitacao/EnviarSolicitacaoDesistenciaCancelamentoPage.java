@@ -25,11 +25,11 @@ import org.joda.time.LocalTime;
 import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.SolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.enumeration.CodigoIrregularidade;
 import br.com.ieptbto.cra.enumeration.MotivoSolicitacaoDesistenciaCancelamento;
 import br.com.ieptbto.cra.enumeration.TipoSolicitacaoDesistenciaCancelamento;
+import br.com.ieptbto.cra.enumeration.regra.CodigoIrregularidade;
 import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.CancelamentoProtestoMediator;
+import br.com.ieptbto.cra.mediator.SolicitacaoDesistenciaCancelamentoMediator;
 import br.com.ieptbto.cra.mediator.TituloMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
 import br.com.ieptbto.cra.security.CraRoles;
@@ -48,7 +48,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	@SpringBean
 	private TituloMediator tituloMediator;
 	@SpringBean
-	private CancelamentoProtestoMediator cancelamentoProtestoMediator;
+	private SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
@@ -98,8 +98,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 					if (MotivoSolicitacaoDesistenciaCancelamento.IRREGULARIDADE_NO_TITULO_APRESENTADO.equals(motivo)) {
 						if (solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_0)
 								|| solicitacao.getCodigoIrregularidade().equals(CodigoIrregularidade.IRREGULARIDADE_CONVENIO)) {
-							throw new InfraException(
-									"A irregularidade informada não pode ser aplicada. Por favor informe uma outra irregularidade!");
+							throw new InfraException("A irregularidade informada não pode ser aplicada. Por favor informe uma outra irregularidade!");
 						}
 						if (fileUploadField.getFileUpload() != null) {
 							if (!fileUploadField.getFileUpload().getClientFileName().toUpperCase().contains(".ZIP")) {
@@ -116,7 +115,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 						}
 					}
 
-					cancelamentoProtestoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
+					solicitacaoMediator.salvarSolicitacaoDesistenciaCancelamento(solicitacao, fileUploadField.getFileUpload());
 					if (MotivoSolicitacaoDesistenciaCancelamento.PAGAMENTO_AO_CREDOR.equals(motivo)) {
 						success("A solicitação por meio de Carta de Anuência Eletrônica foi enviada com sucesso! "
 								+ "O devedor deverá comparecer em cartório para <span class=\"alert-link\">quitação das custas</span>! ");

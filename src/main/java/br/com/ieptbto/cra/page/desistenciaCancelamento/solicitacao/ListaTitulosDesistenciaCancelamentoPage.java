@@ -15,7 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.ieptbto.cra.bean.TituloConvenioBean;
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;

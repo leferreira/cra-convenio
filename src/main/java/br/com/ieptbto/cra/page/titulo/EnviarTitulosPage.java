@@ -29,7 +29,6 @@ import br.com.ieptbto.cra.component.label.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
@@ -100,8 +99,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				try {
 					List<TituloFiliado> titulos = (List<TituloFiliado>) titulosSelecionados.getModelObject();
 					if (titulos.isEmpty()) {
-						throw new InfraException(
-								"Não foi encontrado títulos selecionados para envio. Por favor, verifique se os selecionou corretamente!");
+						throw new InfraException("Não foi encontrado títulos selecionados para envio. Por favor, verifique se os selecionou corretamente!");
 					}
 					tituloFiliadoMediator.enviarTitulosPendentes(titulos);
 
@@ -147,9 +145,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 			}
 		};
 		formularioFitroSetor.add(comboSetorFiliado());
-		if (getUser().getInstituicao().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)) {
-			divSetoresFiliados.setVisible(false);
-		}
+		divSetoresFiliados.setVisible(getUser().getInstituicao().getSetoresConvenio());
 		divSetoresFiliados.add(formularioFitroSetor);
 		add(divSetoresFiliados);
 	}
@@ -157,8 +153,7 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 	private DropDownChoice<SetorFiliado> comboSetorFiliado() {
 		IChoiceRenderer<SetorFiliado> renderer = new ChoiceRenderer<SetorFiliado>("descricao");
 		Filiado filiado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser()).getFiliado();
-		selectSetorFiliado =
-				new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(), filiadoMediator.buscarSetoresFiliado(filiado), renderer);
+		selectSetorFiliado = new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(), filiadoMediator.buscarSetoresFiliado(filiado), renderer);
 		if (this.setorFiliado != null) {
 			selectSetorFiliado = new DropDownChoice<SetorFiliado>("setor", new Model<SetorFiliado>(setorFiliado),
 					filiadoMediator.buscarSetoresFiliado(filiado), renderer);

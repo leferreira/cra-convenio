@@ -28,8 +28,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.enumeration.EnumerationSimNao;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
 import br.com.ieptbto.cra.mediator.InstituicaoMediator;
@@ -132,8 +131,8 @@ public class IncluirFiliadoPage extends BasePage<Filiado> {
 		divSetoresFiliados.add(new SetorFiliadoInputPanel("setorPanel", getModel(), getSetoresFiliado()));
 		divSetoresFiliados.add(listaSetoresFiliado());
 		if (getFiliado().getInstituicaoConvenio() != null) {
-			if (getFiliado().getInstituicaoConvenio().getPermitidoSetoresConvenio().equals(EnumerationSimNao.NAO)
-					&& getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CRA)) {
+			if (getFiliado().getInstituicaoConvenio().getSetoresConvenio() == false
+					&& getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CRA)) {
 				divSetoresFiliados.setVisible(false);
 			}
 		}
