@@ -42,13 +42,12 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<SolicitacaoDesistenciaCancelamento> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	private TituloMediator tituloMediator;
+	TituloMediator tituloMediator;
 	@SpringBean
-	private SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
+	SolicitacaoDesistenciaCancelamentoMediator solicitacaoMediator;
 
 	private TituloRemessa titulo;
 	private SolicitacaoDesistenciaCancelamento solicitacao;
@@ -58,7 +57,6 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	public EnviarSolicitacaoDesistenciaCancelamentoPage(TituloRemessa titulo) {
 		this.solicitacao = new SolicitacaoDesistenciaCancelamento();
 		this.titulo = titulo;
-
 		adicionarComponentes();
 	}
 
@@ -73,7 +71,6 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	private void formularioSolicitacao() {
 		Form<SolicitacaoDesistenciaCancelamento> form = new Form<SolicitacaoDesistenciaCancelamento>("form", getModel()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -139,7 +136,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 
 	private void criarCampoAnexoOficio() {
 		this.fileUploadField = new FileUploadField("anexoDesistencia", new ListModel<FileUpload>());
-		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício"));
+		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício/Carta Anuência"));
 	}
 	
 	private void criarRadioMotivo() {
