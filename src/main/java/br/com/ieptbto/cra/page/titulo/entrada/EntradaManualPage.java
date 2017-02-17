@@ -40,7 +40,6 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -49,6 +48,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	AvalistaMediator avalistaMediator;
 	@SpringBean
 	FiliadoMediator filiadoMediator;
+	
 	private TituloFiliado tituloFiliado;
 	private FileUploadField fileUploadField;
 
@@ -59,7 +59,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		this.tituloFiliado.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 		this.tituloFiliado.setSetor(filiadoMediator.buscarSetorPadraoFiliado(tituloFiliado.getFiliado()));
 		this.tituloFiliado.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-
 		adicionarComponentes();
 	}
 
@@ -70,7 +69,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 		this.tituloFiliado.setFiliado(usuarioFiliadoMediator.buscarEmpresaFiliadaDoUsuario(getUser()));
 		this.tituloFiliado.setSetor(filiadoMediator.buscarSetorPadraoFiliado(tituloFiliado.getFiliado()));
 		this.tituloFiliado.setSituacaoTituloConvenio(SituacaoTituloConvenio.AGUARDANDO);
-
 		success(message);
 		adicionarComponentes();
 	}
@@ -78,7 +76,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	public EntradaManualPage(TituloFiliado titulo) {
 		this.tituloFiliado = titulo;
 		this.tituloFiliado.setAvalistas(avalistaMediator.buscarAvalistasPorTitulo(titulo));
-
 		adicionarComponentes();
 	}
 

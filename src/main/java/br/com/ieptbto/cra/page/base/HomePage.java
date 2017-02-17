@@ -31,7 +31,7 @@ import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
-import br.com.ieptbto.cra.enumeration.regra.TipoInstituicaoSistema;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
@@ -52,7 +52,6 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -136,7 +135,7 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 			protected void populateItem(ListItem<Remessa> item) {
 				final Remessa remessa = item.getModelObject();
 				item.add(new Label("arquivo", remessa.getArquivo().getNomeArquivo()));
-				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoSistema.CARTORIO)) {
+				if (getUser().getInstituicao().getTipoInstituicao().getTipoInstituicao().equals(TipoInstituicaoCRA.CARTORIO)) {
 					String nomeFantasia = remessa.getInstituicaoOrigem().getNomeFantasia();
 					item.add(new Label("instituicao", nomeFantasia.toUpperCase()));
 				} else {

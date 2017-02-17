@@ -22,7 +22,6 @@ import br.com.ieptbto.cra.util.CpfCnpjUtil;
  */
 public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
@@ -31,6 +30,7 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 	TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
 	FiliadoMediator filiadoMediator;
+	
 	private FileUploadField fileUploadField;
 	private Usuario usuario;
 
