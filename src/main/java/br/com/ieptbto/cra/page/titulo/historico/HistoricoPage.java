@@ -29,7 +29,7 @@ public class HistoricoPage extends BasePage<TituloRemessa> {
 
 		adicionarComponentes();
 	}
-
+ 
 	@Override
 	protected void adicionarComponentes() {
 		add(arquivosOcorrenciasPanel());

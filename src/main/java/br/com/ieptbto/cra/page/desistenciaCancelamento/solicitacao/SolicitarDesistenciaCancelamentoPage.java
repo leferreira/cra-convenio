@@ -31,7 +31,7 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloFiliado
 	private TituloConvenioBean tituloConvenioBean;
 	private Filiado filiado;
 	private Usuario usuario;
-
+ 
 	public SolicitarDesistenciaCancelamentoPage() {
 		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();

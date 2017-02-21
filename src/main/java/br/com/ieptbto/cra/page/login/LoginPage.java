@@ -29,7 +29,7 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 
 	private void inicializarObjetos() {
 		usuario = new Usuario();
-	}
+	} 
 
 	private void adicionarCampos() {
 		feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);

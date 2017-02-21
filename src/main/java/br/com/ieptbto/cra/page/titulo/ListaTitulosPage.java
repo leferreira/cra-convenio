@@ -33,32 +33,28 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 
 	private TituloConvenioBean tituloBean;
-	private Filiado filiado;
+	private Filiado filiado; 
 
 	public ListaTitulosPage(TituloConvenioBean tituloBean, Filiado filiado) {
 		this.tituloBean = tituloBean;
 		this.filiado = filiado;
-
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
 		add(listaTitulos());
-
 	}
 
 	private ListView<TituloRemessa> listaTitulos() {
 		return new ListView<TituloRemessa>("listViewTitulos", buscarTitulos()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
