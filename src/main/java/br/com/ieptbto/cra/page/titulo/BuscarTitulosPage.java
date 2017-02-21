@@ -23,7 +23,6 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	private TituloFiliado tituloFiliado;
@@ -31,12 +30,11 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 	private Filiado filiado;
 	private Usuario usuario;
 
-	public BuscarTitulosPage() {
+	public BuscarTitulosPage() { 
 		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();
 		this.usuario = getUser();
 		this.filiado = getFiliadoPorUsuarioCorrente();
-		
 		adicionarComponentes();
 	}
 

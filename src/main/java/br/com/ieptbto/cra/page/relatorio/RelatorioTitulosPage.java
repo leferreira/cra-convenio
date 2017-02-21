@@ -60,7 +60,7 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 	InstituicaoMediator instituicaoMediator;
 	@SpringBean
 	MunicipioMediator municipioMediator;
-
+ 
 	private TituloFiliado titulo;
 	private UsuarioFiliado usuarioFiliado;
 	private TextField<LocalDate> dataEnvioInicio;

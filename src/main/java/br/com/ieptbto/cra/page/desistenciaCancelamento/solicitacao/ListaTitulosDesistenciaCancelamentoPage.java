@@ -41,7 +41,7 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 	private TituloConvenioBean tituloBean;
 	private Filiado filiado;
-
+ 
 	public ListaTitulosDesistenciaCancelamentoPage(TituloConvenioBean tituloBean, Filiado filiado) {
 		this.tituloBean = tituloBean;
 		this.filiado = filiado;

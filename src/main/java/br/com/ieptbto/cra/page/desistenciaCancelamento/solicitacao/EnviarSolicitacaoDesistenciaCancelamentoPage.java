@@ -130,7 +130,7 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 			}
 		};
 		form.add(new EnviarDesistenciaCancelamentoInputPanel("solicitacaoInputPanel", getModel(), titulo, fileUploadField, radioMotivo));
-		form.setMultiPart(true);
+		form.setMultiPart(true); 
 		add(form);
 	}
 

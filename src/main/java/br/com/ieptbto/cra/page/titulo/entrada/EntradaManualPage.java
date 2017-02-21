@@ -46,7 +46,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
 	AvalistaMediator avalistaMediator;
-	@SpringBean
+	@SpringBean 
 	FiliadoMediator filiadoMediator;
 	
 	private TituloFiliado tituloFiliado;

@@ -86,7 +86,7 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 
 	private void initConfig() {
 		getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
-
+ 
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
 		getRequestCycleSettings().setTimeout(Duration.minutes(10));
