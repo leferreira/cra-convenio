@@ -6,6 +6,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -24,7 +25,6 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 
 	private static final long serialVersionUID = 1L;
-
 	private TituloFiliado tituloFiliado;
 	private TituloConvenioBean tituloConvenioBean;
 	private Filiado filiado;
@@ -34,7 +34,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();
 		this.usuario = getUser();
-		this.filiado = getFiliadoPorUsuarioCorrente();
+		this.filiado = getFiliadoPorUsuario();
 		adicionarComponentes();
 	}
 
@@ -46,7 +46,6 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 	private Form<TituloConvenioBean> formularioBuscarTitulo() {
 		Form<TituloConvenioBean> form = new Form<TituloConvenioBean>("form", getModelForm()){
 			
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -56,12 +55,21 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 					if (tituloConvenioBean.getNumeroTitulo() == null && tituloConvenioBean.getDocumentoDevedor() == null 
 							&& tituloConvenioBean.getNomeDevedor() == null && tituloConvenioBean.getDataInicio() == null
 							&& tituloConvenioBean.getFiliado() == null) {
-						if (tituloConvenioBean.getInstiuicaoCartorio() != null) {
+						if (tituloConvenioBean.getCartorio() != null) {
 							throw new InfraException("Por favor informe mais um parâmetro, além do município selecionado...");
 						} else {
 							throw new InfraException("Os campos não podem ser nulos! Por favor informe ao menos um parâmetro...");
 						}
 					}
+					if (tituloConvenioBean.getDataInicio() != null) {
+						if (tituloConvenioBean.getDataFim() != null) {
+							LocalDate dataInicio = new LocalDate(tituloConvenioBean.getDataInicio());
+							LocalDate dataFim = new LocalDate(tituloConvenioBean.getDataFim());
+							if (!dataInicio.isBefore(dataFim) && !dataInicio.isEqual(dataFim))
+								throw new InfraException("A data de início deve ser antes da data fim.");
+						} else throw new InfraException("As duas datas devem ser preenchidas.");
+					}
+					
 					setResponsePage(new ListaTitulosPage(tituloConvenioBean, filiado));
 				} catch (InfraException ex) {
 					logger.error(ex.getMessage());

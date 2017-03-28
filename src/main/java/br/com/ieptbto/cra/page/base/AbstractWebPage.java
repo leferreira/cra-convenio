@@ -75,7 +75,7 @@ public abstract class AbstractWebPage<T extends AbstractEntidade<?>> extends Web
 	}
 
 	
-	public Filiado getFiliadoPorUsuarioCorrente() {
+	public Filiado getFiliadoPorUsuario() {
 		UsuarioFiliado usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
 		if (usuarioFiliado != null) {
 			return usuarioFiliado.getFiliado();

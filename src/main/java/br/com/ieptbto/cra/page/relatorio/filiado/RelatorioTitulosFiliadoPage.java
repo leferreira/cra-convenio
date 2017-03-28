@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.relatorio;
+package br.com.ieptbto.cra.page.relatorio.filiado;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,12 +8,12 @@ import java.util.List;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -23,18 +23,19 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
+import br.com.ieptbto.cra.component.DateTextField;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.FiliadoMediator;
-import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.relatorioConvenio.RelatorioUtil;
+import br.com.ieptbto.cra.report.RelatorioUtil;
 import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
@@ -47,73 +48,57 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 @AuthorizeInstantiation(value = "USER")
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
-public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
-
-	/***/
-	private static final long serialVersionUID = 1L;
+public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado> {
 
 	@SpringBean
 	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
 	FiliadoMediator filiadoMediator;
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
-	@SpringBean
 	MunicipioMediator municipioMediator;
  
-	private TituloFiliado titulo;
-	private UsuarioFiliado usuarioFiliado;
-	private TextField<LocalDate> dataEnvioInicio;
-	private TextField<LocalDate> dataEnvioFinal;
-	private RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo;
-	private DropDownChoice<Filiado> dropDownFiliado;
+	private static final long serialVersionUID = 1L;
+	private TituloConvenioBean tituloConvenioBean;
+	private Usuario usuario;
+	private Filiado filiado;
 
-	public RelatorioTitulosPage() {
-		this.titulo = new TituloFiliado();
-		this.usuarioFiliado = usuarioFiliadoMediator.buscarUsuarioFiliado(getUser());
-
+	public RelatorioTitulosFiliadoPage() {
+		this.tituloConvenioBean = new TituloConvenioBean();
+		this.filiado = getFiliadoPorUsuario();
+		this.usuario = getUser();
 		adicionarComponentes();
 	}
 
 	@Override
 	protected void adicionarComponentes() {
 		carregarFormulario();
-
 	}
 
 	private void carregarFormulario() {
-		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
+		Form<TituloConvenioBean> form = new Form<TituloConvenioBean>("form", new CompoundPropertyModel<TituloConvenioBean>(tituloConvenioBean)) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
-				TituloFiliado titulo = getModelObject();
-				Filiado filiado = dropDownFiliado.getModelObject();
-				Municipio municipio = titulo.getPracaProtesto();
-				SituacaoTituloRelatorio situacaoTipoRelatorio = radioSituacaoTitulo.getModelObject();
+				tituloConvenioBean = getModelObject();
 				LocalDate dataInicio = null;
 				LocalDate dataFim = null;
 
 				try {
-					if (dataEnvioInicio.getDefaultModelObject() != null) {
-						if (dataEnvioFinal.getDefaultModelObject() != null) {
-							dataInicio = DataUtil.stringToLocalDate(dataEnvioInicio.getDefaultModelObject().toString());
-							dataFim = DataUtil.stringToLocalDate(dataEnvioFinal.getDefaultModelObject().toString());
-							if (!dataInicio.isBefore(dataFim))
-								if (!dataInicio.isEqual(dataFim))
-									throw new InfraException("A data de início deve ser antes da data fim.");
-						} else {
-							throw new InfraException("As duas datas devem ser preenchidas.");
-						}
-						if (PeriodoDataUtil.diferencaDeDiasEntreData(dataInicio.toDate(), dataFim.toDate()) > 30) {
-							throw new InfraException("Limite máximo do período para o relatório é de 30 dias entre a data inicial e a final.");
-						}
+					if (tituloConvenioBean.getDataInicio() != null) {
+						if (tituloConvenioBean.getDataFim() != null) {
+							dataInicio = new LocalDate(tituloConvenioBean.getDataInicio());
+							dataFim = new LocalDate(tituloConvenioBean.getDataFim());
+							if (!dataInicio.isBefore(dataFim) && !dataInicio.isEqual(dataFim))
+								throw new InfraException("A data de início deve ser antes da data fim.");
+						} else throw new InfraException("As duas datas devem ser preenchidas.");
 					}
-
-					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosConvenioPorSituacao(getUser(), situacaoTipoRelatorio, filiado,
-							municipio, dataInicio, dataFim);
+					if (PeriodoDataUtil.diferencaDeDiasEntreData(dataInicio.toDate(), dataFim.toDate()) > 30) {
+						throw new InfraException("Limite máximo do período para o relatório é de 30 dias entre a data inicial e a final.");
+					}
+					
+					JasperPrint jasperPrint = new RelatorioUtil().gerarRelatorioTitulosConvenioPorSituacao(usuario, tituloConvenioBean);
 					if (jasperPrint.getPages().isEmpty()) {
 						throw new InfraException("O sistema não encontrou títulos para o relatório com os parâmetros informados!");
 					}
@@ -124,50 +109,59 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 							"CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
 
 				} catch (InfraException ex) {
+					logger.info(ex.getMessage());
 					error(ex.getMessage());
 				} catch (Exception e) {
+					logger.info(e.getMessage());
 					error("Não foi possível gerar o relatório ! Entre em contato com o IEPTB-TO !");
-					e.printStackTrace();
 				}
 			}
 		};
-		form.add(dataEnvioInicio());
-		form.add(dataEnvioFinal());
+		form.add(dataInicio());
+		form.add(dataFinal());
 		form.add(pracaProtesto());
 		form.add(dropDownFiliado());
+		form.add(labelEmpresasFiliadas());
 		form.add(tipoRelatorio());
 		add(form);
 	}
 
-	private TextField<LocalDate> dataEnvioInicio() {
-		dataEnvioInicio = new TextField<LocalDate>("dataEnvioInicio", new Model<LocalDate>());
+	private DateTextField dataInicio() {
+		DateTextField dataEnvioInicio = new DateTextField("dataInicio");
 		dataEnvioInicio.setLabel(new Model<String>("Período de Datas"));
 		dataEnvioInicio.setRequired(true);
 		return dataEnvioInicio;
 	}
 
-	private TextField<LocalDate> dataEnvioFinal() {
-		return dataEnvioFinal = new TextField<LocalDate>("dataEnvioFinal", new Model<LocalDate>());
+	private DateTextField dataFinal() {
+		return new DateTextField("dataFim");
 	}
 
 	private DropDownChoice<Municipio> pracaProtesto() {
 		IChoiceRenderer<Municipio> renderer = new ChoiceRenderer<Municipio>("nomeMunicipio");
-		DropDownChoice<Municipio> comboMunicipio =
-				new DropDownChoice<Municipio>("pracaProtesto", municipioMediator.getMunicipiosTocantins(), renderer);
+		DropDownChoice<Municipio> comboMunicipio = new DropDownChoice<Municipio>("municipio", municipioMediator.getMunicipiosTocantins(), renderer);
 		return comboMunicipio;
+	}
+
+	private Label labelEmpresasFiliadas() {
+		Label label = new Label("labelEmpresasFiliadas");
+		label.setVisible(getUser().getInstituicao().getAdministrarEmpresasFiliadas());
+		return label;
 	}
 
 	private DropDownChoice<Filiado> dropDownFiliado() {
 		IChoiceRenderer<Filiado> renderer = new ChoiceRenderer<Filiado>("razaoSocial");
-		if (usuarioFiliado != null) {
-			dropDownFiliado = new DropDownChoice<Filiado>("filiado", new Model<Filiado>(usuarioFiliado.getFiliado()),
-					filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
-			dropDownFiliado.setEnabled(false);
-			dropDownFiliado.setOutputMarkupId(true);
-		} else {
-			dropDownFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		DropDownChoice<Filiado> campoFiliado = new DropDownChoice<Filiado>("filiado", filiadoMediator.buscarListaFiliados(getUser().getInstituicao()), renderer);
+		campoFiliado.setLabel(new Model<String>("Filiado"));
+		campoFiliado.setOutputMarkupId(true);
+		campoFiliado.setVisible(getUser().getInstituicao().getAdministrarEmpresasFiliadas());
+
+		if (filiado != null) {
+			campoFiliado.setEnabled(false);
+			campoFiliado.setModel(new Model<Filiado>());
+			campoFiliado.setDefaultModelObject(filiado);
 		}
-		return dropDownFiliado;
+		return campoFiliado;
 	}
 
 	private RadioChoice<SituacaoTituloRelatorio> tipoRelatorio() {
@@ -177,7 +171,8 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 		situacoes.add(SituacaoTituloRelatorio.PAGOS);
 		situacoes.add(SituacaoTituloRelatorio.PROTESTADOS);
 		situacoes.add(SituacaoTituloRelatorio.RETIRADOS_DEVOLVIDOS);
-		radioSituacaoTitulo = new RadioChoice<SituacaoTituloRelatorio>("tipoRelatorio", new Model<SituacaoTituloRelatorio>(), situacoes, renderer);
+		
+		RadioChoice<SituacaoTituloRelatorio> radioSituacaoTitulo = new RadioChoice<SituacaoTituloRelatorio>("situacaoTitulosRelatorio", situacoes, renderer);
 		radioSituacaoTitulo.setRequired(true);
 		radioSituacaoTitulo.setLabel(new Model<String>("Situação dos Títulos"));
 		return radioSituacaoTitulo;
@@ -185,6 +180,6 @@ public class RelatorioTitulosPage extends BasePage<TituloFiliado> {
 
 	@Override
 	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(titulo);
+		return null;
 	}
 }

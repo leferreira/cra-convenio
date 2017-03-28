@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.relatorioConvenio;
+package br.com.ieptbto.cra.report;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import org.joda.time.LocalDate;
 
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.Municipio;
 import br.com.ieptbto.cra.entidade.Usuario;
@@ -29,13 +30,14 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class RelatorioUtil implements Serializable {
 
-	/***/
 	private static final long serialVersionUID = 1L;
-
 	private JasperReport jasperReport;
 	private HashMap<String, Object> params;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
+	private Municipio municipio;
+	private Filiado filiado;
+	private SituacaoTituloRelatorio situacaoTitulosRelatorio;
 
 	private void initParams() throws IOException {
 		this.params = new HashMap<String, Object>();
@@ -45,10 +47,13 @@ public class RelatorioUtil implements Serializable {
 		this.params.put("DATA_FIM", new Date(getDataFim().toDate().getTime()));
 	}
 
-	public JasperPrint gerarRelatorioTitulosConvenioPorSituacao(Usuario usuario, SituacaoTituloRelatorio situacaoTitulosRelatorio, Filiado filiado,
-			Municipio municipio, LocalDate dataInicio, LocalDate dataFim) throws JRException {
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
+	public JasperPrint gerarRelatorioTitulosConvenioPorSituacao(Usuario usuario, TituloConvenioBean bean) throws JRException {
+		this.dataInicio = new LocalDate(bean.getDataInicio());
+		this.dataFim = new LocalDate(bean.getDataFim());
+		this.municipio = bean.getMunicipio();
+		this.filiado = bean.getFiliado();
+		this.situacaoTitulosRelatorio = bean.getSituacaoTitulosRelatorio();
+		
 
 		try {
 			initParams();
@@ -123,10 +128,8 @@ public class RelatorioUtil implements Serializable {
 				if (municipio != null && filiado == null) {
 					throw new InfraException(
 							"Os relatórios onde é informado somente o município como parâmetro, estão temporáriamente indisponíveis!");
-					// params.put("PRACA_PROTESTO",
-					// municipio.getNomeMunicipio().toUpperCase());
-					// jasperReport =
-					// JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetiradosDevolvidosPorMunicipio.jrxml"));
+					// params.put("PRACA_PROTESTO", municipio.getNomeMunicipio().toUpperCase());
+					// jasperReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("RelatorioRetiradosDevolvidosPorMunicipio.jrxml"));
 				}
 			}
 		} catch (IOException e) {
@@ -140,10 +143,9 @@ public class RelatorioUtil implements Serializable {
 	private Connection getConnection() {
 		try {
 			Class.forName("org.postgresql.Driver");
-			 return
-			 DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra",
-			 "postgres", "@dminB3g1n");
-//			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
+			 return DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", 
+					 "postgres", "@dminB3g1n");
+			 //	return DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
 		} catch (Exception e) {
 			throw new InfraException("Não foi possível gerar o relatório ! Entre em contato com a CRA !");
 		}

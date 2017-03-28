@@ -56,6 +56,25 @@ public class MenuItem extends WebMarkupContainer {
 		add(item);
 		return item;
 	}
+	
+	/**
+	 * Contr adiciona um MenuItem ao menu indicando os roles que podem
+	 * visualizar o menu e a definicao de visibilidade. 
+	 * Todos os demais roles nao tem acesso ao menu.
+	 * 
+	 * @param id
+	 *            id do novo item
+	 * @param roles
+	 *            lista de roles autorizados para ver o menu
+	 * @return o MenuItem criado
+	 */
+	public MenuItem addItem(String id, boolean visibility, String... roles) {
+		MenuItem item = new MenuItem(id);
+		item.authorize(roles);
+		item.setVisible(visibility);
+		add(item);
+		return item;
+	}
 
 	/**
 	 * Contra adiciona um MenuItem ao menu indicando os roles que podem

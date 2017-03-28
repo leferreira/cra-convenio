@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
 import br.com.ieptbto.cra.app.IWebApplication;
-import br.com.ieptbto.cra.component.label.CustomFeedbackPanel;
+import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.AbstractEntidade;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.login.LoginPage;
@@ -24,7 +24,6 @@ import br.com.ieptbto.cra.page.usuario.PerfilUsuarioPage;
  */
 public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWebPage<T> {
 
-	/****/
 	private static final long serialVersionUID = 1L;
 	protected static final Logger logger = Logger.getLogger(BasePage.class);
 	protected static final String WID_MENU = "menu";
@@ -46,7 +45,7 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 		String nome = null;
 		if (StringUtils.isNotBlank(getUser().getNome())) {
 			if (getUser().getNome().length() > 15) {
-				nome = getUser().getNome().substring(0, 15);
+				nome = getUser().getNome().substring(0, 14);
 			} else
 				nome = getUser().getNome();
 		}
@@ -63,7 +62,6 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	private void adicionarLinkProfileUser() {
 		add(new Link<Usuario>("configuracoesUsuario") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

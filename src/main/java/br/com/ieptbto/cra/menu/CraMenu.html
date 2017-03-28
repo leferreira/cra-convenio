@@ -2,7 +2,7 @@
 	<div wicket:id="CraMenu">
 		<div wicket:id="menuLateral">
 		 <ul  wicket:id="menuFiliado" class="nav navbar-nav">
-	        <li class="active"><a href="HomePage" >In&iacute;cio <span class="sr-only"></span></a></li>
+	        <li class="active"><a href="HomePage" style="color: #009688 !important;">In&iacute;cio <span class="sr-only"></span></a></li>
 	        <li><a wicket:id="EntradaManual" href="EntradaManual">Entrada de T&iacute;tulos</a></li>
 	        <li><a wicket:id="EnviarTitulosPendentes" href="EnviarTitulosPendentes">Enviar Pendentes</a></li>
 	        <li><a wicket:id="BuscarTitulos" href="BuscarTitulos">Buscar T&iacute;tulos</a></li>
@@ -10,20 +10,27 @@
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-        		<li><a href="RelatorioTitulos" wicket:id="RelatorioTitulos">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
-        		<li><a href="RelatorioTItulosEnviados" wicket:id="RelatorioTItulosEnviados">Relat&oacute;rios de Envio de T&iacute;tulos</a></li>
+        		<li><a href="RelatorioTitulosFiliado" wicket:id="RelatorioTitulosFiliado">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
+        		<li><a href="RelatorioTitulosEnviadosFiliado" wicket:id="RelatorioTitulosEnviadosFiliado">Relat&oacute;rios de Envio de T&iacute;tulos</a></li>
 			  </ul>
 	        </li>
        	 </ul> 
        	 <ul wicket:id="menuConvenio" class="nav navbar-nav">
-	        <li class="active"><a href="HomePage" >Início <span class="sr-only"></span></a></li>
+	        <li class="active"><a href="HomePage" style="color: #009688 !important;">Início <span class="sr-only"></span></a></li>
+	        <li><a wicket:id="EnviarArquivoEmpresa" href="EnviarArquivoEmpresa">Enviar Arquivo</a></li>
+	        <li><a wicket:id="EnviarArquivo" href="EnviarArquivo">Enviar Arquivo</a></li>
+	        <li><a href="BuscarArquivo" wicket:id="BuscarArquivo">Buscar Arquivos</a></li>
+	        <li><a wicket:id="RetornoRecebimentoEmpresa" href="RetornoRecebimentoEmpresa">Recebimento Empresa</a></li>
+	        <li><a wicket:id="SolicitarDesistenciaCancelamentoEmpresa" href="SolicitarDesistenciaCancelamentoEmpresa">Desist&ecirc;ncias e Cancelamentos</a></li>
 	        <li><a wicket:id="BuscarTitulos" href="BuscarTitulos">Buscar T&iacute;tulos</a></li>
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relat&oacute;rios<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-        		<li><a href="RelatorioTitulos" wicket:id="RelatorioTitulos">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
+        		<li><a href="RelatorioTitulosConvenio" wicket:id="RelatorioTitulosConvenio">T&iacute;tulos: Detalhados por Situa&ccedil;&atilde;o</a></li>
 			  </ul>
 	        </li> 
+       	 </ul>
+       	 <ul wicket:id="menuAdminConvenio" class="nav navbar-nav">
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administra&ccedil;&atilde;o<span class="caret"></span></a>
 	          <ul class="dropdown-menu">
@@ -31,7 +38,7 @@
 				<li><a href="UsuariosEmpresaConvenioPage" wicket:id="UsuariosEmpresaConvenioPage">Acesso de Usu&aacute;rios</a></li>
 			  </ul>
 	        </li>
-       	 </ul>
+	       </ul>
        	</div>
-    	</div> 
+    </div> 
 </wicket:panel> 

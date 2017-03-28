@@ -1,0 +1,59 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org/" charset="UTF8">
+	<h4 class="titulo-top">RETORNO DE RECEBIMENTO EMPRESA</h4>
+	<br style="clear: both;"/>
+	<div class="row">
+		<form wicket:id="form">
+			<div class="col-md-12">
+				<div class="col-md-3"><label>Período</label></div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<input class="form-control input-md" id="date" maxlength="10"
+								placeholder="__/__/____" wicket:id="dataInicio">
+				</div>
+				<div class="col-md-3">
+				    <input class="form-control input-md" id="date1" maxlength="10"
+								placeholder="__/__/____" wicket:id="dataFim">
+				</div>
+				<div class="col-md-1">
+				    <button class="btn btn-primary" wicket:id="buttonSearch" ><span class="fa fa-search"></span>&nbsp;Buscar</button>
+				</div>
+			</div>
+		</form>.
+	</div>
+	<br style="clear: both;">
+	<table id="table" class="table table-responsive table-striped table-hover">
+		<thead>
+			<tr>
+				<th class="text-center">DOWNLOAD</th>
+				<th>INSTITUIÇÃO</th>
+				<th class="text-center">DATA</th>
+				<th class="text-center">HORA</th>
+				<th class="text-center">ARQUIVO</th>
+				<th>ENVIADO POR</th>
+				<th>DESTINO</th>
+				<th class="text-center">SITUAÇÃO</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr wicket:id="listaResultado"> 
+				<td class="text-center">
+					<a href="#" class="link" wicket:id="downloadArquivo">
+						<img border="0" class="download-ico" title="Download em TXT" src="img/download.jpg">
+					</a>
+				</td> 
+				<td wicket:id="instituicao"></td>
+				<td class="text-center" wicket:id="dataEnvio"></td>
+				<td class="text-center" wicket:id="horaEnvio"></td>
+				<td class="text-center"><span class="link" wicket:id="nomeArquivo"></span></td>
+				<td wicket:id="envio"></td>
+				<td wicket:id="destino"></td>
+				<td class="text-center">
+					<div wicket:id="divInfo">
+						<span wicket:id="status"></span>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</wicket:extend> 

@@ -21,17 +21,22 @@ import org.joda.time.DateTimeZone;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
+import br.com.ieptbto.cra.page.arquivo.BuscarArquivoPage;
+import br.com.ieptbto.cra.page.arquivo.EnviarArquivoPage;
+import br.com.ieptbto.cra.page.arrecadacaoRecebimentoEmpresa.RetornoRecebimentoEmpresaPage;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
-import br.com.ieptbto.cra.page.base.HomePage;
 import br.com.ieptbto.cra.page.base.NotFoundPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.EnviarSolicitacaoDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.ListaTitulosDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao.SolicitarDesistenciaCancelamentoPage;
 import br.com.ieptbto.cra.page.filiado.IncluirFiliadoPage;
 import br.com.ieptbto.cra.page.filiado.ListaFiliadoPage;
+import br.com.ieptbto.cra.page.home.HomePage;
+import br.com.ieptbto.cra.page.layoutPersonalizado.EnviarArquivoEmpresaPage;
 import br.com.ieptbto.cra.page.login.LoginPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioTItulosEnviadosPage;
-import br.com.ieptbto.cra.page.relatorio.RelatorioTitulosPage;
+import br.com.ieptbto.cra.page.relatorio.convenio.RelatorioTitulosConvenioPage;
+import br.com.ieptbto.cra.page.relatorio.filiado.RelatorioTItulosEnviadosFiliadoPage;
+import br.com.ieptbto.cra.page.relatorio.filiado.RelatorioTitulosFiliadoPage;
 import br.com.ieptbto.cra.page.titulo.BuscarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.EnviarTitulosPage;
 import br.com.ieptbto.cra.page.titulo.entrada.EntradaManualPage;
@@ -114,24 +119,23 @@ public class CraConveioApplication extends WebApplication implements ISecureAppl
 		mountPage("LoginPage", LoginPage.class);
 		mountPage("HomePage", HomePage.class);
 		mountPage("CargaInicial", CargaInicialPage.class);
-
-		/* CONVENIO */
 		mountPage("EmpresasConvenioPage", ListaFiliadoPage.class);
 		mountPage("IncluirEmpresaConvenioPage", IncluirFiliadoPage.class);
 		mountPage("UsuariosEmpresaConvenioPage", ListaUsuarioFiliadoPage.class);
 		mountPage("IncluirUsuarioEmpresaConvenioPage", IncluirUsuarioFiliadoPage.class);
-
-		/* AMBOS */
 		mountPage("BuscarTitulos", BuscarTitulosPage.class);
-		mountPage("RelatorioTitulos", RelatorioTitulosPage.class);
-
-		/* EMPRESA CONVENIO */
+		mountPage("RelatorioTitulosFiliado", RelatorioTitulosFiliadoPage.class);
+		mountPage("RelatorioTitulosConvenio", RelatorioTitulosConvenioPage.class);
 		mountPage("EntradaManual", EntradaManualPage.class);
 		mountPage("EnviarTitulosPendentes", EnviarTitulosPage.class);
 		mountPage("SolicitarDesistenciaCancelamentoEmpresa", SolicitarDesistenciaCancelamentoPage.class);
 		mountPage("ListaTitulosDesistenciaCancelamento", ListaTitulosDesistenciaCancelamentoPage.class);
 		mountPage("EnviarSolicitacaoDesistenciaCancelamento", EnviarSolicitacaoDesistenciaCancelamentoPage.class);
-		mountPage("RelatorioTItulosEnviados", RelatorioTItulosEnviadosPage.class);
+		mountPage("RelatorioTitulosEnviadosFiliado", RelatorioTItulosEnviadosFiliadoPage.class);
+		mountPage("EnviarArquivoEmpresa", EnviarArquivoEmpresaPage.class);
+		mountPage("EnviarArquivo", EnviarArquivoPage.class);
+		mountPage("RetornoRecebimentoEmpresa", RetornoRecebimentoEmpresaPage.class);
+		mountPage("BuscarArquivo", BuscarArquivoPage.class);
 	}
 
 	/**

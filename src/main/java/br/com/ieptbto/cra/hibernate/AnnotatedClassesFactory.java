@@ -63,6 +63,12 @@ import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.entidade.view.AutorizacaoPendente;
+import br.com.ieptbto.cra.entidade.view.CancelamentoPendente;
+import br.com.ieptbto.cra.entidade.view.DesistenciaPendente;
+import br.com.ieptbto.cra.entidade.view.RemessaPendente;
+import br.com.ieptbto.cra.entidade.view.ViewBatimentoRetorno;
+import br.com.ieptbto.cra.entidade.view.ViewTitulo;
 import br.com.ieptbto.cra.hibernate.audit.CraCustomRevisionEntity;
 
 /**
@@ -86,7 +92,7 @@ public class AnnotatedClassesFactory {
 	 * Metodo responsavel por mapear classes Hibernate.
 	 */
 	private static void adicionarClassesHibernate() {
-		classesHibernate.add(UsuarioAnonimo.class);
+		classesHibernate.add(UsuarioAnonimo.class); 
 		classesHibernate.add(LogCra.class);
 		classesHibernate.add(CraServiceConfig.class);
 		classesHibernate.add(Usuario.class);
@@ -134,10 +140,16 @@ public class AnnotatedClassesFactory {
 		classesHibernate.add(Deposito.class);
 		classesHibernate.add(BatimentoDeposito.class);
 		classesHibernate.add(Batimento.class);
-
 		classesHibernate.add(LoteCnp.class);
 		classesHibernate.add(RegistroCnp.class);
 		classesHibernate.add(TaxaCra.class);
+		
+		classesHibernate.add(ViewBatimentoRetorno.class);
+		classesHibernate.add(ViewTitulo.class);
+		classesHibernate.add(RemessaPendente.class);
+		classesHibernate.add(DesistenciaPendente.class);
+		classesHibernate.add(CancelamentoPendente.class);
+		classesHibernate.add(AutorizacaoPendente.class);
 	}
 
 	/**

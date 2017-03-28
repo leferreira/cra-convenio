@@ -14,9 +14,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.beans.TituloConvenioBean;
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
@@ -33,11 +34,10 @@ import br.com.ieptbto.cra.util.DataUtil;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	TituloFiliadoMediator tituloFiliadoMediator;
 
+	private static final long serialVersionUID = 1L;
 	private TituloConvenioBean tituloBean;
 	private Filiado filiado; 
 
@@ -78,7 +78,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				item.add(new LabelValorMonetario<BigDecimal>("valorTitulo", tituloLista.getSaldoTitulo()));
 				Link<TituloRemessa> linkHistorico = new Link<TituloRemessa>("linkHistorico") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					public void onClick() {
@@ -106,7 +105,6 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 	public IModel<List<TituloRemessa>> buscarTitulos() {
 		return new LoadableDetachableModel<List<TituloRemessa>>() {
 
-			/**/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -115,8 +113,8 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				if (filiado != null) {
 					codigoFiliado = filiado.getCodigoFiliado();
 				}
-				return tituloFiliadoMediator.buscarListaTitulos(getUser(), tituloBean.getDataInicio(), tituloBean.getInstiuicaoCartorio(), tituloBean.getNumeroTitulo(),
-						tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
+				return tituloFiliadoMediator.buscarListaTitulos(getUser(), new LocalDate(tituloBean.getDataInicio()), new LocalDate(tituloBean.getDataFim()), 
+						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
 			}
 		};
 	}

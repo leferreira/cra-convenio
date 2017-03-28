@@ -5,6 +5,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioFiliado;
+import br.com.ieptbto.cra.enumeration.LayoutPadraoXML;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.security.CraRoles;
 
@@ -45,22 +46,60 @@ public class CraMenu extends Panel {
 		menuFiliado.setVisible(verificaPermissao(user, "filiado"));
 		menuFiliado.addItem("EntradaManual", rolesUser);
 		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
-		menuFiliado.addItem("RelatorioTitulos", rolesUser);
-		menuFiliado.addItem("RelatorioTItulosEnviados", rolesUser);
 		menuFiliado.addItem("BuscarTitulos", rolesUser);
 		menuFiliado.addItem("SolicitarDesistenciaCancelamentoEmpresa", rolesUser);
+		menuFiliado.addItem("RelatorioTitulosFiliado", rolesUser);
+		menuFiliado.addItem("RelatorioTitulosEnviadosFiliado", rolesUser);
 
 		/** Menus Titulos Convenio */
 		MenuItem menuConvenio = menuLateral.addItem("menuConvenio", rolesAdmin);
 		menuConvenio.setVisible(verificaPermissao(user, "convenio"));
+		menuConvenio.addItem("EnviarArquivoEmpresa", isEnvioLayoutPersonalizado(), rolesAdmin);
+		menuConvenio.addItem("EnviarArquivo", isEnvioCraNacional(), rolesAdmin);
+		menuConvenio.addItem("RetornoRecebimentoEmpresa", isLayoutRetornoRecebimentoEmpresa(), rolesAdmin);
+		menuConvenio.addItem("BuscarArquivo", (isLayoutRetornoRecebimentoEmpresa() == true) ? false : true, rolesAdmin);
+		menuConvenio.addItem("SolicitarDesistenciaCancelamentoEmpresa", rolesAdmin);
 		menuConvenio.addItem("BuscarTitulos", rolesAdmin);
-		menuConvenio.addItem("RelatorioTitulos", rolesAdmin);
-		menuConvenio.addItem("EmpresasConvenioPage", rolesAdmin);
-		menuConvenio.addItem("UsuariosEmpresaConvenioPage", rolesAdmin);
+		menuConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
+		
+		MenuItem menuAdminConvenio = menuLateral.addItem("menuAdminConvenio", rolesAdmin);
+		menuAdminConvenio.setVisible(isAdministrarFiliados());
+		menuAdminConvenio.addItem("EmpresasConvenioPage", rolesAdmin);
+		menuAdminConvenio.addItem("UsuariosEmpresaConvenioPage", rolesAdmin);
 	}
 
-	private boolean verificaPermissao(UsuarioFiliado user, String chave) {
+	private boolean isLayoutRetornoRecebimentoEmpresa() {
+		if (usuario != null) {
+			return (usuario.getInstituicao().getLayoutRetornoRecebimentoEmpresa()) ? true : false;
+		}
+		return false;
+	}
 
+	private boolean isEnvioLayoutPersonalizado() {
+		if (usuario != null) {
+			return (LayoutPadraoXML.ENTRADA_MANUAL_LAYOUT_PERSONALIZADO == usuario.getInstituicao().getLayoutPadraoXML()) ? true : false;
+		}
+		return false;
+	}
+	
+	private boolean isAdministrarFiliados() {
+		if (usuario != null) {
+			LayoutPadraoXML layout = usuario.getInstituicao().getLayoutPadraoXML();
+			if (LayoutPadraoXML.ENTRADA_MANUAL_LAYOUT_PERSONALIZADO == layout) {
+				return usuario.getInstituicao().getAdministrarEmpresasFiliadas();
+			}
+		}
+		return false;
+	}
+
+	private boolean isEnvioCraNacional() {
+		if (usuario != null) {
+			return (LayoutPadraoXML.CRA_NACIONAL == usuario.getInstituicao().getLayoutPadraoXML()) ? true : false;
+		}
+		return false;
+	}
+	
+	private boolean verificaPermissao(UsuarioFiliado user, String chave) {
 		if (user == null && chave.equals("convenio")) {
 			return true;
 		} else if (user != null && chave.equals("filiado")) {

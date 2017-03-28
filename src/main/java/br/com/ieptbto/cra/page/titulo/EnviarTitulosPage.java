@@ -25,7 +25,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.component.label.LabelValorMonetario;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
 import br.com.ieptbto.cra.entidade.Filiado;
 import br.com.ieptbto.cra.entidade.SetorFiliado;
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -90,7 +90,6 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 		final CheckGroup<TituloFiliado> titulosSelecionados = new CheckGroup<TituloFiliado>("group", new ArrayList<TituloFiliado>());
 		Form<TituloFiliado> form = new Form<TituloFiliado>("form", getModel()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -125,7 +124,6 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 		WebMarkupContainer divSetoresFiliados = new WebMarkupContainer("divSetoresFiliados");
 		Form<SetorFiliado> formularioFitroSetor = new Form<SetorFiliado>("formFiltroSetor") {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -178,7 +176,6 @@ public class EnviarTitulosPage extends BasePage<TituloFiliado> {
 				item.add(new Label("municipio", tituloLista.getCidadeDevedor()));
 				Link<String> linkAlterar = new Link<String>("linkAlterar") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override

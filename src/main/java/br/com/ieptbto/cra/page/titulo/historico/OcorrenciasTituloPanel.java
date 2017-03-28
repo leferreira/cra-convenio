@@ -11,11 +11,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import br.com.ieptbto.cra.beans.TituloOcorrenciaBean;
-import br.com.ieptbto.cra.component.label.DataUtil;
 import br.com.ieptbto.cra.entidade.Arquivo;
 import br.com.ieptbto.cra.entidade.Remessa;
 import br.com.ieptbto.cra.entidade.TituloRemessa;
 import br.com.ieptbto.cra.mediator.HistoricoMediator;
+import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
@@ -23,25 +23,21 @@ import br.com.ieptbto.cra.mediator.HistoricoMediator;
  */
 public class OcorrenciasTituloPanel extends Panel {
 
-	/***/
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
 	HistoricoMediator historicoMediator;
 
+	private static final long serialVersionUID = 1L;
 	private TituloRemessa titulo;
 
 	public OcorrenciasTituloPanel(String id, IModel<TituloRemessa> model) {
 		super(id, model);
 		this.titulo = model.getObject();
-
 		add(timeLineArquivosOcorrencias());
 	}
 
 	private ListView<TituloOcorrenciaBean> timeLineArquivosOcorrencias() {
 		return new ListView<TituloOcorrenciaBean>("divListaHistorico", historicoMediator.carregarOrrenciasTitulo(titulo)) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -56,7 +52,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Remessa> link = new Link<Remessa>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -78,7 +73,6 @@ public class OcorrenciasTituloPanel extends Panel {
 					item.add(divIcon);
 					Link<Remessa> link = new Link<Remessa>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -99,7 +93,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Remessa> link = new Link<Remessa>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -122,7 +115,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Remessa> link = new Link<Remessa>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -145,7 +137,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Arquivo> link = new Link<Arquivo>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -166,7 +157,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Arquivo> link = new Link<Arquivo>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -188,7 +178,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Arquivo> link = new Link<Arquivo>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -210,7 +199,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Arquivo> link = new Link<Arquivo>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override
@@ -232,7 +220,6 @@ public class OcorrenciasTituloPanel extends Panel {
 
 					Link<Remessa> link = new Link<Remessa>("link") {
 
-						/***/
 						private static final long serialVersionUID = 1L;
 
 						@Override

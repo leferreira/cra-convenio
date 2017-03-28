@@ -1,4 +1,4 @@
-package br.com.ieptbto.cra.page.base;
+package br.com.ieptbto.cra.page.home;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.PageReference;

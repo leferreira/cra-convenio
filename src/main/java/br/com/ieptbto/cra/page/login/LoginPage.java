@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-import br.com.ieptbto.cra.component.label.CustomFeedbackPanel;
+import br.com.ieptbto.cra.component.CustomFeedbackPanel;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.page.base.AbstractWebPage;
 
@@ -34,6 +34,7 @@ public class LoginPage extends AbstractWebPage<Usuario> {
 	private void adicionarCampos() {
 		feedBackPanel = new CustomFeedbackPanel(WID_FEEDBACK);
 		feedBackPanel.setOutputMarkupId(true);
+		feedBackPanel.setEscapeModelStrings(false);
 
 		LoginForm loginForm = new LoginForm("loginForm", getModel());
 		loginForm.add(campoUsuario());
