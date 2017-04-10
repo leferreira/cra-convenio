@@ -17,12 +17,12 @@
 			</div>
 		</div>
 		<div class="col-md-4">
+			<label wicket:id="labelContemAnexo" style="color: red;"></label>  
 			<div class="form-group">
-				<label>*OBS</label> <small>A praça de protesto é o município
-					qual o cartório receberá o título. O destino do título deverá ser
-					de acordo com o convênio firmado com o <b>IEPTB-TO</b>, caso não, o
-					título poderá ser devolvido.
-				</small>
+				<label>Anexar Documentos:</label>
+				<div class="form-control">
+					<label><span wicket:id="anexo"></span></label> 
+				</div>
 			</div>
 		</div>
 	</div>
@@ -35,13 +35,16 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<label wicket:id="labelContemAnexo" style="color: red;"></label>  
 			<div class="form-group">
-				<label>Anexar Documento: (somente ZIP)</label> <input
-					wicket:id="anexo" type="file" class="filestyle"
-					data-buttonText="Procurar">
+				<label>*OBS</label> <small>A praça de protesto é o município
+					qual o cartório receberá o título. O destino do título deverá ser
+					de acordo com o convênio firmado com o <b>IEPTB-TO</b>, caso não, o
+					título poderá ser devolvido.
+				</small>
 			</div>
 		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-4">
 			<div class="form-group">
 				<label>Motivo do Protesto (Cheque)</label> <select
@@ -71,7 +74,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">R$</span> <input maxlength="15"
 						onkeypress="FormataValor(this.id, 12, event);"
-						class="form-control input-md" wicket:id="valorTitulo">
+						class="form-control input-md" wicket:id="valorTitulo" placeholder="00,00">
 				</div>
 			</div>
 		</div>
@@ -81,7 +84,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">R$</span> <input maxlength="15"
 						onkeypress="FormataValor(this.id, 12, event);"
-						class="form-control input-md" wicket:id="valorSaldoTitulo">
+						class="form-control input-md" wicket:id="valorSaldoTitulo" placeholder="00,00">
 				</div>
 			</div>
 		</div>

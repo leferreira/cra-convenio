@@ -35,7 +35,7 @@ import br.com.ieptbto.cra.util.DataUtil;
 public class ListaTitulosPage extends BasePage<TituloRemessa> {
 
 	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
+	private TituloFiliadoMediator tituloFiliadoMediator;
 
 	private static final long serialVersionUID = 1L;
 	private TituloConvenioBean tituloBean;
@@ -113,7 +113,9 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				if (filiado != null) {
 					codigoFiliado = filiado.getCodigoFiliado();
 				}
-				return tituloFiliadoMediator.buscarListaTitulos(getUser(), new LocalDate(tituloBean.getDataInicio()), new LocalDate(tituloBean.getDataFim()), 
+				LocalDate dataInicio = (tituloBean.getDataInicio() != null) ? new LocalDate(tituloBean.getDataInicio()) : null;
+				LocalDate dataFim = (tituloBean.getDataFim() != null) ? new LocalDate(tituloBean.getDataFim()) : null;
+				return tituloFiliadoMediator.buscarListaTitulos(getUser(), dataInicio, dataFim,
 						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
 			}
 		};

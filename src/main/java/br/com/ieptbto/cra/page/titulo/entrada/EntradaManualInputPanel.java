@@ -12,7 +12,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -27,24 +27,27 @@ import br.com.ieptbto.cra.mediator.MunicipioMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.util.EstadoUtils;
 
+/**
+ * @author Thasso Araujo
+ *
+ */
 public class EntradaManualInputPanel extends Panel {
 
-	/***/
+	@SpringBean
+	private MunicipioMediator municipioMediator;
+	@SpringBean
+	private FiliadoMediator filiadoMediator;
+	@SpringBean
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
+	
 	private static final long serialVersionUID = 1L;
-
-	@SpringBean
-	MunicipioMediator municipioMediator;
-	@SpringBean
-	FiliadoMediator filiadoMediator;
-	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
 	private DropDownChoice<TipoAlineaCheque> comboAlinea;
-	private FileUploadField fileUploadField;
+	private MultiFileUploadField fileUploadField;
 
-	public EntradaManualInputPanel(String id, IModel<TituloFiliado> model, FileUploadField fileUploadField) {
+	public EntradaManualInputPanel(String id, IModel<TituloFiliado> model, MultiFileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
-		add(fileUploadAnexo());
+		add(fileUploadAnexos());
 		add(labelContemAnexo());
 		add(textFieldNumeroTitulo());
 		add(dateFieldDataEmissao());
@@ -175,7 +178,6 @@ public class EntradaManualInputPanel extends Panel {
 				new DropDownChoice<EspecieTituloEntradaManual>("especieTitulo", Arrays.asList(EspecieTituloEntradaManual.values()), renderer);
 		dropDownEspecie.add(new OnChangeAjaxBehavior() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -211,7 +213,7 @@ public class EntradaManualInputPanel extends Panel {
 		return comboAlinea;
 	}
 
-	private FileUploadField fileUploadAnexo() {
+	private MultiFileUploadField fileUploadAnexos() {
 		return fileUploadField;
 	}
 }

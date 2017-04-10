@@ -26,13 +26,11 @@ import br.com.ieptbto.cra.security.CraRoles;
 public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloFiliado> {
 
 	private static final long serialVersionUID = 1L;
-	private TituloFiliado tituloFiliado;
 	private TituloConvenioBean tituloConvenioBean;
 	private Filiado filiado;
 	private Usuario usuario;
  
 	public SolicitarDesistenciaCancelamentoPage() {
-		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();
 		this.usuario = getUser();
 		this.filiado = getFiliadoPorUsuario();
@@ -77,7 +75,7 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloFiliado
 					error(ex.getMessage());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
-					error("Não foi possível buscar os titulos! \n Entre em contato com a CRA ");
+					error("Não foi possível buscar os titulos! Entre em contato com o IEPTB-TO... ");
 				}
 			}
 		};
@@ -91,6 +89,6 @@ public class SolicitarDesistenciaCancelamentoPage extends BasePage<TituloFiliado
 	
 	@Override
 	protected IModel<TituloFiliado> getModel() {
-		return new CompoundPropertyModel<TituloFiliado>(tituloFiliado);
+		return null;
 	}
 }

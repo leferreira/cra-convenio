@@ -16,14 +16,13 @@ import br.com.ieptbto.cra.security.CraRoles;
  */
 public class CraMenu extends Panel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
-
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliado;
+	private UsuarioFiliadoMediator usuarioFiliado;
+
+	private static final long serialVersionUID = 1L;
+	private static final String NIVEL_CONVENIO = "convenio";
+	private static final String NIVEL_FILIADO = "filiado";
+	private Usuario usuario;
 
 	public CraMenu(String id, Usuario usuario) {
 		super(id);
@@ -43,7 +42,7 @@ public class CraMenu extends Panel {
 		UsuarioFiliado user = usuarioFiliado.buscarUsuarioFiliado(usuario);
 		/** Menus Titulos Filiado */
 		MenuItem menuFiliado = menuLateral.addItem("menuFiliado", rolesUser);
-		menuFiliado.setVisible(verificaPermissao(user, "filiado"));
+		menuFiliado.setVisible(verificaPermissao(user, NIVEL_FILIADO));
 		menuFiliado.addItem("EntradaManual", rolesUser);
 		menuFiliado.addItem("EnviarTitulosPendentes", rolesUser);
 		menuFiliado.addItem("BuscarTitulos", rolesUser);
@@ -53,7 +52,7 @@ public class CraMenu extends Panel {
 
 		/** Menus Titulos Convenio */
 		MenuItem menuConvenio = menuLateral.addItem("menuConvenio", rolesAdmin);
-		menuConvenio.setVisible(verificaPermissao(user, "convenio"));
+		menuConvenio.setVisible(verificaPermissao(user, NIVEL_CONVENIO));
 		menuConvenio.addItem("EnviarArquivoEmpresa", isEnvioLayoutPersonalizado(), rolesAdmin);
 		menuConvenio.addItem("EnviarArquivo", isEnvioCraNacional(), rolesAdmin);
 		menuConvenio.addItem("RetornoRecebimentoEmpresa", isLayoutRetornoRecebimentoEmpresa(), rolesAdmin);
@@ -63,7 +62,7 @@ public class CraMenu extends Panel {
 		menuConvenio.addItem("RelatorioTitulosConvenio", rolesAdmin);
 		
 		MenuItem menuAdminConvenio = menuLateral.addItem("menuAdminConvenio", rolesAdmin);
-		menuAdminConvenio.setVisible(isAdministrarFiliados());
+		menuAdminConvenio.setVisible(isAdministrarFiliados(user));
 		menuAdminConvenio.addItem("EmpresasConvenioPage", rolesAdmin);
 		menuAdminConvenio.addItem("UsuariosEmpresaConvenioPage", rolesAdmin);
 	}
@@ -82,19 +81,19 @@ public class CraMenu extends Panel {
 		return false;
 	}
 	
-	private boolean isAdministrarFiliados() {
+	private boolean isEnvioCraNacional() {
 		if (usuario != null) {
-			LayoutPadraoXML layout = usuario.getInstituicao().getLayoutPadraoXML();
-			if (LayoutPadraoXML.ENTRADA_MANUAL_LAYOUT_PERSONALIZADO == layout) {
-				return usuario.getInstituicao().getAdministrarEmpresasFiliadas();
-			}
+			return (LayoutPadraoXML.CRA_NACIONAL == usuario.getInstituicao().getLayoutPadraoXML()) ? true : false;
 		}
 		return false;
 	}
 
-	private boolean isEnvioCraNacional() {
-		if (usuario != null) {
-			return (LayoutPadraoXML.CRA_NACIONAL == usuario.getInstituicao().getLayoutPadraoXML()) ? true : false;
+	private boolean isAdministrarFiliados(UsuarioFiliado user) {
+		if (usuario != null && user == null) {
+			LayoutPadraoXML layout = usuario.getInstituicao().getLayoutPadraoXML();
+			if (LayoutPadraoXML.ENTRADA_MANUAL_LAYOUT_PERSONALIZADO == layout) {
+				return usuario.getInstituicao().getAdministrarEmpresasFiliadas();
+			}
 		}
 		return false;
 	}

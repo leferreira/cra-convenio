@@ -31,9 +31,10 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 
-	MunicipioMediator municipioMediator;
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	private MunicipioMediator municipioMediator;
+	@SpringBean
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
@@ -69,7 +70,6 @@ public class HomePage<T extends AbstractEntidade<T>> extends BasePage<T> {
 		final ModalWindow modalContrato = new ModalWindow("modalContrato");
 		modalContrato.setPageCreator(new ModalWindow.PageCreator() {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override

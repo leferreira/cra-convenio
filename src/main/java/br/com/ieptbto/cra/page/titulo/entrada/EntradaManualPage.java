@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -40,17 +40,16 @@ import br.com.ieptbto.cra.security.CraRoles;
 @AuthorizeAction(action = Action.RENDER, roles = { CraRoles.USER })
 public class EntradaManualPage extends BasePage<TituloFiliado> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	AvalistaMediator avalistaMediator;
+	private AvalistaMediator avalistaMediator;
 	@SpringBean 
-	FiliadoMediator filiadoMediator;
+	private FiliadoMediator filiadoMediator;
 	
+	private static final long serialVersionUID = 1L;
 	private TituloFiliado tituloFiliado;
-	private FileUploadField fileUploadField;
+	private MultiFileUploadField fileUploadField;
 
 	public EntradaManualPage() {
 		this.tituloFiliado = new TituloFiliado();
@@ -83,7 +82,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	protected void adicionarComponentes() {
 		criarCampoAnexo();
 		carregarFormularioTitulo();
-
 	}
 
 	public void carregarFormularioTitulo() {
@@ -99,7 +97,7 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	}
 
 	private void criarCampoAnexo() {
-		fileUploadField = new FileUploadField("anexo", new ListModel<FileUpload>());
+		fileUploadField = new MultiFileUploadField("anexo", new ListModel<FileUpload>(new ArrayList<FileUpload>()));
 		fileUploadField.setLabel(new Model<String>("Anexo de Documento"));
 	}
 
@@ -121,7 +119,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 	private ListView<Avalista> listaAvalistas() {
 		return new ListView<Avalista>("listaAvalistas", tituloFiliado.getAvalistas()) {
 
-			/***/
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -138,7 +135,6 @@ public class EntradaManualPage extends BasePage<TituloFiliado> {
 			private Link<Avalista> removerAvalista(final Avalista avalista) {
 				return new Link<Avalista>("remover") {
 
-					/***/
 					private static final long serialVersionUID = 1L;
 
 					@Override

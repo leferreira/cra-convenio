@@ -1,9 +1,10 @@
 package br.com.ieptbto.cra.page.titulo.entrada;
 
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.lang.Bytes;
 import org.joda.time.LocalDate;
 
 import br.com.ieptbto.cra.entidade.TituloFiliado;
@@ -22,19 +23,18 @@ import br.com.ieptbto.cra.util.CpfCnpjUtil;
  */
 public class EntradaManualForm extends BaseForm<TituloFiliado> {
 
-	private static final long serialVersionUID = 1L;
-
 	@SpringBean
-	UsuarioFiliadoMediator usuarioFiliadoMediator;
+	private UsuarioFiliadoMediator usuarioFiliadoMediator;
 	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	@SpringBean
-	FiliadoMediator filiadoMediator;
+	private FiliadoMediator filiadoMediator;
 	
-	private FileUploadField fileUploadField;
+	private static final long serialVersionUID = 1L;
+	private MultiFileUploadField fileUploadField;
 	private Usuario usuario;
 
-	public EntradaManualForm(String id, IModel<TituloFiliado> model, Usuario usuario, FileUploadField fileUploadField) {
+	public EntradaManualForm(String id, IModel<TituloFiliado> model, Usuario usuario, MultiFileUploadField fileUploadField) {
 		super(id, model);
 		this.fileUploadField = fileUploadField;
 		this.usuario = usuario;
@@ -66,22 +66,15 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 				}
 			}
 
-			if (fileUploadField.getFileUpload() != null) {
-				if (!fileUploadField.getFileUpload().getClientFileName().toUpperCase().contains(".ZIP")) {
-					throw new InfraException("O anexo do documento devem estar compactados em formato ZIP.");
-				}
-				if (!Bytes.megabytes(5).greaterThan(fileUploadField.getFileUpload().getSize())) {
-					throw new InfraException("Tamanho do arquivo anexo excedido. Limite máximo de 5 MB.");
-				}
-			}
-
+			@SuppressWarnings("unchecked")
+			ListModel<FileUpload> uploadFiles = (ListModel<FileUpload>) fileUploadField.getDefaultModel();
 			if (TituloFiliado.isEspecieNaoContemOutrosDevedores(titulo.getEspecieTitulo())) {
 				if (!titulo.getAvalistas().isEmpty()) {
 					throw new InfraException("O tipo de documento informado não poderá conter outros devedores. "
 							+ "Remova-os e em seguida salve o título novamente...");
 				}
 			}
-			tituloFiliadoMediator.salvarTituloConvenio(usuario, titulo, fileUploadField.getFileUpload());
+			tituloFiliadoMediator.salvarTituloConvenio(usuario, titulo, uploadFiles);
 			setResponsePage(new EntradaManualPage("Os dados do título foram salvos com sucesso e está pendente de envio para protesto!"));
 		} catch (InfraException e) {
 			logger.info(e.getMessage(), e);

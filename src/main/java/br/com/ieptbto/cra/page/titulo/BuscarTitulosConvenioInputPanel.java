@@ -73,7 +73,7 @@ public class BuscarTitulosConvenioInputPanel extends Panel {
 	}
 	
 	private Label labelEmpresasFiliadas() {
-		Label label = new Label("labelEmpresasFiliadas");
+		Label label = new Label("labelEmpresasFiliadas", "Empresa Associada");
 		label.setVisible(instituicao.getAdministrarEmpresasFiliadas());
 		return label;
 	}

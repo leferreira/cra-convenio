@@ -30,7 +30,7 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 public class ConvenioCraNacionalPanel extends Panel {
 
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;

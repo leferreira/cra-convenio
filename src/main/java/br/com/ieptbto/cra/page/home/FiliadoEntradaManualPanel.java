@@ -24,7 +24,7 @@ import br.com.ieptbto.cra.util.PeriodoDataUtil;
 public class FiliadoEntradaManualPanel extends Panel {
 
 	@SpringBean
-	TituloFiliadoMediator tituloFiliadoMediator;
+	private TituloFiliadoMediator tituloFiliadoMediator;
 	
 	private static final long serialVersionUID = 1L;
 	private UsuarioFiliado usuarioFiliado;
@@ -32,6 +32,7 @@ public class FiliadoEntradaManualPanel extends Panel {
 
 	public FiliadoEntradaManualPanel(String id, UsuarioFiliado usuarioFiliado) {
 		super(id);
+		this.usuarioFiliado = usuarioFiliado;
 		this.titulosFiliado = tituloFiliadoMediator.buscarTitulosParaEnvio(usuarioFiliado, null);
 		add(linkTitulosPendentes());
 		add(labelTotalTitulosPendentes());

@@ -44,8 +44,8 @@ public abstract class BasePage<T extends AbstractEntidade<T>> extends AbstractWe
 	private void addComponentesBase() {
 		String nome = null;
 		if (StringUtils.isNotBlank(getUser().getNome())) {
-			if (getUser().getNome().length() > 15) {
-				nome = getUser().getNome().substring(0, 14);
+			if (getUser().getNome().length() > 13) {
+				nome = getUser().getNome().substring(0, 12);
 			} else
 				nome = getUser().getNome();
 		}
