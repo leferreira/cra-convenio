@@ -1,5 +1,6 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -131,8 +132,10 @@ public class EnviarSolicitacaoDesistenciaCancelamentoPage extends BasePage<Solic
 	}
 
 	private void criarCampoAnexoOficio() {
-		this.fileUploadField = new MultiFileUploadField("anexo", new ListModel<FileUpload>());
+		this.fileUploadField = new MultiFileUploadField("anexoDesistencia");
 		this.fileUploadField.setLabel(new Model<String>("Anexo de Ofício/Carta Anuência"));
+		this.fileUploadField.setOutputMarkupId(true);
+		this.fileUploadField.setDefaultModel(new ListModel<FileUpload>(new ArrayList<FileUpload>()));
 	}
 	
 	private void criarRadioMotivo() {

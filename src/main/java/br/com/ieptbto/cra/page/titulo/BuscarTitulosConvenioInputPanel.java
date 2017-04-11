@@ -24,9 +24,9 @@ import br.com.ieptbto.cra.mediator.InstituicaoMediator;
 public class BuscarTitulosConvenioInputPanel extends Panel {
 
 	@SpringBean
-	InstituicaoMediator instituicaoMediator;
+	private InstituicaoMediator instituicaoMediator;
 	@SpringBean
-	FiliadoMediator filiadoMediator;
+	private FiliadoMediator filiadoMediator;
 
 	private static final long serialVersionUID = 1L;
 	private Instituicao instituicao;
@@ -39,6 +39,7 @@ public class BuscarTitulosConvenioInputPanel extends Panel {
 		add(textFieldNumeroTitulo());
 		add(textFieldNomeDevedor());
 		add(textFieldDocumentoDevedor());
+		add(textFieldNumeroProtocoloCartorio());
 		add(textFieldDataInicio());
 		add(textFieldDataFim());
 		add(dropDownCartorioProtesto());
@@ -48,6 +49,10 @@ public class BuscarTitulosConvenioInputPanel extends Panel {
 
 	private TextField<String> textFieldNumeroTitulo() {
 		return new TextField<String>("numeroTitulo");
+	}
+	
+	private TextField<String> textFieldNumeroProtocoloCartorio() {
+		return new TextField<String>("numeroProtocoloCartorio");
 	}
 
 	private TextField<String> textFieldNomeDevedor() {

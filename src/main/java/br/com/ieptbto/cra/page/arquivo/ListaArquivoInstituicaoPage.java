@@ -3,6 +3,9 @@ package br.com.ieptbto.cra.page.arquivo;
 import java.io.File;
 import java.util.List;
 
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -25,18 +28,21 @@ import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.mediator.ArquivoMediator;
 import br.com.ieptbto.cra.mediator.DownloadMediator;
 import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import br.com.ieptbto.cra.util.DataUtil;
 
 /**
  * @author Thasso Araújo
  *
  */
+@AuthorizeInstantiation(value = "USER")
+@AuthorizeAction(action = Action.RENDER, roles = { CraRoles.ADMIN, CraRoles.SUPER, CraRoles.USER })
 public class ListaArquivoInstituicaoPage extends BasePage<Arquivo> {
 
 	@SpringBean
-	ArquivoMediator arquivoMediator;
+	private ArquivoMediator arquivoMediator;
 	@SpringBean
-	DownloadMediator downloadMediator;
+	private DownloadMediator downloadMediator;
 	
 	private static final long serialVersionUID = 1L;
 	private Usuario usuario;

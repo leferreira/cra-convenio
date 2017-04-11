@@ -129,11 +129,11 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 				if (filiado != null) {
 					codigoFiliado = filiado.getCodigoFiliado();
 				}
-
 				LocalDate dataInicio = (tituloBean.getDataInicio() != null) ? new LocalDate(tituloBean.getDataInicio()) : null;
 				LocalDate dataFim = (tituloBean.getDataFim() != null) ? new LocalDate(tituloBean.getDataFim()) : null;
-				return tituloFiliadoMediator.buscarListaTitulos(getUser(), dataInicio, dataFim,  tituloBean.getCartorio(), 
-						tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
+				return tituloFiliadoMediator.buscarListaTitulos(getUser(), dataInicio, dataFim,
+						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), 
+						tituloBean.getDocumentoDevedor(), tituloBean.getNumeroProtocoloCartorio(), codigoFiliado);
 			}
 		};
 	}

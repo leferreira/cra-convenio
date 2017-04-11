@@ -54,7 +54,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 				try {
 					if (tituloConvenioBean.getNumeroTitulo() == null && tituloConvenioBean.getDocumentoDevedor() == null 
 							&& tituloConvenioBean.getNomeDevedor() == null && tituloConvenioBean.getDataInicio() == null
-							&& tituloConvenioBean.getFiliado() == null) {
+							&& tituloConvenioBean.getFiliado() == null && tituloConvenioBean.getNumeroProtocoloCartorio() == null) {
 						if (tituloConvenioBean.getCartorio() != null) {
 							throw new InfraException("Por favor informe mais um parâmetro, além do município selecionado...");
 						} else {

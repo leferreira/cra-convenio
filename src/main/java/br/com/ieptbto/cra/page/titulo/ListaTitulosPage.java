@@ -116,7 +116,8 @@ public class ListaTitulosPage extends BasePage<TituloRemessa> {
 				LocalDate dataInicio = (tituloBean.getDataInicio() != null) ? new LocalDate(tituloBean.getDataInicio()) : null;
 				LocalDate dataFim = (tituloBean.getDataFim() != null) ? new LocalDate(tituloBean.getDataFim()) : null;
 				return tituloFiliadoMediator.buscarListaTitulos(getUser(), dataInicio, dataFim,
-						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), tituloBean.getDocumentoDevedor(), codigoFiliado);
+						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), 
+						tituloBean.getDocumentoDevedor(), tituloBean.getNumeroProtocoloCartorio(), codigoFiliado);
 			}
 		};
 	}
