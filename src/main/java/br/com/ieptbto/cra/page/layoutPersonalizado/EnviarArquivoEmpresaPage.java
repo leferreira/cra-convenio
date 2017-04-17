@@ -45,7 +45,6 @@ public class EnviarArquivoEmpresaPage extends BasePage<Arquivo> {
 
 	@Override
 	protected void adicionarComponentes() {
-
 		form = new FormArquivoEmpresa("form", getModel(), getUsuario()) {
 
 			@Override

@@ -4,7 +4,7 @@
   <artifactId>convenio</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>convenios</name>
+  <name>convenio</name>
   <description>Sistema para convenios da cra</description>
   
   <properties>
