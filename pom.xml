@@ -202,6 +202,7 @@
 	</dependencies>
 
 	<build>
+        <finalName>convenio</finalName>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
