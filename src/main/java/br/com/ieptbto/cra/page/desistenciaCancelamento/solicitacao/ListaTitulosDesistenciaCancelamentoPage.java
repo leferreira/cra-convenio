@@ -1,8 +1,14 @@
 package br.com.ieptbto.cra.page.desistenciaCancelamento.solicitacao;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
+import br.com.ieptbto.cra.component.LabelValorMonetario;
+import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
@@ -14,17 +20,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.TituloConvenioBean;
-import br.com.ieptbto.cra.component.LabelValorMonetario;
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.page.titulo.historico.HistoricoPage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -39,11 +37,9 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 	private static final long serialVersionUID = 1L;
 	private TituloConvenioBean tituloBean;
-	private Filiado filiado;
- 
+
 	public ListaTitulosDesistenciaCancelamentoPage(TituloConvenioBean tituloBean, Filiado filiado) {
 		this.tituloBean = tituloBean;
-		this.filiado = filiado;
 		adicionarComponentes();
 	}
 
@@ -125,20 +121,16 @@ public class ListaTitulosDesistenciaCancelamentoPage extends BasePage<TituloReme
 
 			@Override
 			protected List<TituloRemessa> load() {
-				String codigoFiliado = null;
-				if (filiado != null) {
-					codigoFiliado = filiado.getCodigoFiliado();
-				}
-				LocalDate dataInicio = (tituloBean.getDataInicio() != null) ? new LocalDate(tituloBean.getDataInicio()) : null;
-				LocalDate dataFim = (tituloBean.getDataFim() != null) ? new LocalDate(tituloBean.getDataFim()) : null;
-				return tituloFiliadoMediator.buscarListaTitulos(getUser(), dataInicio, dataFim,
-						tituloBean.getCartorio(), tituloBean.getNumeroTitulo(), tituloBean.getNomeDevedor(), 
-						tituloBean.getDocumentoDevedor(), tituloBean.getNumeroProtocoloCartorio(), codigoFiliado);
+                return tituloFiliadoMediator.buscarListaTitulos(getUser(), getFiliadoPorUsuario(), getTituloBean());
 			}
 		};
 	}
 
-	@Override
+    public TituloConvenioBean getTituloBean() {
+        return tituloBean;
+    }
+
+    @Override
 	protected IModel<TituloRemessa> getModel() {
 		return null;
 	}

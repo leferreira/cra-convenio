@@ -3,21 +3,6 @@
  */
 package br.com.ieptbto.cra.app;
 
-import java.util.Locale;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.time.Duration;
-import org.joda.time.DateTimeZone;
-
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.entidade.UsuarioAnonimo;
 import br.com.ieptbto.cra.menu.CraMenu;
@@ -48,6 +33,16 @@ import br.com.ieptbto.cra.security.UserRolesAuthorizer;
 import br.com.ieptbto.cra.security.UserSession;
 import br.com.ieptbto.cra.util.CargaInicialPage;
 import br.com.ieptbto.cra.util.DataUtil;
+import org.apache.wicket.*;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.time.Duration;
+import org.joda.time.DateTimeZone;
+
+import java.util.Locale;
 
 /**
  * @author Lefer

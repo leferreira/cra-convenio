@@ -1,11 +1,10 @@
 package br.com.ieptbto.cra.page.relatorio.convenio;
 
-import org.apache.wicket.model.IModel;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.exception.InfraException;
 import br.com.ieptbto.cra.page.base.BaseForm;
+import org.apache.wicket.model.IModel;
+import org.joda.time.LocalDate;
 
 /**
  * @author Thasso Araujo

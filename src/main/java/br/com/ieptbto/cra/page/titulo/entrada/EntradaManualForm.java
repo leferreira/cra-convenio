@@ -1,12 +1,5 @@
 package br.com.ieptbto.cra.page.titulo.entrada;
 
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.entidade.TituloFiliado;
 import br.com.ieptbto.cra.entidade.Usuario;
 import br.com.ieptbto.cra.enumeration.EspecieTituloEntradaManual;
@@ -16,6 +9,12 @@ import br.com.ieptbto.cra.mediator.TituloFiliadoMediator;
 import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
 import br.com.ieptbto.cra.page.base.BaseForm;
 import br.com.ieptbto.cra.util.CpfCnpjUtil;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 /**
  * @author Thasso Araújo
@@ -65,6 +64,10 @@ public class EntradaManualForm extends BaseForm<TituloFiliado> {
 					throw new InfraException("O CNPJ/CPF do devedor está inválido! Por favor verifique se o documento foi digitado corretamente...");
 				}
 			}
+//			if (!titulo.getPracaProtesto().cepIsValidFromMunicipio(titulo.getCepDevedor())){
+//                throw new InfraException("O CEP do devedor informado é inválido para esta praça de pagamento pois deve ser dentro da " +
+//                        "faixa de " + titulo.getPracaProtesto().getFaixaInicialCep() + " até " + titulo.getPracaProtesto().getFaixaFinalCep());
+//            }
 
 			@SuppressWarnings("unchecked")
 			ListModel<FileUpload> uploadFiles = (ListModel<FileUpload>) fileUploadField.getDefaultModel();

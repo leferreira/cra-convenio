@@ -1,21 +1,16 @@
 package br.com.ieptbto.cra.page.titulo.entrada;
 
-import java.util.List;
-
+import br.com.ieptbto.cra.entidade.Avalista;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.util.EstadoUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import br.com.ieptbto.cra.entidade.Avalista;
-import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.util.EstadoUtils;
+import java.util.List;
 
 /**
  * @author Thasso Araújo

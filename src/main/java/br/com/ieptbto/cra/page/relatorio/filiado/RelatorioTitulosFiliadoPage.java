@@ -1,28 +1,5 @@
 package br.com.ieptbto.cra.page.relatorio.filiado;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.joda.time.LocalDate;
-
 import br.com.ieptbto.cra.beans.TituloConvenioBean;
 import br.com.ieptbto.cra.component.DateTextField;
 import br.com.ieptbto.cra.entidade.Filiado;
@@ -41,6 +18,24 @@ import br.com.ieptbto.cra.util.DataUtil;
 import br.com.ieptbto.cra.util.PeriodoDataUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.joda.time.LocalDate;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
@@ -94,7 +89,7 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado> {
 								throw new InfraException("A data de início deve ser antes da data fim.");
 						} else throw new InfraException("As duas datas devem ser preenchidas.");
 					}
-					if (PeriodoDataUtil.diferencaDeDiasEntreData(dataInicio.toDate(), dataFim.toDate()) > 30) {
+					if (PeriodoDataUtil.diferencaDeDiasEntreData(dataInicio.toDate(), dataFim.toDate()) > 31) {
 						throw new InfraException("Limite máximo do período para o relatório é de 30 dias entre a data inicial e a final.");
 					}
 					
@@ -109,10 +104,10 @@ public class RelatorioTitulosFiliadoPage extends BasePage<TituloFiliado> {
 							"CRA_RELATORIO_" + DataUtil.localDateToString(new LocalDate()).replaceAll("/", "_") + ".pdf"));
 
 				} catch (InfraException ex) {
-					logger.info(ex.getMessage());
+					logger.info(ex.getMessage(), ex);
 					error(ex.getMessage());
 				} catch (Exception e) {
-					logger.info(e.getMessage());
+					logger.info(e.getMessage(), e);
 					error("Não foi possível gerar o relatório ! Entre em contato com o IEPTB-TO !");
 				}
 			}

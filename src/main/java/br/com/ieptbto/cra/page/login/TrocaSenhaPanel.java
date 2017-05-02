@@ -1,5 +1,7 @@
 package br.com.ieptbto.cra.page.login;
 
+import br.com.ieptbto.cra.entidade.Usuario;
+import br.com.ieptbto.cra.mediator.UsuarioMediator;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -7,9 +9,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.mediator.UsuarioMediator;
 
 /**
  * 
@@ -59,7 +58,6 @@ public class TrocaSenhaPanel extends Panel {
 					senhaConfirmacao = confirmaSenha.getModelObject();
 					
 				Usuario user = usuarioMediator.autenticar(usuario.getLogin(), senhaAtual);
-				
 				if (user != null) {
 					user.setSenha(senhaNova);
 					user.setConfirmarSenha(senhaConfirmacao);

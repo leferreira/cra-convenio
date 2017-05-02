@@ -1,5 +1,11 @@
 package br.com.ieptbto.cra.page.titulo;
 
+import br.com.ieptbto.cra.beans.TituloConvenioBean;
+import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -7,14 +13,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.time.LocalDate;
-
-import br.com.ieptbto.cra.beans.TituloConvenioBean;
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.entidade.Usuario;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
 
 /**
  * @author Thasso Araújo
@@ -28,12 +26,10 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 	private TituloFiliado tituloFiliado;
 	private TituloConvenioBean tituloConvenioBean;
 	private Filiado filiado;
-	private Usuario usuario;
 
 	public BuscarTitulosPage() { 
 		this.tituloFiliado = new TituloFiliado();
 		this.tituloConvenioBean = new TituloConvenioBean();
-		this.usuario = getUser();
 		this.filiado = getFiliadoPorUsuario();
 		adicionarComponentes();
 	}
@@ -80,7 +76,7 @@ public class BuscarTitulosPage extends BasePage<TituloFiliado> {
 				}
 			}
 		};
-		form.add(new BuscarTitulosConvenioInputPanel("buscarTitulosPanel", getModelForm(), usuario.getInstituicao(), filiado));
+		form.add(new BuscarTitulosConvenioInputPanel("buscarTitulosPanel", getModelForm(), getUser().getInstituicao(), filiado));
 		return form;
 	}
 	

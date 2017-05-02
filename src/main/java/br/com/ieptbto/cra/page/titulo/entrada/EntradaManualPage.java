@@ -1,7 +1,14 @@
 package br.com.ieptbto.cra.page.titulo.entrada;
 
-import java.util.ArrayList;
-
+import br.com.ieptbto.cra.entidade.Avalista;
+import br.com.ieptbto.cra.entidade.SetorFiliado;
+import br.com.ieptbto.cra.entidade.TituloFiliado;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
+import br.com.ieptbto.cra.mediator.AvalistaMediator;
+import br.com.ieptbto.cra.mediator.FiliadoMediator;
+import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -22,15 +29,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 
-import br.com.ieptbto.cra.entidade.Avalista;
-import br.com.ieptbto.cra.entidade.SetorFiliado;
-import br.com.ieptbto.cra.entidade.TituloFiliado;
-import br.com.ieptbto.cra.enumeration.SituacaoTituloConvenio;
-import br.com.ieptbto.cra.mediator.AvalistaMediator;
-import br.com.ieptbto.cra.mediator.FiliadoMediator;
-import br.com.ieptbto.cra.mediator.UsuarioFiliadoMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.ArrayList;
 
 /**
  * @author Thasso Araújo

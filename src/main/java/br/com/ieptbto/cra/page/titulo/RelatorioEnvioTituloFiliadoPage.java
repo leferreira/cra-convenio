@@ -1,13 +1,13 @@
 package br.com.ieptbto.cra.page.titulo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-
+import br.com.ieptbto.cra.entidade.Filiado;
+import br.com.ieptbto.cra.entidade.Retorno;
+import br.com.ieptbto.cra.exception.InfraException;
+import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
+import br.com.ieptbto.cra.util.DataUtil;
+import net.sf.jasperreports.engine.*;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -20,18 +20,12 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.entidade.Filiado;
-import br.com.ieptbto.cra.entidade.Retorno;
-import br.com.ieptbto.cra.exception.InfraException;
-import br.com.ieptbto.cra.mediator.ConfiguracaoBase;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
-import br.com.ieptbto.cra.util.DataUtil;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.HashMap;
 
 /**
  * @author Thasso Araújo
@@ -75,9 +69,7 @@ public class RelatorioEnvioTituloFiliadoPage extends BasePage<Filiado> {
 				try {
 					Class.forName("org.postgresql.Driver");
 					connection = DriverManager.getConnection("jdbc:postgresql://192.168.254.233:5432/nova_cra", "postgres", "@dminB3g1n");
-					// connection =
-					// DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra",
-					// "postgres", "1234");
+//                    connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/nova_cra", "postgres", "1234");
 
 					parametros.put("SUBREPORT_DIR", ConfiguracaoBase.RELATORIOS_CONVENIO_PATH);
 					parametros.put("LOGO", ImageIO.read(getClass().getResource(ConfiguracaoBase.RELATORIOS_CONVENIO_PATH + "ieptb.gif")));
@@ -90,8 +82,7 @@ public class RelatorioEnvioTituloFiliadoPage extends BasePage<Filiado> {
 					jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, connection);
 
 					if (jasperPrint.getPages().isEmpty()) {
-						throw new InfraException(
-								"Não foram encontrados títulos enviados na data de hoje. Verifique se ao enviar, os títulos foram selecionados corretamente...");
+						throw new InfraException("Não foram encontrados títulos enviados na data de hoje. Verifique se ao enviar, os títulos foram selecionados corretamente...");
 					}
 
 					File pdf = File.createTempFile("report", ".pdf");

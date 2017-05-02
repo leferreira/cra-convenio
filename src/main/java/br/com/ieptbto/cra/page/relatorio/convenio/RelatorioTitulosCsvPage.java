@@ -1,8 +1,17 @@
 package br.com.ieptbto.cra.page.relatorio.convenio;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import br.com.ieptbto.cra.beans.TituloCsvBean;
+import br.com.ieptbto.cra.component.dataTable.CustomCraDataTable;
+import br.com.ieptbto.cra.dataProvider.TituloCsvProvider;
+import br.com.ieptbto.cra.entidade.Instituicao;
+import br.com.ieptbto.cra.entidade.TituloRemessa;
+import br.com.ieptbto.cra.entidade.view.ViewTitulo;
+import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
+import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
+import br.com.ieptbto.cra.mediator.RelatorioMediator;
+import br.com.ieptbto.cra.mediator.TituloMediator;
+import br.com.ieptbto.cra.page.base.BasePage;
+import br.com.ieptbto.cra.security.CraRoles;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -16,18 +25,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import br.com.ieptbto.cra.beans.TituloCsvBean;
-import br.com.ieptbto.cra.component.dataTable.CustomCraDataTable;
-import br.com.ieptbto.cra.dataProvider.TituloCsvProvider;
-import br.com.ieptbto.cra.entidade.Instituicao;
-import br.com.ieptbto.cra.entidade.TituloRemessa;
-import br.com.ieptbto.cra.entidade.view.ViewTitulo;
-import br.com.ieptbto.cra.enumeration.SituacaoTituloRelatorio;
-import br.com.ieptbto.cra.enumeration.TipoInstituicaoCRA;
-import br.com.ieptbto.cra.mediator.RelatorioMediator;
-import br.com.ieptbto.cra.mediator.TituloMediator;
-import br.com.ieptbto.cra.page.base.BasePage;
-import br.com.ieptbto.cra.security.CraRoles;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Thasso Araújo
