@@ -4,8 +4,7 @@
 /.tern-project
 /.settings/
 /.gitignore
-/.idea/
 /bin/
 /README.md
+/.idea/
 /convenio.iml
-
